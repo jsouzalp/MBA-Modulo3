@@ -1,81 +1,111 @@
 ﻿using FluentAssertions;
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Conteudo.Domain.Tests
 {
     public class ConteudoProgramaticoTests
     {
+        #region Helpers
+        private const string _finalidadeValida = "Formar o aluno em conceitos de DDD";
+        private const string _ementaValida = "Conceitos básicos e avançados de Domain Driven Design, com suporte a CQRS e mais um monte de coisas que você não pode perder";
+
+        private ConteudoProgramatico CriarInstanciaConteudo(string finalidade = _finalidadeValida, 
+            string ementa = _ementaValida)
+        {
+            return new ConteudoProgramatico(finalidade, ementa);
+        }
+        #endregion
+
+        #region Construtores
         [Fact]
         public void Deve_criar_conteudo_programatico_valido()
         {
             // Arrange
-            var finalidade = "Formar o aluno em conceitos de DDD";
-            var ementa = "Conceitos básicos e avançados de Domain Driven Design";
 
             // Act
-            var conteudo = new ConteudoProgramatico(finalidade, ementa);
+            var conteudo = CriarInstanciaConteudo(_finalidadeValida, _ementaValida);
 
             // Assert
             conteudo.Should().NotBeNull();
-            conteudo.Finalidade.Should().Be(finalidade);
-            conteudo.Ementa.Should().Be(ementa);
+            conteudo.Finalidade.Should().Be(_finalidadeValida);
+            conteudo.Ementa.Should().Be(_ementaValida);
         }
 
-        [Fact]
-        public void Nao_deve_criar_conteudo_com_finalidade_vazia()
+        [Theory]
+        [InlineData("", _ementaValida, "*Finalidade não pode ser vazia ou nula*")]
+        [InlineData("abc", _ementaValida, "*Finalidade do conteúdo programático deve ter entre 10 e 100 caracteres*")]
+        [InlineData(_finalidadeValida, "", "*Ementa do conteúdo programático não pode ser vazia ou nula*")]
+        [InlineData(_finalidadeValida, "abc", "*Ementa do conteúdo programático deve ter entre 50 e 4000 caracteres*")]
+        public void Nao_deve_criar_conteudo_invalido(string finalidade, string ementa, string mensagemErro)
+        {
+            Action act = () => CriarInstanciaConteudo(finalidade, ementa);
+
+            act.Should().Throw<DomainException>()
+               .WithMessage(mensagemErro);
+        }
+        #endregion
+
+        #region Setters
+        [Theory]
+        [InlineData("", "*Finalidade não pode ser vazia ou nula*")]
+        [InlineData("abc", "*Finalidade do conteúdo programático deve ter entre 10 e 100 caracteres*")]
+        public void Nao_deve_alterar_finalidade_invalida(string finalidade, string mensagemErro)
         {
             // Arrange
-            var finalidade = "";
-            var ementa = "Ementa válida";
+            var conteudo = CriarInstanciaConteudo();
 
             // Act
-            Action act = () => new ConteudoProgramatico(finalidade, ementa);
+            Action act = () => conteudo.AlterarFinalidade(finalidade);
 
             // Assert
             act.Should().Throw<DomainException>()
-                .WithMessage("*Finalidade não pode ser vazio ou nulo*");
-        }
-
-        [Fact]
-        public void Nao_deve_criar_conteudo_com_ementa_curta()
-        {
-            // Arrange
-            var finalidade = "Finalidade válida";
-            var ementa = "abc";
-
-            // Act
-            Action act = () => new ConteudoProgramatico(finalidade, ementa);
-
-            // Assert
-            act.Should().Throw<DomainException>()
-                .WithMessage("*Finalidade do conteúdo programático deve ter entre 10 e 100 caracteres*");
+               .WithMessage(mensagemErro);
         }
 
         [Fact]
         public void Deve_alterar_finalidade_valida()
         {
-            var conteudo = new ConteudoProgramatico("Finalidade válida", "Ementa válida");
+            // Arrange
+            var novaFinalidade = "Curso atualizado de DDD";
+            var conteudo = CriarInstanciaConteudo();
 
-            conteudo.AlterarFinalidade("Nova finalidade válida");
+            // Act
+            conteudo.AlterarFinalidade(novaFinalidade);
 
-            conteudo.Finalidade.Should().Be("Nova finalidade válida");
+            // Assert
+            conteudo.Finalidade.Should().Be(novaFinalidade);
+        }
+
+        [Theory]
+        [InlineData("", "*Ementa do conteúdo programático não pode ser vazia ou nula*")]
+        [InlineData("abc", "*Ementa do conteúdo programático deve ter entre 50 e 4000 caracteres*")]
+        public void Nao_deve_alterar_ementa_invalida(string ementa, string mensagemErro)
+        {
+            // Arrange
+            var conteudo = CriarInstanciaConteudo();
+
+            // Act
+            Action act = () => conteudo.AlterarEmenta(ementa);
+
+            // Assert
+            act.Should().Throw<DomainException>()
+               .WithMessage(mensagemErro);
         }
 
         [Fact]
-        public void Nao_deve_alterar_para_finalidade_invalida()
+        public void Deve_alterar_ementa_valida()
         {
-            var conteudo = new ConteudoProgramatico("Finalidade válida", "Ementa válida");
+            // Arrange
+            var novaEmenta = "Conceitos básicos, intermediários e avançados de Domain Driven Design, com suporte a CQRS e mais um monte de coisas que você não pode perder";
+            var conteudo = CriarInstanciaConteudo();
 
-            Action act = () => conteudo.AlterarFinalidade("");
+            // Act
+            conteudo.AlterarEmenta(novaEmenta);
 
-            act.Should().Throw<DomainException>()
-                .WithMessage("*Finalidade não pode ser vazio ou nulo*");
+            // Assert
+            conteudo.Ementa.Should().Be(novaEmenta);
         }
+        #endregion
     }
 }

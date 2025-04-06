@@ -1,9 +1,4 @@
 ﻿using Plataforma.Educacao.Core.Validations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Conteudo.Domain.ValueObjects
 {
@@ -45,10 +40,10 @@ namespace Plataforma.Educacao.Conteudo.Domain.ValueObjects
             var ementa = novaEmenta ?? Ementa;
 
             var validacao = new ResultadoValidacao<ConteudoProgramatico>();
-            ValidacaoTexto.DevePossuirConteudo(finalidade, "Finalidade não pode ser vazio ou nulo", validacao);
-            ValidacaoTexto.DevePossuirTamanho(finalidade, "Finalidade do conteúdo programático deve ter entre 10 e 100 caracteres", 10, 100, validacao);
-            ValidacaoTexto.DevePossuirConteudo(ementa, "Finalidade do conteúdo programático não pode ser vazio ou nulo", validacao);
-            ValidacaoTexto.DevePossuirTamanho(ementa, "Finalidade do conteúdo programático deve ter entre 10 e 100 caracteres", 10, 100, validacao);
+            ValidacaoTexto.DevePossuirConteudo(finalidade, "Finalidade não pode ser vazia ou nula", validacao);
+            ValidacaoTexto.DevePossuirTamanho(finalidade, 10, 100, "Finalidade do conteúdo programático deve ter entre 10 e 100 caracteres", validacao);
+            ValidacaoTexto.DevePossuirConteudo(ementa, "Ementa do conteúdo programático não pode ser vazia ou nula", validacao);
+            ValidacaoTexto.DevePossuirTamanho(ementa, 50, 4000, "Ementa do conteúdo programático deve ter entre 50 e 4000 caracteres", validacao);
 
             validacao.DispararExcecaoDominioSeInvalido();
         }

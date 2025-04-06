@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="ValueObjects\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Plataforma.Educacao.Core\Plataforma.Educacao.Core.csproj" />
   </ItemGroup>
 
