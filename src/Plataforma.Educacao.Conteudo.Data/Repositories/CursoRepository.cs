@@ -1,6 +1,5 @@
 ﻿using Plataforma.Educacao.Conteudo.Data.Contexts;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
-using Plataforma.Educacao.Core.Data;
 
 namespace Plataforma.Educacao.Conteudo.Data.Repositories
 {

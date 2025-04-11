@@ -1,7 +1,6 @@
 ﻿using Plataforma.Educacao.Core.Aggregates;
 using Plataforma.Educacao.Core.Entities;
 using Plataforma.Educacao.Core.Validations;
-using System.Text.Json.Serialization;
 
 namespace Plataforma.Educacao.Aluno.Domain.Entities
 {

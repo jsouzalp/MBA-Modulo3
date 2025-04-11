@@ -2,11 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Core.Data.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Aluno.Data.Configurations
 {

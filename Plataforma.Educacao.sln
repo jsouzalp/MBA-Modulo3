@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteud
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Data", "src\Plataforma.Educacao.Conteudo.Data\Plataforma.Educacao.Conteudo.Data.csproj", "{7E361041-5208-45B3-9FC9-432537610802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Service", "src\Plataforma.Educacao.Conteudo.Service\Plataforma.Educacao.Conteudo.Service.csproj", "{4109D533-B98D-4BDD-A64F-795EC54291DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Application", "src\Plataforma.Educacao.Conteudo.Application\Plataforma.Educacao.Conteudo.Application.csproj", "{4109D533-B98D-4BDD-A64F-795EC54291DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aluno", "Aluno", "{F36DB824-C016-44D9-85EA-C138665CC6D6}"
 EndProject
@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Aluno.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Aluno.Data", "src\Plataforma.Educacao.Aluno.Data\Plataforma.Educacao.Aluno.Data.csproj", "{15AB717B-61D1-4913-9C34-4145DEA8C375}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Aluno.Service", "src\Plataforma.Educacao.Aluno.Service\Plataforma.Educacao.Aluno.Service.csproj", "{907496F5-3D31-4B3E-8B6F-0BD417C70B4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Aluno.Application", "src\Plataforma.Educacao.Aluno.Application\Plataforma.Educacao.Aluno.Application.csproj", "{907496F5-3D31-4B3E-8B6F-0BD417C70B4D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{228FCE6B-C4C8-42B3-A1EE-0082A087A62C}"
 EndProject
@@ -39,7 +39,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Faturam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Faturamento.Domain", "src\Plataforma.Educacao.Faturamento.Domain\Plataforma.Educacao.Faturamento.Domain.csproj", "{E49FA26B-4709-4635-AB88-0F96C450BA30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Faturamento.Service", "src\Plataforma.Educacao.Faturamento.Service\Plataforma.Educacao.Faturamento.Service.csproj", "{2FBC0F7F-64CE-4D36-94C3-AE5D56E336A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Faturamento.Application", "src\Plataforma.Educacao.Faturamento.Application\Plataforma.Educacao.Faturamento.Application.csproj", "{2FBC0F7F-64CE-4D36-94C3-AE5D56E336A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Helpers", ".Helpers", "{C5B069F4-834D-40F5-89E4-E65E27C0FE68}"
+	ProjectSection(SolutionItems) = preProject
+		src\ClearBinObj.cmd = src\ClearBinObj.cmd
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

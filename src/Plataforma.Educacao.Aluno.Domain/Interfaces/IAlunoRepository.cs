@@ -1,10 +1,4 @@
-﻿using Plataforma.Educacao.Aluno.Domain.Entities;
-using Plataforma.Educacao.Core.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Plataforma.Educacao.Core.Data;
 
 namespace Plataforma.Educacao.Aluno.Domain.Interfaces
 {

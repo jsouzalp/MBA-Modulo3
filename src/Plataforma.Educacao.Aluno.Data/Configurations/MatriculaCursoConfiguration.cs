@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Core.Data.Constants;
-using Plataforma.Educacao.Aluno.Domain.Enumerators;
 
 namespace Plataforma.Educacao.Aluno.Data.Configurations
 {
