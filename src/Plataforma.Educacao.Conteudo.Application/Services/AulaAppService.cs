@@ -18,7 +18,7 @@ public class AulaAppService(ICursoRepository cursoRepository) : BaseService, IAu
     {
         var curso = await ObterCursoComAulaAsync(cursoId);
 
-        curso.AdicionarAula(dto.Descricao, dto.CargaHoraria, dto.OrdemAula);
+        curso.AdicionarAula(dto.Descricao, dto.CargaHoraria, dto.OrdemAula, dto.Url);
         await _cursoRepository.AtualizarAsync(curso);
         await _cursoRepository.UnitOfWork.Commit();
 

@@ -49,6 +49,13 @@ public class AulaConfiguration : IEntityTypeConfiguration<Aula>
             .HasColumnName("OrdemAula")
             .HasColumnType(DatabaseTypeConstant.Byte)
             .IsRequired();
+
+        builder.Property(x => x.Url)
+            .HasColumnName("Url")
+            .HasColumnType(DatabaseTypeConstant.Varchar)
+            .HasMaxLength(1024)
+            .UseCollation(DatabaseTypeConstant.Collate)
+            .IsRequired();
         #endregion Mapping columns
 
         #region Indexes

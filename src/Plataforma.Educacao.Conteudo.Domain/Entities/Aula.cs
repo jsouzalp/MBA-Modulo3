@@ -11,6 +11,7 @@ public class Aula : Entidade
     public bool Ativo { get; private set; }
     public short CargaHoraria { get; private set; }
     public byte OrdemAula { get; private set; }
+    public string Url { get; private set; }
 
     #region Helper only for EF Mapping
     [JsonIgnore]
@@ -23,12 +24,14 @@ public class Aula : Entidade
     public Aula(Guid cursoId, 
         string descricao, 
         short cargaHoraria, 
-        byte ordemAula)
+        byte ordemAula, 
+        string url)
     {
         CursoId = cursoId;
         Descricao = descricao;
         CargaHoraria = cargaHoraria;
         OrdemAula = ordemAula;
+        Url = url;
 
         ValidarIntegridadeAula();
     }
@@ -61,12 +64,13 @@ public class Aula : Entidade
     #endregion
 
     #region Validacoes
-    private void ValidarIntegridadeAula(Guid? novoCursoId = null, string novaDescricao = null, short? novaCargaHoraria = null, byte? novaOrdemAula = null)
+    private void ValidarIntegridadeAula(Guid? novoCursoId = null, string novaDescricao = null, short? novaCargaHoraria = null, byte? novaOrdemAula = null, string novoUrl = null)
     {
         var cursoId = novoCursoId ?? CursoId;
         var descricao = novaDescricao ?? Descricao;
         var cargaHoraria = novaCargaHoraria ?? CargaHoraria;
         var ordemAula = novaOrdemAula ?? OrdemAula;
+        var url = novoUrl ?? Url;
 
         var validacao = new ResultadoValidacao<Aula>();
         ValidacaoGuid.DeveSerValido(cursoId, "Id do curso não pode ser vazio", validacao);
@@ -75,6 +79,8 @@ public class Aula : Entidade
         ValidacaoNumerica.DeveSerMaiorQueZero(cargaHoraria, "Carga horária deve ser maior que zero", validacao);
         ValidacaoNumerica.DeveEstarEntre(cargaHoraria, 1, 5, "Carga horária deve estar entre 1 e 5 horas", validacao);
         ValidacaoNumerica.DeveSerMaiorQueZero(ordemAula, "Ordem da aula deve ser maior que zero", validacao);
+        ValidacaoTexto.DevePossuirConteudo(url, "URL da aula não pode ser vazia ou nula", validacao);
+        ValidacaoTexto.DevePossuirTamanho(url, 10, 1024, "Url da aula deve ter entre 10 e 1024 caracteres", validacao);
 
         validacao.DispararExcecaoDominioSeInvalido();
     }

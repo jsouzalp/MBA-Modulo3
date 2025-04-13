@@ -9,15 +9,18 @@ public class AulaTests
     private const string _cursoIdInvalido = "00000000-0000-0000-0000-000000000000";
     private const string _cursoIdValido = "11111111-1111-1111-1111-111111111111";
     private const string _descricaoValida = "Introdução ao Domain Driven Design";
+    private const string _urlValida = "http://google.com";
+    private const string _urlInvalida = "http:";
     private const int _cargaHorariaValida = 4;
     private const byte _ordemAulaValida = 1;
 
     private Aula CriarInstanciaAula(string cursoId = _cursoIdValido, 
         string descricao = _descricaoValida, 
         short cargaHoraria = _cargaHorariaValida, 
-        byte ordemAula = _ordemAulaValida)
+        byte ordemAula = _ordemAulaValida, 
+        string url = _urlValida)
     {
-        return new Aula(Guid.Parse(cursoId), descricao, cargaHoraria, ordemAula);
+        return new Aula(Guid.Parse(cursoId), descricao, cargaHoraria, ordemAula, url);
     }
     #endregion
 
@@ -37,18 +40,20 @@ public class AulaTests
     }
 
     [Theory]
-    [InlineData(_cursoIdInvalido, _descricaoValida, _cargaHorariaValida, _ordemAulaValida, "*Id do curso não pode ser vazio*")]
-    [InlineData("11111111-1111-1111-1111-111111111111", "", _cargaHorariaValida, _ordemAulaValida, "*Descrição da aula não pode ser vazia ou nula*")]
-    [InlineData(_cursoIdValido, "abc", _cargaHorariaValida, _ordemAulaValida, "*Descrição da aula deve ter entre 5 e 100 caracteres*")]
-    [InlineData(_cursoIdValido, _descricaoValida, 0, _ordemAulaValida, "*Carga horária deve ser maior que zero*")]
-    [InlineData(_cursoIdValido, _descricaoValida, 10, _ordemAulaValida, "*Carga horária deve estar entre 1 e 5 horas*")]
-    [InlineData(_cursoIdValido, _descricaoValida, 2, 0, "*Ordem da aula deve ser maior que zero*")]
-    public void Nao_deve_criar_aula_invalida(string cursoId, string descricao, short cargaHoraria, byte ordemAula, string mensagemErro)
+    [InlineData(_cursoIdInvalido, _descricaoValida, _cargaHorariaValida, _ordemAulaValida, _urlValida, "*Id do curso não pode ser vazio*")]
+    [InlineData("11111111-1111-1111-1111-111111111111", "", _cargaHorariaValida, _ordemAulaValida, _urlValida, "*Descrição da aula não pode ser vazia ou nula*")]
+    [InlineData(_cursoIdValido, "abc", _cargaHorariaValida, _ordemAulaValida, _urlValida, "*Descrição da aula deve ter entre 5 e 100 caracteres*")]
+    [InlineData(_cursoIdValido, _descricaoValida, 0, _ordemAulaValida, _urlValida, "*Carga horária deve ser maior que zero*")]
+    [InlineData(_cursoIdValido, _descricaoValida, 10, _ordemAulaValida, _urlValida, "*Carga horária deve estar entre 1 e 5 horas*")]
+    [InlineData(_cursoIdValido, _descricaoValida, 2, 0, _urlValida, "*Ordem da aula deve ser maior que zero*")]
+    [InlineData(_cursoIdValido, _descricaoValida, 2, 0, "", "*URL da aula não pode ser vazia ou nula*")]
+    [InlineData(_cursoIdValido, _descricaoValida, _cargaHorariaValida, _ordemAulaValida, _urlInvalida, "*Url da aula deve ter entre 10 e 1024 caracteres*")]
+    public void Nao_deve_criar_aula_invalida(string cursoId, string descricao, short cargaHoraria, byte ordemAula, string url, string mensagemErro)
     {
         // Arrange
 
         // Act
-        Action act = () => CriarInstanciaAula(cursoId, descricao, cargaHoraria, ordemAula);
+        Action act = () => CriarInstanciaAula(cursoId, descricao, cargaHoraria, ordemAula, url);
 
         // Assert
         act.Should().Throw<DomainException>()

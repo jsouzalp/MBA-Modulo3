@@ -73,10 +73,10 @@ public class Curso : Entidade, IRaizAgregacao
         ConteudoProgramatico = conteudoProgramatico;
     }
 
-    public void AdicionarAula(string descricao, short cargaHoraria, byte ordemAula)
+    public void AdicionarAula(string descricao, short cargaHoraria, byte ordemAula, string url)
     {
         ValidarOrdemAula(ordemAula);
-        _aulas.Add(new Aula(Id, descricao, cargaHoraria, ordemAula));
+        _aulas.Add(new Aula(Id, descricao, cargaHoraria, ordemAula, url));
     }
 
     public void RemoverAula(Aula aula)

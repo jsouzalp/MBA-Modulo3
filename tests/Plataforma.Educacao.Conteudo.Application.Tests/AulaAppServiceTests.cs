@@ -31,7 +31,8 @@ public class AulaAppServiceTests
         Descricao = "Aula de Introdução",
         CargaHoraria = 2,
         OrdemAula = 1,
-        Ativo = true
+        Ativo = true,
+        Url = "http://google.com"
     };
 
     private AulaAppService CriarAppService(out Mock<ICursoRepository> cursoRepoMock, Curso curso)
@@ -67,7 +68,7 @@ public class AulaAppServiceTests
     {
         // Arrange
         var curso = CriarCurso();
-        curso.AdicionarAula("Aula Original", 1, 1);
+        curso.AdicionarAula("Aula Original", 1, 1, "http://google.com");
         var aula = curso.Aulas.First();
 
         var dto = new AulaDto
@@ -96,7 +97,7 @@ public class AulaAppServiceTests
     {
         // Arrange
         var curso = CriarCurso();
-        curso.AdicionarAula("Aula a remover", 1, 1);
+        curso.AdicionarAula("Aula a remover", 1, 1, "http://google.com");
         var aula = curso.Aulas.First();
         var service = CriarAppService(out var mock, curso);
 

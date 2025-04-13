@@ -13,4 +13,5 @@ public class AulaDto
     public short CargaHoraria { get; set; }
     public byte OrdemAula { get; set; }
     public bool Ativo { get; set; }
+    public string Url { get; set; }
 }
