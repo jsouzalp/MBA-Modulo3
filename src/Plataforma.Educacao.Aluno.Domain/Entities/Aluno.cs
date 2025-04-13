@@ -72,10 +72,7 @@ namespace Plataforma.Educacao.Aluno.Domain.Entities
         #endregion
 
         #region Overrides
-        public override string ToString()
-        {
-            return $"{Nome} (Email: {Email})";
-        }
+        public override string ToString() => $"{Nome} (Email: {Email})";
         #endregion
     }
 }

@@ -9,4 +9,5 @@
     <ProjectReference Include="..\Plataforma.Educacao.Core\Plataforma.Educacao.Core.csproj" />
   </ItemGroup>
 
+
 </Project>

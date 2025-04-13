@@ -9,7 +9,12 @@ namespace Plataforma.Educacao.Aluno.Domain.Entities
     {
         #region Atributos        
         public Guid AlunoId { get; private set; }
+        //public string NomeAluno { get; private set; }
+
         public Guid CursoId { get; private set; }
+        //public string NomeCurso { get; private set; }
+
+        public decimal Valor { get; private set; }
         public DateTime DataMatricula { get; private set; }
         public DateTime? DataConclusao { get; private set; }
         public EstadoMatriculaCursoEnum EstadoMatricula { get; private set; }
@@ -22,11 +27,13 @@ namespace Plataforma.Educacao.Aluno.Domain.Entities
         #endregion
         #endregion
 
-        #region Construtores        
-        public MatriculaCurso(Guid alunoId, Guid cursoId)
+        #region Construtores   
+        protected MatriculaCurso() { }
+        public MatriculaCurso(Guid alunoId, Guid cursoId, decimal valor)
         {
             AlunoId = alunoId;
             CursoId = cursoId;
+            Valor = valor;
             DataMatricula = DateTime.Now;
             EstadoMatricula = EstadoMatriculaCursoEnum.PendentePagamento;
 
@@ -68,6 +75,7 @@ namespace Plataforma.Educacao.Aluno.Domain.Entities
             var validacao = new ResultadoValidacao<MatriculaCurso>();
             ValidacaoGuid.DeveSerValido(AlunoId, "Aluno deve ser informado", validacao);
             ValidacaoGuid.DeveSerValido(CursoId, "Curso deve ser informado", validacao);
+            ValidacaoNumerica.DeveSerMaiorQueZero(Valor, "Valor da matrícula deve ser maior que zero", validacao);
 
             ValidarConclusaoCurso(dataConclusao, validacao);
             ValidarEstadoParaAbandono(novoEstadoMatriculaCurso, dataConclusao, validacao);
@@ -83,6 +91,7 @@ namespace Plataforma.Educacao.Aluno.Domain.Entities
                 {
                     case EstadoMatriculaCursoEnum.PendentePagamento:
                     case EstadoMatriculaCursoEnum.PagamentoRealizado:
+                        ValidacaoData.DeveSerValido(dataConclusao.Value, "Data de conclusão deve ser informada", validacao);
                         ValidacaoData.DeveTerRangeValido(DataMatricula, dataConclusao.Value, "Data de conclusão não pode ser anterior a data de matrícula", validacao);
                         break;
                     case EstadoMatriculaCursoEnum.Abandonado:

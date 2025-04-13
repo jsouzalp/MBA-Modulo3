@@ -1,0 +1,152 @@
+﻿using FluentAssertions;
+using Moq;
+using Plataforma.Educacao.Conteudo.Application.DTO;
+using Plataforma.Educacao.Conteudo.Application.Services;
+using Plataforma.Educacao.Conteudo.Domain.Entities;
+using Plataforma.Educacao.Conteudo.Domain.Interfaces;
+using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
+using Plataforma.Educacao.Core.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Plataforma.Educacao.Conteudo.Application.Tests;
+public class CursoAppServiceTests
+{
+    #region Helpers
+    private Curso CriarCurso() => new("Curso Teste", 1500m, DateTime.Now.AddMonths(6),
+        new ConteudoProgramatico("Finalidade", new string('A', 60)));
+
+    private CadastroCursoDto CriarCadastroDto() => new()
+    {
+        Nome = "Curso Teste",
+        Valor = 1500m,
+        ValidoAte = DateTime.Now.AddMonths(6),
+        Finalidade = "Finalidade do Curso",
+        Ementa = new string('A', 60)
+    };
+
+    private AtualizacaoCursoDto CriarAtualizacaoDto(Guid cursoId) => new()
+    {
+        CursoId = cursoId,
+        Nome = "Curso Atualizado",
+        Valor = 1800m,
+        ValidoAte = DateTime.Now.AddMonths(12),
+        Finalidade = "Finalidade Atualizada",
+        Ementa = new string('B', 60),
+        Ativo = true
+    };
+
+    private CursoAppService CriarAppService(out Mock<ICursoRepository> repoMock, Curso curso = null)
+    {
+        repoMock = new Mock<ICursoRepository>();
+
+        repoMock.Setup(r => r.AdicionarAsync(It.IsAny<Curso>())).Returns(Task.CompletedTask);
+        repoMock.Setup(r => r.AtualizarAsync(It.IsAny<Curso>())).Returns(Task.CompletedTask);
+        repoMock.Setup(r => r.UnitOfWork.Commit()).ReturnsAsync(true);
+        if (curso != null)
+        {
+            repoMock.Setup(r => r.ObterPorIdAsync(curso.Id)).ReturnsAsync(curso);
+        }
+
+        return new CursoAppService(repoMock.Object);
+    }
+    #endregion
+
+    [Fact]
+    public async Task Deve_cadastrar_curso_valido()
+    {
+        var service = CriarAppService(out var repoMock);
+        var dto = CriarCadastroDto();
+
+        var id = await service.CadastrarCursoAsync(dto);
+
+        id.Should().NotBeEmpty();
+        repoMock.Verify(r => r.AdicionarAsync(It.IsAny<Curso>()), Times.Once);
+        repoMock.Verify(r => r.UnitOfWork.Commit(), Times.Once);
+    }
+
+    [Fact]
+    public async Task Nao_deve_cadastrar_curso_duplicado()
+    {
+        var repoMock = new Mock<ICursoRepository>();
+        repoMock.Setup(r => r.ExisteCursoComMesmoNomeAsync(It.IsAny<string>())).ReturnsAsync(true);
+
+        var service = new CursoAppService(repoMock.Object);
+        var dto = CriarCadastroDto();
+
+        Func<Task> act = async () => await service.CadastrarCursoAsync(dto);
+
+        await act.Should().ThrowAsync<DomainException>().WithMessage("*Já existe um curso cadastrado com esse nome*");
+    }
+
+    [Fact]
+    public async Task Deve_atualizar_curso_valido()
+    {
+        var curso = CriarCurso();
+        var service = CriarAppService(out var repoMock, curso);
+        var dto = CriarAtualizacaoDto(curso.Id);
+
+        await service.AtualizarCursoAsync(curso.Id, dto);
+
+        curso.Nome.Should().Be(dto.Nome);
+        curso.Valor.Should().Be(dto.Valor);
+        curso.ConteudoProgramatico.Finalidade.Should().Be(dto.Finalidade);
+        curso.ConteudoProgramatico.Ementa.Should().Be(dto.Ementa);
+
+        repoMock.Verify(r => r.AtualizarAsync(curso), Times.Once);
+        repoMock.Verify(r => r.UnitOfWork.Commit(), Times.Once);
+    }
+
+    [Fact]
+    public async Task Nao_deve_atualizar_curso_inexistente()
+    {
+        var service = CriarAppService(out var repoMock);
+        var dto = CriarAtualizacaoDto(Guid.NewGuid());
+
+        Func<Task> act = async () => await service.AtualizarCursoAsync(dto.CursoId, dto);
+
+        await act.Should().ThrowAsync<DomainException>().WithMessage("*Curso não encontrado*");
+    }
+
+    [Fact]
+    public async Task Deve_desativar_curso()
+    {
+        var curso = CriarCurso();
+        var service = CriarAppService(out var repoMock, curso);
+
+        await service.DesativarCursoAsync(curso.Id);
+
+        curso.Ativo.Should().BeFalse();
+        repoMock.Verify(r => r.AtualizarAsync(curso), Times.Once);
+        repoMock.Verify(r => r.UnitOfWork.Commit(), Times.Once);
+    }
+
+    [Fact]
+    public async Task Deve_obter_curso_por_id()
+    {
+        var curso = CriarCurso();
+        var service = CriarAppService(out var repoMock, curso);
+
+        var dto = await service.ObterPorIdAsync(curso.Id);
+
+        dto.Should().NotBeNull();
+        dto.Id.Should().Be(curso.Id);
+    }
+
+    [Fact]
+    public async Task Deve_obter_lista_de_cursos()
+    {
+        var curso = CriarCurso();
+        var repoMock = new Mock<ICursoRepository>();
+        repoMock.Setup(r => r.ObterTodosAsync()).ReturnsAsync([curso]);
+
+        var service = new CursoAppService(repoMock.Object);
+
+        var lista = await service.ObterTodosAsync();
+
+        lista.Should().HaveCount(1);
+    }
+}

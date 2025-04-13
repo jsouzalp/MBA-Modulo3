@@ -32,7 +32,7 @@
         }
         #endregion
 
-        #region Validação INT
+        #region Validação DECIMAL
         public static void DeveSerMaiorQueZero<T>(decimal valor, string mensagem, ResultadoValidacao<T> resultado) where T : class
         {
             if (valor <= 0)

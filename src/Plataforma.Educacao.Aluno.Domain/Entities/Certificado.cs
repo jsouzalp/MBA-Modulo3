@@ -18,6 +18,8 @@ namespace Plataforma.Educacao.Aluno.Domain.Entities
         #endregion
 
         #region Construtores
+        protected Certificado() { }
+
         public Certificado(Guid matriculaCursoId, string pathCertificado)
         {
             MatriculaCursoId = matriculaCursoId;
@@ -52,10 +54,7 @@ namespace Plataforma.Educacao.Aluno.Domain.Entities
         #endregion
 
         #region Overrides
-        public override string ToString()
-        {
-            return $"Certificado da matrícula {MatriculaCursoId}, gerado em {DataSolicitacao:dd/MM/yyyy}";
-        }
+        public override string ToString() => $"Certificado da matrícula {MatriculaCursoId}, gerado em {DataSolicitacao:dd/MM/yyyy}";
         #endregion
     }
 }

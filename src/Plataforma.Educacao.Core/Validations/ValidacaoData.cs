@@ -10,23 +10,41 @@
 
         public static void DeveSerMenorQue<T>(DateTime dataValidacao, DateTime dataLimite, string mensagem, ResultadoValidacao<T> resultado) where T : class
         {
-            if (dataValidacao == DateTime.MinValue || dataValidacao == DateTime.MaxValue)
-                resultado.AdicionarErro(mensagem);
+            DeveSerValido(dataValidacao, mensagem, resultado);
+            //if (dataValidacao == DateTime.MinValue || dataValidacao == DateTime.MaxValue)
+            //    resultado.AdicionarErro(mensagem);
 
-            if (dataLimite == DateTime.MinValue || dataLimite == DateTime.MaxValue)
-                resultado.AdicionarErro(mensagem);
+            DeveSerValido(dataLimite, mensagem, resultado);
+            //if (dataLimite == DateTime.MinValue || dataLimite == DateTime.MaxValue)
+            //    resultado.AdicionarErro(mensagem);
 
             if (dataValidacao.Date > dataLimite.Date)
                 resultado.AdicionarErro(mensagem);
         }
 
+        public static void DeveSerMaiorQue<T>(DateTime dataMaior, DateTime dataMenor, string mensagem, ResultadoValidacao<T> resultado) where T : class
+        {
+            DeveSerValido(dataMaior, mensagem, resultado);
+            //if (dataValidacao == DateTime.MinValue || dataValidacao == DateTime.MaxValue)
+            //    resultado.AdicionarErro(mensagem);
+
+            DeveSerValido(dataMenor, mensagem, resultado);
+            //if (dataLimite == DateTime.MinValue || dataLimite == DateTime.MaxValue)
+            //    resultado.AdicionarErro(mensagem);
+
+            if (dataMenor.Date > dataMaior.Date)
+                resultado.AdicionarErro(mensagem);
+        }
+
         public static void DeveTerRangeValido<T>(DateTime dataInicial, DateTime dataFinal, string mensagem, ResultadoValidacao<T> resultado) where T : class
         {
-            if (dataInicial == DateTime.MinValue || dataInicial == DateTime.MaxValue)
-                resultado.AdicionarErro(mensagem);
+            DeveSerValido(dataInicial, mensagem, resultado);
+            //if (dataInicial == DateTime.MinValue || dataInicial == DateTime.MaxValue)
+            //    resultado.AdicionarErro(mensagem);
 
-            if (dataFinal == DateTime.MinValue || dataFinal == DateTime.MaxValue)
-                resultado.AdicionarErro(mensagem);
+            DeveSerValido(dataFinal, mensagem, resultado);
+            //if (dataFinal == DateTime.MinValue || dataFinal == DateTime.MaxValue)
+            //    resultado.AdicionarErro(mensagem);
 
             if (dataInicial.Date > dataFinal.Date)
                 resultado.AdicionarErro(mensagem);

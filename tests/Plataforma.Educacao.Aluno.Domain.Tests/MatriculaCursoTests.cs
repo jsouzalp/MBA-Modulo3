@@ -11,10 +11,12 @@ namespace Plataforma.Educacao.Aluno.Domain.Tests
         private const string _alunoIdValido = "11111111-1111-1111-1111-111111111111";
         private const string _cursoIdValido = "22222222-2222-2222-2222-222222222222";
         private const string _guidInvalido = "00000000-0000-0000-0000-000000000000";
+        private const double _valorValido = 1000.00;
+        private const double _valorInvalido = 0.00;
 
-        private MatriculaCurso CriarMatricula(string alunoId = _alunoIdValido, string cursoId = _cursoIdValido)
+        private MatriculaCurso CriarMatricula(string alunoId = _alunoIdValido, string cursoId = _cursoIdValido, double? valor = _valorValido)
         {
-            return new MatriculaCurso(Guid.Parse(alunoId), Guid.Parse(cursoId));
+            return new MatriculaCurso(Guid.Parse(alunoId), Guid.Parse(cursoId), (decimal?)valor ?? 0.00m);
         }
         #endregion
 
@@ -27,16 +29,18 @@ namespace Plataforma.Educacao.Aluno.Domain.Tests
             matricula.Should().NotBeNull();
             matricula.AlunoId.Should().Be(Guid.Parse(_alunoIdValido));
             matricula.CursoId.Should().Be(Guid.Parse(_cursoIdValido));
+            matricula.Valor.Should().Be((decimal)_valorValido);
             matricula.EstadoMatricula.Should().Be(EstadoMatriculaCursoEnum.PendentePagamento);
             matricula.DataMatricula.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
         }
 
         [Theory]
-        [InlineData(_guidInvalido, _cursoIdValido, "*Aluno deve ser informado*")]
-        [InlineData(_alunoIdValido, _guidInvalido, "*Curso deve ser informado*")]
-        public void Nao_deve_criar_matricula_invalida(string alunoId, string cursoId, string mensagemErro)
+        [InlineData(_guidInvalido, _cursoIdValido, _valorValido, "*Aluno deve ser informado*")]
+        [InlineData(_alunoIdValido, _guidInvalido, _valorValido, "*Curso deve ser informado*")]
+        [InlineData(_alunoIdValido, _guidInvalido, _valorInvalido, "*Valor da matrícula deve ser maior que zero*")]
+        public void Nao_deve_criar_matricula_invalida(string alunoId, string cursoId, double valor, string mensagemErro)
         {
-            Action act = () => CriarMatricula(alunoId, cursoId);
+            Action act = () => CriarMatricula(alunoId, cursoId, valor);
 
             act.Should().Throw<DomainException>()
                .WithMessage(mensagemErro);

@@ -1,6 +1,6 @@
 ﻿namespace Plataforma.Educacao.Aluno.Domain.Interfaces
 {
-    internal interface IAlunoService
+    internal interface IAlunoApplication
     {
     }
 }
