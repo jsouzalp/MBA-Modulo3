@@ -40,7 +40,7 @@ public class Aula : Entidade
     #region Getters
     #endregion
 
-    #region Setters
+    #region Metodos do Dominio
     public void AtivarAula() => Ativo = true;
     public void DesativarAula() => Ativo = false;
 
@@ -64,16 +64,15 @@ public class Aula : Entidade
     #endregion
 
     #region Validacoes
-    private void ValidarIntegridadeAula(Guid? novoCursoId = null, string novaDescricao = null, short? novaCargaHoraria = null, byte? novaOrdemAula = null, string novoUrl = null)
+    private void ValidarIntegridadeAula(string novaDescricao = null, short? novaCargaHoraria = null, byte? novaOrdemAula = null, string novoUrl = null)
     {
-        var cursoId = novoCursoId ?? CursoId;
         var descricao = novaDescricao ?? Descricao;
         var cargaHoraria = novaCargaHoraria ?? CargaHoraria;
         var ordemAula = novaOrdemAula ?? OrdemAula;
         var url = novoUrl ?? Url;
 
         var validacao = new ResultadoValidacao<Aula>();
-        ValidacaoGuid.DeveSerValido(cursoId, "Id do curso não pode ser vazio", validacao);
+        ValidacaoGuid.DeveSerValido(CursoId, "Id do curso não pode ser vazio", validacao);
         ValidacaoTexto.DevePossuirConteudo(descricao, "Descrição da aula não pode ser vazia ou nula", validacao);
         ValidacaoTexto.DevePossuirTamanho(descricao, 5, 100, "Descrição da aula deve ter entre 5 e 100 caracteres", validacao);
         ValidacaoNumerica.DeveSerMaiorQueZero(cargaHoraria, "Carga horária deve ser maior que zero", validacao);

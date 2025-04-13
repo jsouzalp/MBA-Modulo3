@@ -45,66 +45,66 @@ public class ConteudoProgramaticoTests
     }
     #endregion
 
-    #region Setters
-    [Theory]
-    [InlineData("", "*Finalidade não pode ser vazia ou nula*")]
-    [InlineData("abc", "*Finalidade do conteúdo programático deve ter entre 10 e 100 caracteres*")]
-    public void Nao_deve_alterar_finalidade_invalida(string finalidade, string mensagemErro)
-    {
-        // Arrange
-        var conteudo = CriarInstanciaConteudo();
+    #region Metodos do Dominio
+    //[Theory]
+    //[InlineData("", "*Finalidade não pode ser vazia ou nula*")]
+    //[InlineData("abc", "*Finalidade do conteúdo programático deve ter entre 10 e 100 caracteres*")]
+    //public void Nao_deve_alterar_finalidade_invalida(string finalidade, string mensagemErro)
+    //{
+    //    // Arrange
+    //    var conteudo = CriarInstanciaConteudo();
 
-        // Act
-        Action act = () => conteudo.AlterarFinalidade(finalidade);
+    //    // Act
+    //    Action act = () => conteudo.AlterarFinalidade(finalidade);
 
-        // Assert
-        act.Should().Throw<DomainException>()
-           .WithMessage(mensagemErro);
-    }
+    //    // Assert
+    //    act.Should().Throw<DomainException>()
+    //       .WithMessage(mensagemErro);
+    //}
 
-    [Fact]
-    public void Deve_alterar_finalidade_valida()
-    {
-        // Arrange
-        var novaFinalidade = "Curso atualizado de DDD";
-        var conteudo = CriarInstanciaConteudo();
+    //[Fact]
+    //public void Deve_alterar_finalidade_valida()
+    //{
+    //    // Arrange
+    //    var novaFinalidade = "Curso atualizado de DDD";
+    //    var conteudo = CriarInstanciaConteudo();
 
-        // Act
-        conteudo.AlterarFinalidade(novaFinalidade);
+    //    // Act
+    //    conteudo.AlterarFinalidade(novaFinalidade);
 
-        // Assert
-        conteudo.Finalidade.Should().Be(novaFinalidade);
-    }
+    //    // Assert
+    //    conteudo.Finalidade.Should().Be(novaFinalidade);
+    //}
 
-    [Theory]
-    [InlineData("", "*Ementa do conteúdo programático não pode ser vazia ou nula*")]
-    [InlineData("abc", "*Ementa do conteúdo programático deve ter entre 50 e 4000 caracteres*")]
-    public void Nao_deve_alterar_ementa_invalida(string ementa, string mensagemErro)
-    {
-        // Arrange
-        var conteudo = CriarInstanciaConteudo();
+    //[Theory]
+    //[InlineData("", "*Ementa do conteúdo programático não pode ser vazia ou nula*")]
+    //[InlineData("abc", "*Ementa do conteúdo programático deve ter entre 50 e 4000 caracteres*")]
+    //public void Nao_deve_alterar_ementa_invalida(string ementa, string mensagemErro)
+    //{
+    //    // Arrange
+    //    var conteudo = CriarInstanciaConteudo();
 
-        // Act
-        Action act = () => conteudo.AlterarEmenta(ementa);
+    //    // Act
+    //    Action act = () => conteudo.AlterarEmenta(ementa);
 
-        // Assert
-        act.Should().Throw<DomainException>()
-           .WithMessage(mensagemErro);
-    }
+    //    // Assert
+    //    act.Should().Throw<DomainException>()
+    //       .WithMessage(mensagemErro);
+    //}
 
-    [Fact]
-    public void Deve_alterar_ementa_valida()
-    {
-        // Arrange
-        var novaEmenta = "Conceitos básicos, intermediários e avançados de Domain Driven Design, com suporte a CQRS e mais um monte de coisas que você não pode perder";
-        var conteudo = CriarInstanciaConteudo();
+    //[Fact]
+    //public void Deve_alterar_ementa_valida()
+    //{
+    //    // Arrange
+    //    var novaEmenta = "Conceitos básicos, intermediários e avançados de Domain Driven Design, com suporte a CQRS e mais um monte de coisas que você não pode perder";
+    //    var conteudo = CriarInstanciaConteudo();
 
-        // Act
-        conteudo.AlterarEmenta(novaEmenta);
+    //    // Act
+    //    conteudo.AlterarEmenta(novaEmenta);
 
-        // Assert
-        conteudo.Ementa.Should().Be(novaEmenta);
-    }
+    //    // Assert
+    //    conteudo.Ementa.Should().Be(novaEmenta);
+    //}
     #endregion
 
     #region Comparações
@@ -129,6 +129,15 @@ public class ConteudoProgramaticoTests
 
         // Assert
         conteudo1.Should().NotBe(conteudo2);
+    }
+    #endregion
+
+    #region Testes de Overrides
+    [Fact]
+    public void ToString_deve_retornar_texto_formatado_com_finalidade()
+    {
+        var conteudo = CriarInstanciaConteudo();
+        conteudo.ToString().Should().Contain(_finalidadeValida);
     }
     #endregion
 }

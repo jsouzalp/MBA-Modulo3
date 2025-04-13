@@ -4,11 +4,6 @@ using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Conteudo.Application.Services;
 public class CursoAppService(ICursoRepository cursoRepository) : BaseService, ICursoAppService
@@ -41,7 +36,8 @@ public class CursoAppService(ICursoRepository cursoRepository) : BaseService, IC
         curso.AlterarNome(dto.Nome);
         curso.AlterarValor(dto.Valor);
         curso.AlterarValidadeCurso(dto.ValidoAte);
-        curso.AlterarConteudoProgramatico(new ConteudoProgramatico(dto.Finalidade, dto.Ementa));
+        //curso.AlterarConteudoProgramatico(new ConteudoProgramatico(dto.Finalidade, dto.Ementa));
+        curso.AtualizarConteudoProgramatico(dto.Finalidade, dto.Ementa);
         if (dto.Ativo) { curso.AtivarCurso(); }
         else { curso.DesativarCurso(); }
 

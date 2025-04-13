@@ -1,6 +1,7 @@
 ﻿using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Aggregates;
 using Plataforma.Educacao.Core.Entities;
+using Plataforma.Educacao.Core.Exceptions;
 using Plataforma.Educacao.Core.Validations;
 
 namespace Plataforma.Educacao.Conteudo.Domain.Entities;
@@ -40,12 +41,12 @@ public class Curso : Entidade, IRaizAgregacao
     #endregion
 
     #region Getters
-    public int CargaHoraria() => _aulas.Sum(a => a.CargaHoraria);
+    public short CargaHoraria() => (short)_aulas.Sum(a => a.CargaHoraria);
     public int QuantidadeAulas() => _aulas.Count;
     public bool CursoDisponivel() => Ativo && (!ValidoAte.HasValue || ValidoAte.Value >= DateTime.Now.Date);
     #endregion
 
-    #region Setters
+    #region Metodos do Dominio
     public void AtivarCurso() => Ativo = true;
     public void DesativarCurso() => Ativo = false;
 
@@ -67,10 +68,14 @@ public class Curso : Entidade, IRaizAgregacao
         ValidoAte = validoAte;
     }
 
-    public void AlterarConteudoProgramatico(ConteudoProgramatico conteudoProgramatico)
+    //public void AlterarConteudoProgramatico(ConteudoProgramatico conteudoProgramatico)
+    //{
+    //    ValidarIntegridadeCurso(novoConteudoProgramatico: conteudoProgramatico);
+    //    ConteudoProgramatico = conteudoProgramatico;
+    //}
+    public void AtualizarConteudoProgramatico(string finalidade, string ementa)
     {
-        ValidarIntegridadeCurso(novoConteudoProgramatico: conteudoProgramatico);
-        ConteudoProgramatico = conteudoProgramatico;
+        ConteudoProgramatico = new ConteudoProgramatico(finalidade, ementa);
     }
 
     public void AdicionarAula(string descricao, short cargaHoraria, byte ordemAula, string url)
@@ -82,6 +87,9 @@ public class Curso : Entidade, IRaizAgregacao
     public void RemoverAula(Aula aula)
     {
         if (_aulas == null) { return; }
+        if (!_aulas.Contains(aula))
+            throw new DomainException("Aula não pertence a este curso");
+
         _aulas.Remove(aula);
     }
     #endregion

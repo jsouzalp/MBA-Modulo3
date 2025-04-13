@@ -4,32 +4,20 @@ namespace Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 public class ConteudoProgramatico
 {
     #region Atributos
-    public string Finalidade { get; private set; }
-    public string Ementa { get; private set; }
+    public string Finalidade { get; }
+    public string Ementa { get; }
     #endregion
 
     #region Construtores
+    // EF Constructor
     protected ConteudoProgramatico() { }
+
     public ConteudoProgramatico(string finalidade, string ementa)
     {
         Finalidade = finalidade;
         Ementa = ementa;
 
         ValidarIntegridadeConteudoProgramatico();
-    }
-    #endregion
-
-    #region Setters
-    public void AlterarFinalidade(string finalidade)
-    {
-        ValidarIntegridadeConteudoProgramatico(novaFinalidade: finalidade);
-        Finalidade = finalidade;
-    }
-
-    public void AlterarEmenta(string ementa)
-    {
-        ValidarIntegridadeConteudoProgramatico(novaEmenta: ementa);
-        Ementa = ementa;
     }
     #endregion
 

@@ -6,11 +6,6 @@ using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Conteudo.Application.Tests;
 public class AulaAppServiceTests
@@ -124,6 +119,31 @@ public class AulaAppServiceTests
 
         // Assert
         await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("Aula não encontrada");
+            .WithMessage("*Aula não encontrada*");
     }
+
+    //[Fact]
+    //public async Task Deve_lancar_excecao_quando_ordem_aula_ja_existir()
+    //{
+    //    var curso = CriarCurso();
+    //    curso.AdicionarAula("Aula existente 1", 2, 1, "http://google.com");
+    //    curso.AdicionarAula("Aula existente 2", 4, 2, "http://google.com");
+
+    //    var aulaNova = curso.Aulas.First();
+    //    var dto = new AulaDto
+    //    {
+    //        Id = aulaNova.Id,
+    //        Descricao = "Atualizando aula",
+    //        CargaHoraria = 2,
+    //        OrdemAula = 1, // mesma ordem
+    //        Ativo = true
+    //    };
+
+    //    var service = CriarAppService(out _, curso);
+
+    //    Func<Task> act = async () => await service.AtualizarAulaAsync(curso.Id, dto);
+
+    //    await act.Should().ThrowAsync<DomainException>()
+    //             .WithMessage("*Já existe uma aula com essa ordem*");
+    //}
 }

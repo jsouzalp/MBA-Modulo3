@@ -58,7 +58,7 @@ namespace Plataforma.Educacao.Conteudo.Faturamento.Tests
         }
         #endregion
 
-        #region Setters
+        #region Metodos do Dominio
         [Fact]
         public void Deve_atualizar_numero_valido()
         {

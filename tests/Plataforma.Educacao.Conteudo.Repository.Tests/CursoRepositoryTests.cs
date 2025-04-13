@@ -4,11 +4,6 @@ using Plataforma.Educacao.Conteudo.Data.Contexts;
 using Plataforma.Educacao.Conteudo.Data.Repositories;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Conteudo.Repository.Tests;
 public class CursoRepositoryTests
@@ -157,6 +152,33 @@ public class CursoRepositoryTests
         var curso = await repository.ObterPorIdAsync(Guid.NewGuid());
 
         curso.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Deve_retornar_true_se_houver_cursos_com_nomes_iguais()
+    {
+        var curso1 = CriarCursoValido("Curso Duplicado...");
+        var curso2 = CriarCursoValido("Curso Duplicado...");
+
+        var repository = CriarRepository(out var context);
+        await repository.AdicionarAsync(curso1);
+        await repository.AdicionarAsync(curso2);
+        await context.SaveChangesAsync();
+
+        var existe = await repository.ExisteCursoComMesmoNomeAsync("Curso Duplicado...");
+
+        existe.Should().BeTrue();
+    }
+    #endregion
+
+    #region Overrides
+    [Fact]
+    public void Dispose_deve_encerrar_contexto_sem_excecao()
+    {
+        var repository = CriarRepository(out var context);
+        var act = () => repository.Dispose();
+
+        act.Should().NotThrow();
     }
     #endregion
 }

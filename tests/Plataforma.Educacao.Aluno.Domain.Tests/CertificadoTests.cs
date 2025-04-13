@@ -2,99 +2,97 @@
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Core.Exceptions;
 
-namespace Plataforma.Educacao.Aluno.Domain.Tests
+namespace Plataforma.Educacao.Aluno.Domain.Tests;
+public class CertificadoTests
 {
-    public class CertificadoTests
+    #region Helpers
+    private const string _matriculaCursoIdValido = "11111111-1111-1111-1111-111111111111";
+    private const string _matriculaCursoIdInvalido = "00000000-0000-0000-0000-000000000000";
+    private const string _pathValido = "/certificados/matricula-curso-id-certificado.pdf";
+
+    private Certificado CriarCertificado(string matriculaCursoId = _matriculaCursoIdValido, string pathCertificado = _pathValido)
     {
-        #region Helpers
-        private const string _matriculaCursoIdValido = "11111111-1111-1111-1111-111111111111";
-        private const string _matriculaCursoIdInvalido = "00000000-0000-0000-0000-000000000000";
-        private const string _pathValido = "/certificados/matricula-curso-id-certificado.pdf";
-
-        private Certificado CriarCertificado(string matriculaCursoId = _matriculaCursoIdValido, string pathCertificado = _pathValido)
-        {
-            return new Certificado(Guid.Parse(matriculaCursoId), pathCertificado);
-        }
-        #endregion
-
-        #region Construtores
-        [Fact]
-        public void Deve_criar_certificado_valido()
-        {
-            // Act
-            var certificado = CriarCertificado();
-
-            // Assert
-            certificado.Should().NotBeNull();
-            certificado.MatriculaCursoId.Should().Be(Guid.Parse(_matriculaCursoIdValido));
-            certificado.PathCertificado.Should().Be(_pathValido);
-            certificado.DataSolicitacao.Date.Should().Be(DateTime.Now.Date);
-        }
-
-        [Theory]
-        [InlineData(_matriculaCursoIdInvalido, _pathValido, "*Matrícula do curso deve ser informada*")]
-        [InlineData(_matriculaCursoIdValido, "", "*Path do certificado não pode ser nulo ou vazio*")]
-        public void Nao_deve_criar_certificado_invalido(string matriculaCursoId, string path, string mensagemErro)
-        {
-            // Act
-            Action act = () => CriarCertificado(matriculaCursoId, path);
-
-            // Assert
-            act.Should().Throw<DomainException>()
-                .WithMessage(mensagemErro);
-        }
-
-        [Fact]
-        public void Nao_deve_criar_certificado_com_path_muito_longo()
-        {
-            var pathLongo = new string('x', 1025);
-
-            Action act = () => CriarCertificado(_matriculaCursoIdValido, pathLongo);
-
-            act.Should().Throw<DomainException>()
-                .WithMessage("*Path do certificado deve ter no máximo 1024 caracteres*");
-        }
-        #endregion
-
-        #region Setters
-        [Fact]
-        public void Deve_atualizar_path_certificado_valido()
-        {
-            // Arrange
-            var novoPath = "/novos-caminhos/atualizado.pdf";
-            var certificado = CriarCertificado();
-
-            // Act
-            certificado.AtualizarPathCertificado(novoPath);
-
-            // Assert
-            certificado.PathCertificado.Should().Be(novoPath);
-        }
-
-        [Theory]
-        [InlineData("", "*Path do certificado não pode ser nulo ou vazio*")]
-        [InlineData(null, "*Path do certificado não pode ser nulo ou vazio*")]
-        public void Nao_deve_atualizar_path_invalido(string novoPath, string mensagemErro)
-        {
-            var certificado = CriarCertificado();
-
-            Action act = () => certificado.AtualizarPathCertificado(novoPath);
-
-            act.Should().Throw<DomainException>()
-                .WithMessage(mensagemErro);
-        }
-
-        [Fact]
-        public void Nao_deve_atualizar_certificado_com_path_muito_longo()
-        {
-            var pathLongo = new string('x', 1025);
-            var certificado = CriarCertificado();
-
-            Action act = () => certificado.AtualizarPathCertificado(pathLongo);
-
-            act.Should().Throw<DomainException>()
-                .WithMessage("*Path do certificado deve ter no máximo 1024 caracteres*");
-        }
-        #endregion
+        return new Certificado(Guid.Parse(matriculaCursoId), pathCertificado);
     }
+    #endregion
+
+    #region Construtores
+    [Fact]
+    public void Deve_criar_certificado_valido()
+    {
+        // Act
+        var certificado = CriarCertificado();
+
+        // Assert
+        certificado.Should().NotBeNull();
+        certificado.MatriculaCursoId.Should().Be(Guid.Parse(_matriculaCursoIdValido));
+        certificado.PathCertificado.Should().Be(_pathValido);
+        certificado.DataSolicitacao.Date.Should().Be(DateTime.Now.Date);
+    }
+
+    [Theory]
+    [InlineData(_matriculaCursoIdInvalido, _pathValido, "*Matrícula do curso deve ser informada*")]
+    [InlineData(_matriculaCursoIdValido, "", "*Path do certificado não pode ser nulo ou vazio*")]
+    public void Nao_deve_criar_certificado_invalido(string matriculaCursoId, string path, string mensagemErro)
+    {
+        // Act
+        Action act = () => CriarCertificado(matriculaCursoId, path);
+
+        // Assert
+        act.Should().Throw<DomainException>()
+            .WithMessage(mensagemErro);
+    }
+
+    [Fact]
+    public void Nao_deve_criar_certificado_com_path_muito_longo()
+    {
+        var pathLongo = new string('x', 1025);
+
+        Action act = () => CriarCertificado(_matriculaCursoIdValido, pathLongo);
+
+        act.Should().Throw<DomainException>()
+            .WithMessage("*Path do certificado deve ter no máximo 1024 caracteres*");
+    }
+    #endregion
+
+    #region Metodos do Dominio
+    [Fact]
+    public void Deve_atualizar_path_certificado_valido()
+    {
+        // Arrange
+        var novoPath = "/novos-caminhos/atualizado.pdf";
+        var certificado = CriarCertificado();
+
+        // Act
+        certificado.AtualizarPathCertificado(novoPath);
+
+        // Assert
+        certificado.PathCertificado.Should().Be(novoPath);
+    }
+
+    [Theory]
+    [InlineData("", "*Path do certificado não pode ser nulo ou vazio*")]
+    [InlineData(null, "*Path do certificado não pode ser nulo ou vazio*")]
+    public void Nao_deve_atualizar_path_invalido(string novoPath, string mensagemErro)
+    {
+        var certificado = CriarCertificado();
+
+        Action act = () => certificado.AtualizarPathCertificado(novoPath);
+
+        act.Should().Throw<DomainException>()
+            .WithMessage(mensagemErro);
+    }
+
+    [Fact]
+    public void Nao_deve_atualizar_certificado_com_path_muito_longo()
+    {
+        var pathLongo = new string('x', 1025);
+        var certificado = CriarCertificado();
+
+        Action act = () => certificado.AtualizarPathCertificado(pathLongo);
+
+        act.Should().Throw<DomainException>()
+            .WithMessage("*Path do certificado deve ter no máximo 1024 caracteres*");
+    }
+    #endregion
 }

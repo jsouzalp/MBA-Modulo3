@@ -61,7 +61,7 @@ public class AulaTests
     }
     #endregion
 
-    #region Setters
+    #region Metodos do Dominio
     [Fact]
     public void Deve_ativar_e_desativar_aula()
     {
@@ -153,5 +153,29 @@ public class AulaTests
         // Assert
         aula.OrdemAula.Should().Be(novaOrdem);
     }
+    #endregion
+
+    #region Testes de Override
+    [Fact]
+    public void ToString_deve_retornar_informacoes_da_aula()
+    {
+        var aula = CriarInstanciaAula();
+        var resultado = aula.ToString();
+
+        resultado.Should().Contain(_descricaoValida);
+        resultado.Should().Contain(_cargaHorariaValida.ToString());
+        resultado.Should().Contain(_ordemAulaValida.ToString());
+    }
+
+    //[Fact]
+    //public void Aulas_com_mesmo_id_devem_ser_iguais()
+    //{
+    //    var id = Guid.NewGuid();
+    //    var aula1 = new Aula(id, _descricaoValida, _cargaHorariaValida, _ordemAulaValida, _urlValida);
+    //    var aula2 = new Aula(id, _descricaoValida, _cargaHorariaValida, _ordemAulaValida, _urlValida);
+
+    //    (aula1 == aula2).Should().BeTrue();
+    //    aula1.Equals(aula2).Should().BeTrue();
+    //}
     #endregion
 }

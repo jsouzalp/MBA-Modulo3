@@ -37,7 +37,7 @@ namespace Plataforma.Educacao.Faturamento.Domain.Entities
         public bool PodeConfirmarPagamento() => StatusPagamento.EstahPendente && !DataPagamento.HasValue;
         #endregion
 
-        #region Setters
+        #region Metodos do Dominio
         public void ConfirmarPagamento(DateTime? dataPagamento)
         {
             dataPagamento ??= DateTime.Now;

@@ -22,7 +22,7 @@ namespace Plataforma.Educacao.Faturamento.Domain.ValueObjects
         public bool EstahRecusado => Status == StatusPagamentoEnum.Recusado;
         #endregion
 
-        #region Setters
+        #region Metodos do Dominio
         public void TransicionarPara(StatusPagamentoEnum novoStatus)
         {
             ValidarIntegridadeStatusPagamento(novoStatus);

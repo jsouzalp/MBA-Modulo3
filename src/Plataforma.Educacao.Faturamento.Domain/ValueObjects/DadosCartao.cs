@@ -26,7 +26,7 @@ namespace Plataforma.Educacao.Faturamento.Domain.ValueObjects
         #region Getters
         #endregion
 
-        #region Setters
+        #region Metodos do Dominio
         public void AtualizarNumero(string numero)
         {
             ValidarIntegridadeDadosCartao(novoNumero: numero ?? string.Empty);

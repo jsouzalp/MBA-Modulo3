@@ -3,11 +3,6 @@ using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
 using Plataforma.Educacao.Core.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Conteudo.Application.Services;
 public class AulaAppService(ICursoRepository cursoRepository) : BaseService, IAulaAppService

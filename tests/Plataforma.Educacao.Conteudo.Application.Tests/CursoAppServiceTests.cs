@@ -6,11 +6,6 @@ using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Conteudo.Application.Tests;
 public class CursoAppServiceTests
@@ -148,5 +143,23 @@ public class CursoAppServiceTests
         var lista = await service.ObterTodosAsync();
 
         lista.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public async Task Nao_deve_atualizar_para_nome_ja_existente_em_outro_curso()
+    {
+        var cursoOriginal = CriarCurso();
+        var dto = CriarAtualizacaoDto(cursoOriginal.Id);
+        dto.Nome = "Curso Duplicado";
+
+        var repoMock = new Mock<ICursoRepository>();
+        repoMock.Setup(r => r.ObterPorIdAsync(cursoOriginal.Id)).ReturnsAsync(cursoOriginal);
+        repoMock.Setup(r => r.ExisteCursoComMesmoNomeAsync(dto.Nome)).ReturnsAsync(true);
+
+        var service = new CursoAppService(repoMock.Object);
+
+        Func<Task> act = async () => await service.AtualizarCursoAsync(cursoOriginal.Id, dto);
+
+        await act.Should().ThrowAsync<DomainException>().WithMessage("*Já existe um curso cadastrado com esse nome*");
     }
 }

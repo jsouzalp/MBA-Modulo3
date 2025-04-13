@@ -1,55 +1,60 @@
 ﻿using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Core.Validations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Plataforma.Educacao.Aluno.Domain.ValueObjects
+namespace Plataforma.Educacao.Aluno.Domain.ValueObjects;
+public class HistoricoAprendizado
 {
-    public class HistoricoAprendizado
+    #region Atributos
+    public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid CursoId { get; }
+    public Guid AulaId { get; }
+    public string NomeAula { get; }
+    public DateTime DataInicio { get; }
+    public DateTime? DataTermino { get; }
+    #endregion
+
+    #region Construtores
+    protected HistoricoAprendizado() { }
+    public HistoricoAprendizado(Guid cursoId, Guid aulaId, string nomeAula, DateTime? dataTermino = null)
     {
-        #region Atributos
-        public Guid AulaId { get; private set; }
-        public string NomeAula { get; private set; }
-        public DateTime DataConclusao { get; private set; }
-        #endregion
+        CursoId = cursoId;
+        AulaId = aulaId;
+        NomeAula = nomeAula;
+        DataInicio = DateTime.Now.Date;
+        DataTermino = dataTermino;
 
-        #region Construtores
-        protected HistoricoAprendizado() { }
-        public HistoricoAprendizado(Guid aulaId, string nomeAula)
-        {
-            AulaId = aulaId;
-            NomeAula = nomeAula;
-            DataConclusao = DateTime.Now;
-
-            ValidarIntegridadeHistoricoAprendizado();
-        }
-        #endregion
-
-        #region Getters
-        #endregion
-
-        #region Setters 
-        #endregion
-
-        #region Validacoes 
-        public void ValidarIntegridadeHistoricoAprendizado()
-        {
-            var validacao = new ResultadoValidacao<Certificado>();
-
-            ValidacaoGuid.DeveSerValido(AulaId, "Identifição da aula não pode ser vazio", validacao);
-            ValidacaoTexto.DevePossuirConteudo(NomeAula, "Nome da aula não pode ser vazio", validacao);
-            ValidacaoTexto.DevePossuirTamanho(NomeAula, 5, 100, "Nome da aula deve ter entre 5 e 100 caracteres", validacao);
-
-            validacao.DispararExcecaoDominioSeInvalido();
-        }
-        #endregion
-
-        #region Overrides
-        public override string ToString() => $"Aula {NomeAula} finalizada em {DataConclusao:dd/MM/yyyy}";
-        #endregion
-
+        ValidarIntegridadeHistoricoAprendizado();
     }
+    #endregion
+
+    #region Validacoes 
+    private void ValidarIntegridadeHistoricoAprendizado()
+    {
+        var validacao = new ResultadoValidacao<Certificado>();
+
+        ValidacaoGuid.DeveSerValido(CursoId, "Identifição do curso não pode ser vazio", validacao);
+        ValidacaoGuid.DeveSerValido(AulaId, "Identifição da aula não pode ser vazio", validacao);
+        ValidacaoTexto.DevePossuirConteudo(NomeAula, "Nome da aula não pode ser vazio", validacao);
+        ValidacaoTexto.DevePossuirTamanho(NomeAula, 5, 100, "Nome da aula deve ter entre 5 e 100 caracteres", validacao);
+        ValidacaoData.DeveSerValido(DataInicio, "Data de início é inválida", validacao);
+        ValidacaoData.DeveSerMenorQue(DataInicio, DateTime.Now, "Data de início não pode ser superior à data atual", validacao);
+
+        if (DataTermino.HasValue)
+        {
+            ValidacaoData.DeveSerValido(DataTermino.Value, "Data de término é inválida", validacao);
+            ValidacaoData.DeveSerMaiorQue(DataTermino.Value, DataInicio, "Data de término não pode ser menor que a data de início", validacao);
+            ValidacaoData.DeveSerMenorQue(DataTermino.Value, DateTime.Now, "Data de término não pode ser superior à data atual", validacao);
+        }
+
+        validacao.DispararExcecaoDominioSeInvalido();
+    }
+    #endregion
+
+    #region Overrides
+    public override string ToString()
+    {
+        string conclusao = DataTermino.HasValue ? $"(Término em {DataTermino:dd/MM/yyyy})" : "(Em andamento)";
+        return $"Aula {NomeAula} Iniciada em {DataInicio:dd/MM/yyyy} {conclusao}";
+    }
+    #endregion
 }

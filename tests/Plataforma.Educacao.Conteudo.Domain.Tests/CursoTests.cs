@@ -56,7 +56,7 @@ public class CursoTests
     }
     #endregion
 
-    #region Setters
+    #region Metodos do Dominio
     [Fact]
     public void Deve_ativar_e_desativar_curso()
     {
@@ -133,7 +133,8 @@ public class CursoTests
         var curso = CriarCurso();
         var novoConteudo = new ConteudoProgramatico("Aprender DDD", new string('A', 60));
 
-        curso.AlterarConteudoProgramatico(novoConteudo);
+        //curso.AlterarConteudoProgramatico(novoConteudo);
+        curso.AtualizarConteudoProgramatico("Aprender DDD", new string('A', 60));
 
         curso.ConteudoProgramatico.Should().Be(novoConteudo);
     }
@@ -210,6 +211,21 @@ public class CursoTests
 
         act.Should().Throw<DomainException>()
            .WithMessage("*Ordem da aula deve ser única dentro do curso*");
+    }
+    #endregion
+
+    #region Overrides
+    [Fact]
+    public void ToString_deve_retornar_nome_valor_e_status()
+    {
+        var curso = CriarCurso();
+        curso.AtivarCurso();
+
+        var resultado = curso.ToString();
+
+        resultado.Should().Contain(_nomeValido);
+        resultado.Should().Contain(_valorValido.ToString("N2"));
+        resultado.Should().Contain("Sim");
     }
     #endregion
 }
