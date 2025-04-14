@@ -3,7 +3,7 @@ using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Enumerators;
 using Plataforma.Educacao.Core.Exceptions;
 
-namespace Plataforma.Educacao.Aluno.Domain.Tests;
+namespace Plataforma.Educacao.Aluno.Tests.Domains;
 public class MatriculaCursoTests
 {
     #region Helpers

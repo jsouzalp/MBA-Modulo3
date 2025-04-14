@@ -7,7 +7,7 @@ using Plataforma.Educacao.Conteudo.Domain.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
 
-namespace Plataforma.Educacao.Conteudo.Application.Tests;
+namespace Plataforma.Educacao.Conteudo.Tests.Applications;
 public class AulaAppServiceTests
 {
     #region Helpers

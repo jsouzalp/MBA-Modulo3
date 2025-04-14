@@ -5,7 +5,7 @@ using Plataforma.Educacao.Conteudo.Data.Repositories;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 
-namespace Plataforma.Educacao.Conteudo.Repository.Tests;
+namespace Plataforma.Educacao.Conteudo.Tests.Repositories;
 public class CursoRepositoryTests
 {
     #region Helpers

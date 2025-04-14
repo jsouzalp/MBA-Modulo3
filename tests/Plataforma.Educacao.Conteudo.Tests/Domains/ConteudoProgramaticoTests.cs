@@ -2,7 +2,7 @@
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
 
-namespace Plataforma.Educacao.Conteudo.Domain.Tests;
+namespace Plataforma.Educacao.Conteudo.Tests.Domains;
 public class ConteudoProgramaticoTests
 {
     #region Helpers

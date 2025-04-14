@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Data.Contexts;
 using Plataforma.Educacao.Aluno.Data.Repositories;
 
-namespace Plataforma.Educacao.Aluno.Repository.Tests;
+namespace Plataforma.Educacao.Aluno.Tests.Repositories;
 public class AlunoRepositoryTests
 {
     #region Helpers

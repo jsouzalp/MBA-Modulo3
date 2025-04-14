@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteud
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B203B6F3-6108-4A09-8E3B-BEDA2546EA48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Domain.Tests", "tests\Plataforma.Educacao.Conteudo.Domain.Tests\Plataforma.Educacao.Conteudo.Domain.Tests.csproj", "{8C0CC707-767C-4CD0-9AE5-2AF30D800F8A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Data", "src\Plataforma.Educacao.Conteudo.Data\Plataforma.Educacao.Conteudo.Data.csproj", "{7E361041-5208-45B3-9FC9-432537610802}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Application", "src\Plataforma.Educacao.Conteudo.Application\Plataforma.Educacao.Conteudo.Application.csproj", "{4109D533-B98D-4BDD-A64F-795EC54291DF}"
@@ -31,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Aluno.A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{228FCE6B-C4C8-42B3-A1EE-0082A087A62C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Aluno.Domain.Tests", "tests\Plataforma.Educacao.Aluno.Domain.Tests\Plataforma.Educacao.Aluno.Domain.Tests.csproj", "{3A7045C0-7245-4AFF-AB8F-D1C12A11FA14}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Aluno.Tests", "tests\Plataforma.Educacao.Aluno.Tests\Plataforma.Educacao.Aluno.Tests.csproj", "{3A7045C0-7245-4AFF-AB8F-D1C12A11FA14}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Faturamento", "Faturamento", "{FE93A247-A721-4BFE-AE2F-49F68F40B74A}"
 EndProject
@@ -49,21 +47,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Helpers", ".Helpers", "{C5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3A9E2770-0B7C-45B8-8D31-9FCD8F9688F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Faturamento.Domain.Tests", "tests\Plataforma.Educacao.Faturamento.Domain.Tests\Plataforma.Educacao.Faturamento.Domain.Tests.csproj", "{F408DEC5-65B9-4A10-879D-3F83F8A87B38}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Repository.Tests", "tests\Plataforma.Educacao.Conteudo.Repository.Tests\Plataforma.Educacao.Conteudo.Repository.Tests.csproj", "{337B3201-309D-4572-BF7A-16AB41738A39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Faturamento.Tests", "tests\Plataforma.Educacao.Faturamento.Tests\Plataforma.Educacao.Faturamento.Tests.csproj", "{F408DEC5-65B9-4A10-879D-3F83F8A87B38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{A8E9ECA9-CC87-479A-952C-87EC16458016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Application.Tests", "tests\Plataforma.Educacao.Conteudo.Application.Tests\Plataforma.Educacao.Conteudo.Application.Tests.csproj", "{098B5AAF-1ED5-4ABF-8EB3-26F0C84A8554}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Conteudo.Tests", "tests\Plataforma.Educacao.Conteudo.Tests\Plataforma.Educacao.Conteudo.Tests.csproj", "{098B5AAF-1ED5-4ABF-8EB3-26F0C84A8554}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Autenticacao", "Autenticacao", "{71E1FCC1-0429-420E-AA3B-C1780B37ABD2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Api", "src\Plataforma.Educacao.Api\Plataforma.Educacao.Api.csproj", "{1A8C00A6-935A-4453-AD9F-9AE8F564BA68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Autenticacao.Data", "src\Plataforma.Educacao.Autenticacao.Data\Plataforma.Educacao.Autenticacao.Data.csproj", "{D82E1500-7354-4DB3-830D-44D03A0ACC3D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Aluno.Repository.Tests", "tests\Plataforma.Educacao.Aluno.Repository.Tests\Plataforma.Educacao.Aluno.Repository.Tests.csproj", "{B3A6D77C-B90C-432D-9912-D69143DADD0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,10 +73,6 @@ Global
 		{2FF07CB8-0105-467D-A76F-15D524E33532}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FF07CB8-0105-467D-A76F-15D524E33532}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FF07CB8-0105-467D-A76F-15D524E33532}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C0CC707-767C-4CD0-9AE5-2AF30D800F8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C0CC707-767C-4CD0-9AE5-2AF30D800F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C0CC707-767C-4CD0-9AE5-2AF30D800F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C0CC707-767C-4CD0-9AE5-2AF30D800F8A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7E361041-5208-45B3-9FC9-432537610802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7E361041-5208-45B3-9FC9-432537610802}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E361041-5208-45B3-9FC9-432537610802}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -123,10 +113,6 @@ Global
 		{F408DEC5-65B9-4A10-879D-3F83F8A87B38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F408DEC5-65B9-4A10-879D-3F83F8A87B38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F408DEC5-65B9-4A10-879D-3F83F8A87B38}.Release|Any CPU.Build.0 = Release|Any CPU
-		{337B3201-309D-4572-BF7A-16AB41738A39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{337B3201-309D-4572-BF7A-16AB41738A39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{337B3201-309D-4572-BF7A-16AB41738A39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{337B3201-309D-4572-BF7A-16AB41738A39}.Release|Any CPU.Build.0 = Release|Any CPU
 		{098B5AAF-1ED5-4ABF-8EB3-26F0C84A8554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{098B5AAF-1ED5-4ABF-8EB3-26F0C84A8554}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{098B5AAF-1ED5-4ABF-8EB3-26F0C84A8554}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -139,10 +125,6 @@ Global
 		{D82E1500-7354-4DB3-830D-44D03A0ACC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D82E1500-7354-4DB3-830D-44D03A0ACC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D82E1500-7354-4DB3-830D-44D03A0ACC3D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3A6D77C-B90C-432D-9912-D69143DADD0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3A6D77C-B90C-432D-9912-D69143DADD0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3A6D77C-B90C-432D-9912-D69143DADD0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3A6D77C-B90C-432D-9912-D69143DADD0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,7 +135,6 @@ Global
 		{51DFDD4B-5DCE-41AE-9DF8-15D0E666AAEC} = {50202067-E071-43FF-8B87-C47DB8A0AA71}
 		{2FF07CB8-0105-467D-A76F-15D524E33532} = {98BA0FE6-70FE-4DD0-8404-C3E5ED7C25AC}
 		{B203B6F3-6108-4A09-8E3B-BEDA2546EA48} = {98BA0FE6-70FE-4DD0-8404-C3E5ED7C25AC}
-		{8C0CC707-767C-4CD0-9AE5-2AF30D800F8A} = {B203B6F3-6108-4A09-8E3B-BEDA2546EA48}
 		{7E361041-5208-45B3-9FC9-432537610802} = {98BA0FE6-70FE-4DD0-8404-C3E5ED7C25AC}
 		{4109D533-B98D-4BDD-A64F-795EC54291DF} = {98BA0FE6-70FE-4DD0-8404-C3E5ED7C25AC}
 		{F36DB824-C016-44D9-85EA-C138665CC6D6} = {967E5D10-5C50-4FFD-AC5F-B731799383B7}
@@ -168,11 +149,9 @@ Global
 		{2FBC0F7F-64CE-4D36-94C3-AE5D56E336A5} = {FE93A247-A721-4BFE-AE2F-49F68F40B74A}
 		{3A9E2770-0B7C-45B8-8D31-9FCD8F9688F6} = {FE93A247-A721-4BFE-AE2F-49F68F40B74A}
 		{F408DEC5-65B9-4A10-879D-3F83F8A87B38} = {3A9E2770-0B7C-45B8-8D31-9FCD8F9688F6}
-		{337B3201-309D-4572-BF7A-16AB41738A39} = {B203B6F3-6108-4A09-8E3B-BEDA2546EA48}
 		{098B5AAF-1ED5-4ABF-8EB3-26F0C84A8554} = {B203B6F3-6108-4A09-8E3B-BEDA2546EA48}
 		{71E1FCC1-0429-420E-AA3B-C1780B37ABD2} = {967E5D10-5C50-4FFD-AC5F-B731799383B7}
 		{1A8C00A6-935A-4453-AD9F-9AE8F564BA68} = {A8E9ECA9-CC87-479A-952C-87EC16458016}
 		{D82E1500-7354-4DB3-830D-44D03A0ACC3D} = {71E1FCC1-0429-420E-AA3B-C1780B37ABD2}
-		{B3A6D77C-B90C-432D-9912-D69143DADD0D} = {228FCE6B-C4C8-42B3-A1EE-0082A087A62C}
 	EndGlobalSection
 EndGlobal

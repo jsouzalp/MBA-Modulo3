@@ -2,7 +2,7 @@
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Core.Exceptions;
 
-namespace Plataforma.Educacao.Conteudo.Domain.Tests;
+namespace Plataforma.Educacao.Conteudo.Tests.Domains;
 public class AulaTests
 {
     #region Helpers

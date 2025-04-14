@@ -2,7 +2,7 @@
 using Plataforma.Educacao.Aluno.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
 
-namespace Plataforma.Educacao.Aluno.Domain.Tests;
+namespace Plataforma.Educacao.Aluno.Tests.Domains;
 public class HistoricoAprendizadoTests
 {
     #region Helpers
@@ -12,14 +12,14 @@ public class HistoricoAprendizadoTests
     private const string _aulaIdInvalido = "00000000-0000-0000-0000-000000000000";
     private const string _nomeAulaValido = "Introdução aos fundamentos do DDD";
 
-    private HistoricoAprendizado CriarHistorico(string cursoId = _cursoIdValido, 
-        string aulaId = _aulaIdValido, 
-        string nomeAula = _nomeAulaValido, 
+    private HistoricoAprendizado CriarHistorico(string cursoId = _cursoIdValido,
+        string aulaId = _aulaIdValido,
+        string nomeAula = _nomeAulaValido,
         DateTime? dataTermino = null)
     {
         return new HistoricoAprendizado(Guid.Parse(cursoId),
-            Guid.Parse(aulaId), 
-            nomeAula, 
+            Guid.Parse(aulaId),
+            nomeAula,
             dataTermino);
     }
     #endregion

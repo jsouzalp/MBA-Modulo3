@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Plataforma.Educacao.Core.Exceptions;
 
-namespace Plataforma.Educacao.Aluno.Domain.Tests;
+namespace Plataforma.Educacao.Aluno.Tests.Domains;
 public class AlunoTests
 {
     #region Helpers
@@ -9,9 +9,9 @@ public class AlunoTests
     private const string _emailValido = "jsouza.lp@gmail.com";
     private static readonly DateTime _dataNascimentoValida = new(1973, 06, 25);
 
-    private Entities.Aluno CriarAlunoValido(string nome = _nomeValido, string email = _emailValido, DateTime? dataNascimento = null)
+    private Domain.Entities.Aluno CriarAlunoValido(string nome = _nomeValido, string email = _emailValido, DateTime? dataNascimento = null)
     {
-        return new Entities.Aluno(nome, email, dataNascimento ?? _dataNascimentoValida);
+        return new Domain.Entities.Aluno(nome, email, dataNascimento ?? _dataNascimentoValida);
     }
     #endregion
 
