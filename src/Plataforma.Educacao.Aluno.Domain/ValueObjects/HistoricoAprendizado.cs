@@ -30,7 +30,7 @@ public class HistoricoAprendizado
     #region Validacoes 
     private void ValidarIntegridadeHistoricoAprendizado()
     {
-        var validacao = new ResultadoValidacao<Certificado>();
+        var validacao = new ResultadoValidacao<HistoricoAprendizado>();
 
         ValidacaoGuid.DeveSerValido(CursoId, "Identifição do curso não pode ser vazio", validacao);
         ValidacaoGuid.DeveSerValido(AulaId, "Identifição da aula não pode ser vazio", validacao);

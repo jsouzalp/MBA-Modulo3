@@ -49,6 +49,8 @@ public class Aluno : Entidade, IRaizAgregacao
 
     public void MatricularEmCurso(Guid cursoId, string nomeCurso, decimal valor)
     {
+        if (_matriculasCursos.Any(m => m.CursoId == cursoId)) { throw new DomainException("Aluno já está matriculado neste curso"); }
+
         var novaMatricula = new MatriculaCurso(Id, cursoId, nomeCurso, valor);
         _matriculasCursos.Add(novaMatricula);
     }

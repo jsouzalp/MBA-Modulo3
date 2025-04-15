@@ -228,6 +228,20 @@ public class AlunoTests
         // Assert
         aluno.MatriculasCursos.Should().HaveCount(2);
     }
+
+    [Fact]
+    public void Nao_deve_permitir_matricula_duplicada_no_mesmo_curso()
+    {
+        var aluno = CriarAlunoValido();
+        var cursoId = Guid.NewGuid();
+
+        aluno.MatricularEmCurso(cursoId, "Curso Introdução ao DDD", 500);
+
+        Action act = () => aluno.MatricularEmCurso(cursoId, "Curso Introdução ao DDD - Repetido", 500);
+
+        act.Should().Throw<DomainException>()
+            .WithMessage("*Aluno já está matriculado neste curso*");
+    }
     #endregion
 
     #region Overrides

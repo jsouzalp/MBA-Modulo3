@@ -79,7 +79,7 @@ public class MatriculaCurso : Entidade
     public void RequisitarCertificadoConclusao(string pathCertificado)
     {
         if (Certificado != null) { throw new DomainException("Certificado já foi solicitado para esta matrícula."); }
-        Certificado = new Certificado(CursoId, pathCertificado);
+        Certificado = new Certificado(Id, pathCertificado);
     }
 
     public void RegistrarHistoricoAprendizado(Guid aulaId, string nomeAula, DateTime? dataTermino = null)

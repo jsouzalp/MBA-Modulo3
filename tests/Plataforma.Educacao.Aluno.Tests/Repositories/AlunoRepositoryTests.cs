@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Data.Contexts;
 using Plataforma.Educacao.Aluno.Data.Repositories;
+using Plataforma.Educacao.Aluno.Domain.Entities;
+using Plataforma.Educacao.Core.Data;
 
 namespace Plataforma.Educacao.Aluno.Tests.Repositories;
 public class AlunoRepositoryTests
@@ -9,7 +11,7 @@ public class AlunoRepositoryTests
     #region Helpers
     private Domain.Entities.Aluno CriarAlunoValido()
     {
-        return new Domain.Entities.Aluno("João da Silva", "joao@email.com", new DateTime(1990, 5, 12));
+        return new Domain.Entities.Aluno("Jairo Azevedo", "jairoSouza@email.com", new DateTime(1973, 06, 25));
     }
 
     private AlunoRepository CriarRepository(out AlunoDbContext context)
@@ -31,7 +33,8 @@ public class AlunoRepositoryTests
         var repository = CriarRepository(out var context);
 
         await repository.AdicionarAsync(aluno);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit(); 
+        //context.SaveChangesAsync();
 
         var alunoDb = await repository.ObterPorIdAsync(aluno.Id);
 
@@ -46,7 +49,8 @@ public class AlunoRepositoryTests
         var repository = CriarRepository(out var context);
 
         await repository.AdicionarAsync(aluno);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
+        //await context.SaveChangesAsync();
 
         var alunoDb = await repository.ObterPorEmailAsync(aluno.Email);
 
@@ -61,7 +65,8 @@ public class AlunoRepositoryTests
         var repository = CriarRepository(out var context);
 
         await repository.AdicionarAsync(aluno);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
+        //await context.SaveChangesAsync();
 
         var existe = await repository.ExisteEmailAsync(aluno.Email);
         existe.Should().BeTrue();
@@ -83,16 +88,74 @@ public class AlunoRepositoryTests
         var repository = CriarRepository(out var context);
 
         await repository.AdicionarAsync(aluno);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
+        //await context.SaveChangesAsync();
 
-        aluno.AtualizarNome("João Atualizado");
+        aluno.AtualizarNome("Jairo Atualizado");
         await repository.AtualizarAsync(aluno);
         await context.SaveChangesAsync();
 
         var alunoAtualizado = await repository.ObterPorIdAsync(aluno.Id);
-        alunoAtualizado.Nome.Should().Be("João Atualizado");
+        alunoAtualizado.Nome.Should().Be("Jairo Atualizado");
+    }
+    #endregion
+
+    #region Ações na tabela - Matricula
+    [Fact]
+    public async Task Deve_obter_matricula_por_id()
+    {
+        var repository = CriarRepository(out var context);
+        var aluno = CriarAlunoValido();
+        var matricula = new MatriculaCurso(aluno.Id, Guid.NewGuid(), "Curso de Gestão de Processos", 800);
+
+        context.Alunos.Add(aluno);
+        context.MatriculasCursos.Add(matricula);
+        await repository.UnitOfWork.Commit();
+        //await context.SaveChangesAsync();
+
+        var resultado = await repository.ObterMatriculaPorIdAsync(matricula.Id);
+        resultado.Should().NotBeNull();
+        resultado.CursoId.Should().Be(matricula.CursoId);
     }
 
+    [Fact]
+    public async Task Deve_obter_matricula_por_aluno_e_curso()
+    {
+        var repository = CriarRepository(out var context);
+        var aluno = CriarAlunoValido();
+        var cursoId = Guid.NewGuid();
+        var matricula = new MatriculaCurso(aluno.Id, cursoId, "Curso de Gestão de Processos", 500);
+
+        context.Alunos.Add(aluno);
+        context.MatriculasCursos.Add(matricula);
+        await repository.UnitOfWork.Commit();
+        //await context.SaveChangesAsync();
+
+        var resultado = await repository.ObterMatriculaPorAlunoECursoAsync(aluno.Id, cursoId);
+        resultado.Should().NotBeNull();
+        resultado.CursoId.Should().Be(cursoId);
+    }
+    #endregion
+
+    #region Ações na tabela - Certificado
+    [Fact]
+    public async Task Deve_obter_certificado_por_matricula()
+    {
+        var repository = CriarRepository(out var context);
+        var aluno = CriarAlunoValido();
+        var matricula = new MatriculaCurso(aluno.Id, Guid.NewGuid(), "Curso de Orientação a dados", 1250m);
+        var certificado = new Certificado(matricula.Id, "/caminho/cert.pdf");
+
+        context.Alunos.Add(aluno);
+        context.MatriculasCursos.Add(matricula);
+        context.Certificados.Add(certificado);
+        await repository.UnitOfWork.Commit();
+        //await context.SaveChangesAsync();
+
+        var resultado = await repository.ObterCertificadoPorMatriculaAsync(matricula.Id);
+        resultado.Should().NotBeNull();
+        resultado.PathCertificado.Should().Be(certificado.PathCertificado);
+    }
     #endregion
 
     #region Overrides

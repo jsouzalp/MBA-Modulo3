@@ -61,6 +61,12 @@ public class Aula : Entidade
         ValidarIntegridadeAula(novaOrdemAula: ordemAula);
         OrdemAula = ordemAula;
     }
+
+    public void AlterarUrl(string url)
+    {
+        ValidarIntegridadeAula(novoUrl: url);
+        Url = url;
+    }
     #endregion
 
     #region Validacoes

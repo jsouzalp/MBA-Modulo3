@@ -212,6 +212,18 @@ public class CursoTests
         act.Should().Throw<DomainException>()
            .WithMessage("*Ordem da aula deve ser única dentro do curso*");
     }
+
+    [Fact]
+    public void Nao_deve_remover_aula_que_nao_pertence_ao_curso()
+    {
+        var curso = CriarCurso();
+        var aulaExterna = _aulaValida1;
+
+        Action act = () => curso.RemoverAula(aulaExterna);
+
+        act.Should().Throw<DomainException>()
+           .WithMessage("*Aula não pertence a este curso*");
+    }
     #endregion
 
     #region Overrides

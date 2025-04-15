@@ -153,6 +153,33 @@ public class AulaTests
         // Assert
         aula.OrdemAula.Should().Be(novaOrdem);
     }
+
+    [Theory]
+    [InlineData("", "*URL da aula não pode ser vazia ou nula*")]
+    [InlineData("inv", "*Url da aula deve ter entre 10 e 1024 caracteres*")]
+    public void Nao_deve_alterar_url_invalida(string novaUrl, string mensagemErro)
+    {
+        var aula = CriarInstanciaAula();
+
+        Action act = () => aula.AlterarUrl(novaUrl);
+
+        act.Should().Throw<DomainException>()
+           .WithMessage(mensagemErro);
+    }
+
+    [Fact]
+    public void Deve_alterar_url_valida()
+    {
+        // Arrange
+        var novaUrl = "https://cursos.desenvolvedor.io/modulo-avancado-ddd";
+        var aula = CriarInstanciaAula();
+
+        // Act
+        aula.AlterarUrl(novaUrl);
+
+        // Assert
+        aula.Url.Should().Be(novaUrl);
+    }
     #endregion
 
     #region Testes de Override

@@ -10,7 +10,7 @@ namespace Plataforma.Educacao.Aluno.Data.Contexts
 
         public DbSet<Domain.Entities.Aluno> Alunos { get; set; }
         public DbSet<Certificado> Certificados { get; set; }
-        public DbSet<MatriculaCurso> MatriculaCursos { get; set; }
+        public DbSet<MatriculaCurso> MatriculasCursos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
