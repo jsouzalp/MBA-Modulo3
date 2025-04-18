@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Plataforma.Educacao.Api.Enumerators;
+using Plataforma.Educacao.Core.Messages.Comunications;
+using Plataforma.Educacao.Core.Messages.Handlers;
+using Plataforma.Educacao.Core.Messages;
 using System.Net;
 
 namespace Plataforma.Educacao.Api.Controllers;
 
 [ApiController]
-public class MainController : ControllerBase
+public class MainController(INotificationHandler<DomainNotificacaoRaiz> notifications, 
+    IMediatorHandler mediatorHandler) : ControllerBase
 {
     //private readonly IAppIdentityUser _appIdentityUser;
     //private readonly INotificationService _notificationService;
@@ -21,12 +26,18 @@ public class MainController : ControllerBase
     //    _notificationService = notificationService;
     //}
 
+    protected Guid UserId => Guid.NewGuid(); // _appIdentityUser.GetUserId();
+
+    protected readonly DomainNotificationHandler _notifications = (DomainNotificationHandler)notifications;
+    protected readonly IMediatorHandler _mediatorHandler = mediatorHandler;
+    protected bool OperacaoValida() => !_notifications.TemNotificacao();
+
     protected ActionResult GenerateResponse(object? result = null,
         ResponseTypeEnum responseType = ResponseTypeEnum.Success,
         HttpStatusCode statusCode = HttpStatusCode.OK,
-        IEnumerable<string> errors = null)
+        IList<string> errors = null)
     {
-        if ((int)statusCode >= 200 && (int)statusCode <= 299)
+        if (OperacaoValida() && ((int)statusCode >= 200 && (int)statusCode <= 299))
         {
             return new JsonResult(new
             {
@@ -37,6 +48,16 @@ public class MainController : ControllerBase
             {
                 StatusCode = (int)statusCode
             };
+        }
+
+        errors ??= [];
+        if (_notifications.TemNotificacao())
+        {
+            var notificationErrors = _notifications.ObterNotificacoes().Select(n => $"Chave: {n.Chave} Mensagem: {n.Valor}").ToList();
+            foreach(string erro in notificationErrors)
+            {
+                errors.Add(erro);
+            }
         }
 
         return new JsonResult(new
@@ -62,41 +83,4 @@ public class MainController : ControllerBase
             StatusCode = (int)statusCode
         };
     }
-
-    //protected bool ValidOperation()
-    //{
-    //    return !_notificationService.HasError();
-    //}
-
-    //protected ActionResult GenerateResponse(ModelStateDictionary modelState)
-    //{
-    //    if (!modelState.IsValid) NotifyInvalidModel(modelState);
-    //    return GenerateResponse();
-    //}
-
-    //protected void Notify(string message, NotificationTypeEnum type = NotificationTypeEnum.Error)
-    //{
-    //    _notificationService.Handle(new Notification(message, type));
-    //}
-
-    //protected void NotifyInvalidModel(ModelStateDictionary modelState)
-    //{
-    //    var errors = modelState.Values.SelectMany(e => e.Errors);
-
-    //    foreach (var error in errors)
-    //    {
-    //        Notify(error?.Exception?.Message ?? error?.ErrorMessage);
-    //    }
-    //}
-
-    //protected bool ValidateFileType(string fileType)
-    //{
-    //    if (string.Equals(fileType, "pdf", StringComparison.OrdinalIgnoreCase) || string.Equals(fileType, "xlsx", StringComparison.OrdinalIgnoreCase))
-    //    {
-    //        return true;
-    //    }
-
-    //    Notify("Tipo de arquivo inválido. Use 'pdf' ou 'xlsx'.");
-    //    return false;
-    //}
 }

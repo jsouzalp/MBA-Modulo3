@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -6,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Plataforma.Educacao.Api.Settings;
 using Plataforma.Educacao.Api.ViewModels.Autenticacao;
 using Plataforma.Educacao.Autenticacao.Data.Contexts;
+using Plataforma.Educacao.Core.Messages.Comunications;
+using Plataforma.Educacao.Core.Messages;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -25,12 +28,14 @@ public class AutenticacaoController : MainController
     private readonly AutenticacaoDbContext _identityContext;
 
     public AutenticacaoController(ILogger<AutenticacaoController> logger,
-                          SignInManager<IdentityUser> signInManager,
-                          UserManager<IdentityUser> userManager,
-                          IOptions<AppSettings> appSettings,
-                          //IUserRepository userRepository,
-                          //IAppIdentityUser appIdentityUser,
-                          AutenticacaoDbContext identityContext)
+        SignInManager<IdentityUser> signInManager,
+        UserManager<IdentityUser> userManager,
+        IOptions<AppSettings> appSettings,
+        //IUserRepository userRepository,
+        //IAppIdentityUser appIdentityUser,
+        AutenticacaoDbContext identityContext,
+        INotificationHandler<DomainNotificacaoRaiz> notifications,
+        IMediatorHandler mediatorHandler) : base(notifications, mediatorHandler)
     {
         _logger = logger;
         _signInManager = signInManager;

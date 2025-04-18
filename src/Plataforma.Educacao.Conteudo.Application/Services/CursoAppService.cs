@@ -6,7 +6,7 @@ using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
 
 namespace Plataforma.Educacao.Conteudo.Application.Services;
-public class CursoAppService(ICursoRepository cursoRepository) : BaseService, ICursoAppService
+public class CursoAppService(ICursoRepository cursoRepository) : ICursoAppService
 {
     private readonly ICursoRepository _cursoRepository = cursoRepository;
 
@@ -86,10 +86,9 @@ public class CursoAppService(ICursoRepository cursoRepository) : BaseService, IC
             Id = curso.Id,
             Nome = curso.Nome,
             Valor = curso.Valor,
-            Ativo = curso.Ativo,
-            ValidoAte = curso.ValidoAte,
             Finalidade = curso.ConteudoProgramatico.Finalidade,
             Ementa = curso.ConteudoProgramatico.Ementa,
+            CursoDisponivel = curso.CursoDisponivel(),
             CargaHoraria = curso.CargaHoraria(),
             QuantidadeAulas = curso.QuantidadeAulas(),
             Aulas = curso.Aulas.Select(a => new AulaDto

@@ -49,7 +49,7 @@ public class CursoRepository(ConteudoDbContext context) : ICursoRepository
     {
         return await _context.Cursos
             .AsNoTracking()
-            .Where(c => c.Ativo)
+            .Where(c => c.Ativo && (c.ValidoAte == null || c.ValidoAte.Value.Date >= DateTime.Now.Date))
             .Include(c => c.ConteudoProgramatico)
             .Include(c => c.Aulas)
             .ToListAsync();

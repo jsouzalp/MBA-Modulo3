@@ -2,7 +2,7 @@
 using Plataforma.Educacao.Aluno.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Entities;
 using Plataforma.Educacao.Core.Exceptions;
-using Plataforma.Educacao.Core.Validations;
+using Plataforma.Educacao.Core.DomainValidations;
 using System.Text.Json.Serialization;
 
 namespace Plataforma.Educacao.Aluno.Domain.Entities;
@@ -43,11 +43,13 @@ public class MatriculaCurso : Entidade
     #endregion
 
     #region Getters
-    public bool CursoConcluido => DataConclusao.HasValue;
+    public bool MatriculaCursoConcluido => DataConclusao.HasValue;
+    internal bool MatriculaCursoDisponivel => !DataConclusao.HasValue && EstadoMatricula == EstadoMatriculaCursoEnum.PagamentoRealizado;
+    internal bool PodeFinalizarMatriculaCurso => MatriculaCursoDisponivel && _historicoAprendizado.Count(h => !h.DataTermino.HasValue) == 0;
 
-    public HistoricoAprendizado ObterHistorico(Guid aulaId)
+    internal HistoricoAprendizado ObterHistoricoAulaPeloId(Guid aulaId)
     {
-        var historico = _historicoAprendizado.FirstOrDefault(h => h.AulaId == aulaId);
+        var historico = _historicoAprendizado.FirstOrDefault(h => h.CursoId == CursoId && h.AulaId == aulaId);
         if (historico == null) { throw new DomainException("Historico não foi localizado"); }
 
         return historico;
@@ -55,36 +57,38 @@ public class MatriculaCurso : Entidade
     #endregion
 
     #region Metodos do Dominio
-    public void AtualizarPagamentoMatricula()
+    #region Manipuladores de MatriculaCurso
+    internal void AtualizarPagamentoMatricula()
     {
         ValidarIntegridadeMatriculaCurso(novoEstadoMatriculaCurso: EstadoMatriculaCursoEnum.PagamentoRealizado);
         EstadoMatricula = EstadoMatriculaCursoEnum.PagamentoRealizado;
     }
 
-    public void AtualizarAbandonoMatricula()
+    internal void AtualizarAbandonoMatricula()
     {
         ValidarIntegridadeMatriculaCurso(novoEstadoMatriculaCurso: EstadoMatriculaCursoEnum.Abandonado);
         EstadoMatricula = EstadoMatriculaCursoEnum.Abandonado;
     }
 
-    public void ConcluirCurso()
+    internal void ConcluirCurso()
     {
+        if (!PodeFinalizarMatriculaCurso) { throw new DomainException("Não é possível concluir o curso, existem aulas não finalizadas"); }
+        if (MatriculaCursoConcluido) { throw new DomainException("Curso já foi concluído"); }
+        if (EstadoMatricula == EstadoMatriculaCursoEnum.Abandonado) { throw new DomainException("Não é possível concluir um curso com estado de pagamento abandonado"); }
+
         var dataAtual = DateTime.Now;
         ValidarIntegridadeMatriculaCurso(novaDataConclusao: dataAtual);
         DataConclusao = dataAtual;
-
-        // TODO :: Lançar evento de solicitação do certificado. Pendente de criação
+        EstadoMatricula = EstadoMatriculaCursoEnum.Concluido;
     }
+    #endregion
 
-    public void RequisitarCertificadoConclusao(string pathCertificado)
+    #region Manipuladores de HistoricoAprendizado
+    internal void RegistrarHistoricoAprendizado(Guid aulaId, string nomeAula, DateTime? dataTermino = null)
     {
-        if (Certificado != null) { throw new DomainException("Certificado já foi solicitado para esta matrícula."); }
-        Certificado = new Certificado(Id, pathCertificado);
-    }
+        if (!MatriculaCursoDisponivel) { throw new DomainException("Matrícula não está disponível para registrar histórico de aprendizado"); }
 
-    public void RegistrarHistoricoAprendizado(Guid aulaId, string nomeAula, DateTime? dataTermino = null)
-    {
-        var existente = _historicoAprendizado.FirstOrDefault(h => h.AulaId == aulaId);
+        var existente = _historicoAprendizado.FirstOrDefault(h => h.CursoId == CursoId && h.AulaId == aulaId);
         if (existente != null && existente.DataTermino.HasValue) { throw new DomainException("Esta aula já foi concluída"); }
 
         if (existente != null)
@@ -94,6 +98,17 @@ public class MatriculaCurso : Entidade
 
         _historicoAprendizado.Add(new HistoricoAprendizado(CursoId, aulaId, nomeAula, dataTermino));
     }
+    #endregion
+
+    #region Manipuladores de Certificado
+    internal void RequisitarCertificadoConclusao(string pathCertificado)
+    {
+        if (Certificado != null) { throw new DomainException("Certificado já foi solicitado para esta matrícula"); }
+        if (!MatriculaCursoConcluido) { throw new DomainException("Certificado só pode ser solicitado após a conclusão do curso"); }
+
+        Certificado = new Certificado(Id, pathCertificado);
+    }
+    #endregion
     #endregion
 
     #region Validações
@@ -144,7 +159,7 @@ public class MatriculaCurso : Entidade
     #region Overrides
     public override string ToString()
     {
-        string concluido = CursoConcluido ? "Sim" : "Não";
+        string concluido = MatriculaCursoConcluido ? "Sim" : "Não";
         return $"Matrícula no curso {CursoId} do aluno {AlunoId} (Concluído? {concluido})";
     }
     #endregion

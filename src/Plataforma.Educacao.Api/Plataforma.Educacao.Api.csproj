@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\tests\Plataforma.Educacao.Conteudo.Application.Tests\Plataforma.Educacao.Conteudo.Tests.csproj" />
+    <ProjectReference Include="..\Plataforma.Educacao.Aluno.Application\Plataforma.Educacao.Aluno.Application.csproj" />
     <ProjectReference Include="..\Plataforma.Educacao.Autenticacao.Data\Plataforma.Educacao.Autenticacao.Data.csproj" />
     <ProjectReference Include="..\Plataforma.Educacao.Conteudo.Application\Plataforma.Educacao.Conteudo.Application.csproj" />
     <ProjectReference Include="..\Plataforma.Educacao.Core\Plataforma.Educacao.Core.csproj" />

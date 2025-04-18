@@ -1,6 +1,6 @@
 ﻿using Plataforma.Educacao.Core.Exceptions;
 
-namespace Plataforma.Educacao.Core.Validations
+namespace Plataforma.Educacao.Core.DomainValidations
 {
     public class ResultadoValidacao<T> where T : class
     {

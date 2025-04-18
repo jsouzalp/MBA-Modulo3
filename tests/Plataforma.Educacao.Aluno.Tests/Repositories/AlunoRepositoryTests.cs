@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Data.Contexts;
 using Plataforma.Educacao.Aluno.Data.Repositories;
 using Plataforma.Educacao.Aluno.Domain.Entities;
-using Plataforma.Educacao.Core.Data;
 
 namespace Plataforma.Educacao.Aluno.Tests.Repositories;
 public class AlunoRepositoryTests
@@ -21,7 +20,8 @@ public class AlunoRepositoryTests
             .Options;
 
         context = new AlunoDbContext(options);
-        return new AlunoRepository(context);
+        var a = new AlunoRepository(context);
+        return a;
     }
     #endregion
 
@@ -33,7 +33,7 @@ public class AlunoRepositoryTests
         var repository = CriarRepository(out var context);
 
         await repository.AdicionarAsync(aluno);
-        await repository.UnitOfWork.Commit(); 
+        await repository.UnitOfWork.Commit();
         //context.SaveChangesAsync();
 
         var alunoDb = await repository.ObterPorIdAsync(aluno.Id);
@@ -144,7 +144,7 @@ public class AlunoRepositoryTests
         var repository = CriarRepository(out var context);
         var aluno = CriarAlunoValido();
         var matricula = new MatriculaCurso(aluno.Id, Guid.NewGuid(), "Curso de Orientação a dados", 1250m);
-        var certificado = new Certificado(matricula.Id, "/caminho/cert.pdf");
+        var certificado = new Certificado(matricula.Id, "var/tmp/certificados/certificado.pdf");
 
         context.Alunos.Add(aluno);
         context.MatriculasCursos.Add(matricula);

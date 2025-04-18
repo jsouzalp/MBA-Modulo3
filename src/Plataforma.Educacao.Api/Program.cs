@@ -22,6 +22,7 @@ internal class Program
             .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
             .ConfigurarAutenticacao(appSettings.DatabaseSettings, builder.Environment.IsProduction())
             .ConfigurarConteudoProgramatico(appSettings.DatabaseSettings, builder.Environment.IsProduction())
+            .ConfigurarAluno(appSettings.DatabaseSettings, builder.Environment.IsProduction())
             .ConfigurarApi()
             .ConfigurarJwt(appSettings.JwtSettings)
             .ConfigurarCors()

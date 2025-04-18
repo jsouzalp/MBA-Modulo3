@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Plataforma.Educacao.Core.Validations
+namespace Plataforma.Educacao.Core.DomainValidations
 {
     public static class ValidacaoTexto
     {

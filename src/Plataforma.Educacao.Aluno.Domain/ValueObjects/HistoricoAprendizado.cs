@@ -1,5 +1,4 @@
-﻿using Plataforma.Educacao.Aluno.Domain.Entities;
-using Plataforma.Educacao.Core.Validations;
+﻿using Plataforma.Educacao.Core.DomainValidations;
 
 namespace Plataforma.Educacao.Aluno.Domain.ValueObjects;
 public class HistoricoAprendizado

@@ -2,7 +2,7 @@
 using Plataforma.Educacao.Core.Aggregates;
 using Plataforma.Educacao.Core.Entities;
 using Plataforma.Educacao.Core.Exceptions;
-using Plataforma.Educacao.Core.Validations;
+using Plataforma.Educacao.Core.DomainValidations;
 
 namespace Plataforma.Educacao.Conteudo.Domain.Entities;
 public class Curso : Entidade, IRaizAgregacao
@@ -28,13 +28,11 @@ public class Curso : Entidade, IRaizAgregacao
         decimal valor, 
         DateTime? validoAte, 
         ConteudoProgramatico conteudoProgramatico)
-        //ICollection<Aula> aulas = null)
     {
         Nome = nome;
         Valor = valor;
         ValidoAte = validoAte;
         ConteudoProgramatico = conteudoProgramatico;
-        //if (aulas != null) { _aulas = new List<Aula>(aulas); }
 
         ValidarIntegridadeCurso();
     }
@@ -44,6 +42,13 @@ public class Curso : Entidade, IRaizAgregacao
     public short CargaHoraria() => (short)_aulas.Sum(a => a.CargaHoraria);
     public int QuantidadeAulas() => _aulas.Count;
     public bool CursoDisponivel() => Ativo && (!ValidoAte.HasValue || ValidoAte.Value >= DateTime.Now.Date);
+
+    public Aula ObterAulaPeloId(Guid aulaId)
+    {
+        var aula = _aulas.FirstOrDefault(a => a.Id == aulaId);
+        if (aula == null) { throw new DomainException("Aula não encontrada"); }
+        return aula;
+    }
     #endregion
 
     #region Metodos do Dominio
@@ -68,11 +73,6 @@ public class Curso : Entidade, IRaizAgregacao
         ValidoAte = validoAte;
     }
 
-    //public void AlterarConteudoProgramatico(ConteudoProgramatico conteudoProgramatico)
-    //{
-    //    ValidarIntegridadeCurso(novoConteudoProgramatico: conteudoProgramatico);
-    //    ConteudoProgramatico = conteudoProgramatico;
-    //}
     public void AtualizarConteudoProgramatico(string finalidade, string ementa)
     {
         ConteudoProgramatico = new ConteudoProgramatico(finalidade, ementa);
@@ -91,6 +91,43 @@ public class Curso : Entidade, IRaizAgregacao
             throw new DomainException("Aula não pertence a este curso");
 
         _aulas.Remove(aula);
+    }
+
+    public void AtivarAula(Guid aulaId)
+    {
+        var aula = ObterAulaPeloId(aulaId);
+        aula.AtivarAula();
+    }
+
+    public void DesativarAula(Guid aulaId)
+    {
+        var aula = ObterAulaPeloId(aulaId);
+        aula.DesativarAula();
+    }
+
+    public void AlterarDescricaoAula(Guid aulaId, string descricao)
+    {
+        var aula = ObterAulaPeloId(aulaId);
+        aula.AlterarDescricao(descricao);
+    }
+
+    public void AlterarCargaHorariaAula(Guid aulaId, short cargaHoraria)
+    {
+        var aula = ObterAulaPeloId(aulaId);
+        aula.AlterarCargaHoraria(cargaHoraria);
+    }
+
+    public void AlterarOrdemAula(Guid aulaId, byte ordemAula)
+    {
+        var aula = ObterAulaPeloId(aulaId);
+        ValidarOrdemAula(ordemAula);
+        aula.AlterarOrdemAula(ordemAula);
+    }
+
+    public void AlterarUrlAula(Guid aulaId, string url)
+    {
+        var aula = ObterAulaPeloId(aulaId);
+        aula.AlterarUrl(url);
     }
     #endregion
 

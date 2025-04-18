@@ -30,7 +30,7 @@ public class MatriculaCursoTests
 
         matricula.Should().NotBeNull();
         matricula.EstadoMatricula.Should().Be(EstadoMatriculaCursoEnum.PendentePagamento);
-        matricula.CursoConcluido.Should().BeFalse();
+        matricula.MatriculaCursoConcluido.Should().BeFalse();
         matricula.DataMatricula.Date.Should().Be(DateTime.Now.Date);
     }
 
@@ -67,7 +67,7 @@ public class MatriculaCursoTests
 
         matricula.ConcluirCurso();
 
-        matricula.CursoConcluido.Should().BeTrue();
+        matricula.MatriculaCursoConcluido.Should().BeTrue();
         matricula.DataConclusao.Should().NotBeNull();
     }
 
@@ -100,6 +100,8 @@ public class MatriculaCursoTests
     public void Deve_requisitar_certificado()
     {
         var matricula = CriarMatricula();
+        matricula.ConcluirCurso();
+
         var path = "/certificados/teste.pdf";
 
         matricula.RequisitarCertificadoConclusao(path);
@@ -112,11 +114,12 @@ public class MatriculaCursoTests
     public void Nao_deve_requisitar_certificado_duplicado()
     {
         var matricula = CriarMatricula();
+        matricula.ConcluirCurso();
         matricula.RequisitarCertificadoConclusao("/certificados/teste.pdf");
 
         Action act = () => matricula.RequisitarCertificadoConclusao("/certificados/novo.pdf");
 
-        act.Should().Throw<DomainException>().WithMessage("*Certificado já foi solicitado*");
+        act.Should().Throw<DomainException>().WithMessage("*Certificado já foi solicitado para esta matrícula*");
     }
     #endregion
 
@@ -131,7 +134,7 @@ public class MatriculaCursoTests
         matricula.RegistrarHistoricoAprendizado(aulaId, nomeAula);
 
         matricula.HistoricoAprendizado.Should().ContainSingle();
-        matricula.ObterHistorico(aulaId).NomeAula.Should().Be(nomeAula);
+        matricula.ObterHistoricoAulaPeloId(aulaId).NomeAula.Should().Be(nomeAula);
     }
 
     [Fact]
@@ -155,7 +158,7 @@ public class MatriculaCursoTests
 
         matricula.RegistrarHistoricoAprendizado(aulaId, "Aula 01", DateTime.Now);
 
-        var historico = matricula.ObterHistorico(aulaId);
+        var historico = matricula.ObterHistoricoAulaPeloId(aulaId);
         historico.DataTermino.Should().NotBeNull();
     }
 
@@ -164,7 +167,7 @@ public class MatriculaCursoTests
     {
         var matricula = CriarMatricula();
 
-        Action act = () => matricula.ObterHistorico(Guid.NewGuid());
+        Action act = () => matricula.ObterHistoricoAulaPeloId(Guid.NewGuid());
 
         act.Should().Throw<DomainException>().WithMessage("*não foi localizado*");
     }

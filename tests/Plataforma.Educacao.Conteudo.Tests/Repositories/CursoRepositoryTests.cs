@@ -42,7 +42,7 @@ public class CursoRepositoryTests
 
         // Act
         await repository.AdicionarAsync(curso);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         var cursoDb = await repository.ObterPorIdAsync(curso.Id);
 
@@ -60,7 +60,7 @@ public class CursoRepositoryTests
 
         await repository.AdicionarAsync(curso1);
         await repository.AdicionarAsync(curso2);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         var cursos = await repository.ObterTodosAsync();
 
@@ -79,7 +79,7 @@ public class CursoRepositoryTests
 
         await repository.AdicionarAsync(curso1);
         await repository.AdicionarAsync(curso2);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         var cursosAtivos = await repository.ObterAtivosAsync();
 
@@ -93,7 +93,7 @@ public class CursoRepositoryTests
         var repository = CriarRepository(out var context);
 
         await repository.AdicionarAsync(curso);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         var existe = await repository.ExisteCursoComMesmoNomeAsync("Curso Duplicado");
 
@@ -117,12 +117,12 @@ public class CursoRepositoryTests
         var curso = CriarCursoValido("Curso de como não abusar demais no DDD");
         var repository = CriarRepository(out var context);
         await repository.AdicionarAsync(curso);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         // Act
         curso.AlterarNome("Curso de como não abusar demais no DDD Atualizado");
         await repository.AtualizarAsync(curso);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         var cursoAtualizado = await repository.ObterPorIdAsync(curso.Id);
 
@@ -136,10 +136,10 @@ public class CursoRepositoryTests
         var curso = CriarCursoValido("Curso para desativar");
         var repository = CriarRepository(out var context);
         await repository.AdicionarAsync(curso);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         await repository.DesativarAsync(curso);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         var cursoDesativado = await repository.ObterPorIdAsync(curso.Id);
         cursoDesativado.Ativo.Should().BeFalse();
@@ -163,7 +163,7 @@ public class CursoRepositoryTests
         var repository = CriarRepository(out var context);
         await repository.AdicionarAsync(curso1);
         await repository.AdicionarAsync(curso2);
-        await context.SaveChangesAsync();
+        await repository.UnitOfWork.Commit();
 
         var existe = await repository.ExisteCursoComMesmoNomeAsync("Curso Duplicado...");
 

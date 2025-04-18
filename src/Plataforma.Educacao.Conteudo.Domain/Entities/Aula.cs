@@ -1,5 +1,5 @@
 ﻿using Plataforma.Educacao.Core.Entities;
-using Plataforma.Educacao.Core.Validations;
+using Plataforma.Educacao.Core.DomainValidations;
 using System.Text.Json.Serialization;
 
 namespace Plataforma.Educacao.Conteudo.Domain.Entities;
@@ -41,28 +41,28 @@ public class Aula : Entidade
     #endregion
 
     #region Metodos do Dominio
-    public void AtivarAula() => Ativo = true;
-    public void DesativarAula() => Ativo = false;
+    internal void AtivarAula() => Ativo = true;
+    internal void DesativarAula() => Ativo = false;
 
-    public void AlterarDescricao(string descricao)
+    internal void AlterarDescricao(string descricao)
     {
         ValidarIntegridadeAula(novaDescricao: descricao);
         Descricao = descricao;
     }
 
-    public void AlterarCargaHoraria(short cargaHoraria)
+    internal void AlterarCargaHoraria(short cargaHoraria)
     {
         ValidarIntegridadeAula(novaCargaHoraria: cargaHoraria);
         CargaHoraria = cargaHoraria;
     }
 
-    public void AlterarOrdemAula(byte ordemAula)
+    internal void AlterarOrdemAula(byte ordemAula)
     {
         ValidarIntegridadeAula(novaOrdemAula: ordemAula);
         OrdemAula = ordemAula;
     }
 
-    public void AlterarUrl(string url)
+    internal void AlterarUrl(string url)
     {
         ValidarIntegridadeAula(novoUrl: url);
         Url = url;

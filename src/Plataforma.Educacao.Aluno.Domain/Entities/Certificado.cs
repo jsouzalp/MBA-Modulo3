@@ -1,5 +1,5 @@
 ﻿using Plataforma.Educacao.Core.Entities;
-using Plataforma.Educacao.Core.Validations;
+using Plataforma.Educacao.Core.DomainValidations;
 using System.Text.Json.Serialization;
 
 namespace Plataforma.Educacao.Aluno.Domain.Entities;
@@ -23,30 +23,20 @@ public class Certificado : Entidade
     {
         MatriculaCursoId = matriculaCursoId;
         DataSolicitacao = DateTime.Now;
-        PathCertificado = pathCertificado ?? string.Empty;
+        PathCertificado = pathCertificado;
 
         ValidarIntegridadeCertificado();
     }
     #endregion
 
-    #region Metodos do Dominio
-    public void AtualizarPathCertificado(string path)
-    {
-        ValidarIntegridadeCertificado(novoPath: path ?? string.Empty);
-        PathCertificado = path;
-    }
-    #endregion
-
     #region Validações
-    private void ValidarIntegridadeCertificado(string novoPath = null)
+    private void ValidarIntegridadeCertificado()
     {
-        var path = novoPath ?? PathCertificado;
-
         var validacao = new ResultadoValidacao<Certificado>();
 
         ValidacaoGuid.DeveSerValido(MatriculaCursoId, "Matrícula do curso deve ser informada", validacao);
-        ValidacaoTexto.DevePossuirConteudo(path, "Path do certificado não pode ser nulo ou vazio", validacao);
-        ValidacaoTexto.DevePossuirTamanho(path, 1, 1024, "Path do certificado deve ter no máximo 1024 caracteres", validacao);
+        ValidacaoTexto.DevePossuirConteudo(PathCertificado, "Path do certificado não pode ser nulo ou vazio", validacao);
+        ValidacaoTexto.DevePossuirTamanho(PathCertificado, 1, 1024, "Path do certificado deve ter no máximo 1024 caracteres", validacao);
 
         validacao.DispararExcecaoDominioSeInvalido();
     }

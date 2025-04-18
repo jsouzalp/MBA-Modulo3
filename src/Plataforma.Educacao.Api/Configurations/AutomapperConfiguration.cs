@@ -1,11 +1,17 @@
 ﻿using AutoMapper;
+using Plataforma.Educacao.Api.ViewModels.ConteudoProgramatico;
+using Plataforma.Educacao.Conteudo.Application.DTO;
 
 namespace Plataforma.Educacao.Api.Configurations;
 public class AutomapperConfiguration : Profile
 {
     public AutomapperConfiguration()
     {
-        //CreateMap<Category, CategoryViewModel>().ReverseMap();
+        CreateMap<AulaViewModel, AulaDto>();
+        CreateMap<CadastroCursoViewModel, CadastroCursoDto>();
+        CreateMap<AtualizacaoCursoViewModel, AtualizacaoCursoDto>();
+
+
         //CreateMap<Category, CategoryUpdateViewModel>().ReverseMap();
 
         //CreateMap<BudgetViewModel, Budget>();

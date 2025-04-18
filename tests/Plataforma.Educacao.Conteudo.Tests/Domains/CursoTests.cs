@@ -27,6 +27,13 @@ public class CursoTests
             conteudo ?? _conteudoValido);
             //aulas ?? [_aulaValida1, _aulaValida2, _aulaValida3]);
     }
+
+    private static Curso CriarCursoValidoComAula()
+    {
+        var curso = CriarCurso();
+        curso.AdicionarAula(_aulaValida1.Descricao, _aulaValida1.CargaHoraria, _aulaValida1.OrdemAula, _aulaValida1.Url);
+        return curso;
+    }
     #endregion
 
     #region Construtores
@@ -223,6 +230,77 @@ public class CursoTests
 
         act.Should().Throw<DomainException>()
            .WithMessage("*Aula não pertence a este curso*");
+    }
+
+    [Fact]
+    public void Deve_ativar_aula_via_curso()
+    {
+        var curso = CriarCursoValidoComAula();
+        var aula = curso.Aulas.First();
+
+        curso.DesativarAula(aula.Id);
+        curso.AtivarAula(aula.Id);
+
+        aula.Ativo.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Deve_desativar_aula_via_curso()
+    {
+        var curso = CriarCursoValidoComAula();
+        var aula = curso.Aulas.First();
+
+        curso.DesativarAula(aula.Id);
+
+        aula.Ativo.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Deve_alterar_descricao_aula_via_curso()
+    {
+        var curso = CriarCursoValidoComAula();
+        var aula = curso.Aulas.First();
+
+        string novaDescricao = "Aula de Dominios Ricos utilizando DDD e SOLID";
+        curso.AlterarDescricaoAula(aula.Id, novaDescricao);
+
+        aula.Descricao.Should().Be(novaDescricao);
+    }
+
+    [Fact]
+    public void Deve_alterar_carga_horaria_aula_via_curso()
+    {
+        var curso = CriarCursoValidoComAula();
+        var aula = curso.Aulas.First();
+
+        short novaCargaHoraria = 4;
+        curso.AlterarCargaHorariaAula(aula.Id, novaCargaHoraria);
+
+        aula.CargaHoraria.Should().Be(novaCargaHoraria);
+    }
+
+    [Fact]
+    public void Deve_alterar_ordem_aula_via_curso()
+    {
+        var curso = CriarCursoValidoComAula();
+        var aula = curso.Aulas.First();
+
+        byte novaOrdem = 10;
+        curso.AlterarOrdemAula(aula.Id, novaOrdem);
+
+        aula.OrdemAula.Should().Be(novaOrdem);
+    }
+
+    [Fact]
+    public void Deve_alterar_url_aula_via_curso()
+    {
+        var curso = CriarCursoValidoComAula();
+        var aula = curso.Aulas.First();
+
+        string novaUrl = "http://www.plataformaeducacao.com.br";
+        curso.AlterarUrlAula(aula.Id, novaUrl);
+
+        aula.Url.Should().Be(novaUrl);
     }
     #endregion
 

@@ -1,7 +1,7 @@
 ﻿using Plataforma.Educacao.Core.Aggregates;
 using Plataforma.Educacao.Core.Entities;
 using Plataforma.Educacao.Core.Exceptions;
-using Plataforma.Educacao.Core.Validations;
+using Plataforma.Educacao.Core.DomainValidations;
 
 namespace Plataforma.Educacao.Aluno.Domain.Entities;
 public class Aluno : Entidade, IRaizAgregacao
@@ -28,7 +28,31 @@ public class Aluno : Entidade, IRaizAgregacao
     }
     #endregion
 
+    #region Getters
+    public MatriculaCurso ObterMatriculaPorCursoId(Guid cursoId)
+    {
+        var matriculaCurso = _matriculasCursos.FirstOrDefault(m => m.CursoId == cursoId);
+        if (matriculaCurso == null) { throw new DomainException("Matrícula pelo Curso não foi localizada"); }
+
+        return matriculaCurso;
+    }
+
+    public MatriculaCurso ObterMatriculaCursoPeloId(Guid matriculaCursoId)
+    {
+        var matriculaCurso = _matriculasCursos.FirstOrDefault(m => m.Id == matriculaCursoId);
+        if (matriculaCurso == null) { throw new DomainException("Matrícula não foi localizada"); }
+
+        return matriculaCurso;
+    }
+
+    private bool AlunoJaMatriculado(Guid cursoId)
+    {
+        return _matriculasCursos.Any(m => m.CursoId == cursoId);
+    }
+    #endregion
+
     #region Metodos do Dominio
+    #region Manipuladores do Aluno
     public void AtualizarNome(string nome)
     {
         ValidarIntegridadeAluno(novoNome: nome ?? string.Empty);
@@ -46,22 +70,51 @@ public class Aluno : Entidade, IRaizAgregacao
         ValidarIntegridadeAluno(novaDataNascimento: dataNascimento);
         DataNascimento = dataNascimento;
     }
+    #endregion
 
+    #region Manipuladores de MatriculaCurso
     public void MatricularEmCurso(Guid cursoId, string nomeCurso, decimal valor)
     {
-        if (_matriculasCursos.Any(m => m.CursoId == cursoId)) { throw new DomainException("Aluno já está matriculado neste curso"); }
+        if (AlunoJaMatriculado(cursoId)){ throw new DomainException("Aluno já está matriculado neste curso"); }
 
         var novaMatricula = new MatriculaCurso(Id, cursoId, nomeCurso, valor);
         _matriculasCursos.Add(novaMatricula);
     }
 
-    public MatriculaCurso ObterMatriculaPorCursoId(Guid cursoId)
+    public void AtualizarPagamentoMatricula(Guid matriculaCursoId)
     {
-        var matriculaCurso = _matriculasCursos.FirstOrDefault(m => m.CursoId == cursoId);
-        if (matriculaCurso == null) { throw new DomainException("Matrícula não foi localizada"); }
-
-        return matriculaCurso;
+        MatriculaCurso matriculaCurso = ObterMatriculaCursoPeloId(matriculaCursoId);
+        matriculaCurso.AtualizarPagamentoMatricula();
     }
+
+    public void AtualizarAbandonoMatricula(Guid matriculaCursoId)
+    {
+        MatriculaCurso matriculaCurso = ObterMatriculaCursoPeloId(matriculaCursoId);
+        matriculaCurso.AtualizarAbandonoMatricula();
+    }
+
+    public void ConcluirCurso(Guid matriculaCursoId)
+    {
+        MatriculaCurso matriculaCurso = ObterMatriculaCursoPeloId(matriculaCursoId);
+        matriculaCurso.ConcluirCurso();
+    }
+    #endregion
+
+    #region Manipuladores de Certificado
+    public void RequisitarCertificadoConclusao(Guid matriculaCursoId, string pathCertificado)
+    {
+        MatriculaCurso matriculaCurso = ObterMatriculaCursoPeloId(matriculaCursoId);
+        matriculaCurso.RequisitarCertificadoConclusao(pathCertificado);
+    }
+    #endregion
+
+    #region Manipuladores de HistoricoAprendizado
+    public void RegistrarHistoricoAprendizado(Guid matriculaCursoId, Guid aulaId, string nomeAula, DateTime? dataTermino = null)
+    {
+        MatriculaCurso matriculaCurso = ObterMatriculaCursoPeloId(matriculaCursoId);
+        matriculaCurso.RegistrarHistoricoAprendizado(aulaId, nomeAula, dataTermino);
+    }
+    #endregion
     #endregion
 
     #region Validações

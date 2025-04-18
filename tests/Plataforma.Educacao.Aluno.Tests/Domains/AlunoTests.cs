@@ -191,22 +191,39 @@ public class AlunoTests
         var cursoId = Guid.NewGuid();
         aluno.MatricularEmCurso(cursoId, "Curso de DDD", 1000);
 
+        var matriculaId = aluno.MatriculasCursos.First().Id;
+
         // Act
-        var matricula = aluno.ObterMatriculaPorCursoId(cursoId);
+        var matricula = aluno.ObterMatriculaCursoPeloId(matriculaId);
 
         // Assert
         matricula.Should().NotBeNull();
         matricula.CursoId.Should().Be(cursoId);
+        matricula.Id.Should().Be(matriculaId);
     }
 
     [Fact]
-    public void Nao_deve_retornar_matricula_inexistente()
+    public void Nao_deve_retornar_matricula_inexistente_pelo_cursoId()
     {
         // Arrange
         var aluno = CriarAlunoValido();
 
         // Act
         Action act = () => aluno.ObterMatriculaPorCursoId(Guid.NewGuid());
+
+        // Assert
+        act.Should().Throw<DomainException>()
+            .WithMessage("*Matrícula pelo Curso não foi localizada*");
+    }
+
+    [Fact]
+    public void Nao_deve_retornar_matricula_inexistente_pela_matriculaId()
+    {
+        // Arrange
+        var aluno = CriarAlunoValido();
+
+        // Act
+        Action act = () => aluno.ObterMatriculaCursoPeloId(Guid.NewGuid());
 
         // Assert
         act.Should().Throw<DomainException>()
@@ -241,6 +258,75 @@ public class AlunoTests
 
         act.Should().Throw<DomainException>()
             .WithMessage("*Aluno já está matriculado neste curso*");
+    }
+
+    [Fact]
+    public void Deve_solicitar_certificado_quando_matricula_concluida()
+    {
+        var aluno = CriarAlunoValido();
+        aluno.MatricularEmCurso(Guid.NewGuid(), "Curso Introdução ao DDD", 500);
+        var matricula = aluno.MatriculasCursos.First();
+        aluno.ConcluirCurso(matricula.Id);
+
+        aluno.RequisitarCertificadoConclusao(matricula.Id, "/var/tmp/certificados/JairoSouza.pdf");
+
+        matricula.Certificado.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Nao_deve_solicitar_certificado_quando_matricula_nao_concluida()
+    {
+        var aluno = CriarAlunoValido();
+        aluno.MatricularEmCurso(Guid.NewGuid(), "Curso Introdução ao DDD", 500);
+        var matricula = aluno.MatriculasCursos.First();
+
+        Action act = () => aluno.RequisitarCertificadoConclusao(matricula.Id, "/var/tmp/certificados/JairoSouza.pdf");
+
+        act.Should().Throw<DomainException>().WithMessage("*Certificado só pode ser solicitado após a conclusão do curso*");
+    }
+
+    [Fact]
+    public void Deve_atualizar_pagamento_matricula_existente()
+    {
+        var aluno = CriarAlunoValido();
+        aluno.MatricularEmCurso(Guid.NewGuid(), "Curso Introdução ao DDD", 500);
+        var matricula = aluno.MatriculasCursos.First();
+
+        aluno.AtualizarPagamentoMatricula(matricula.Id);
+
+        matricula.EstadoMatricula.Should().Be(Domain.Enumerators.EstadoMatriculaCursoEnum.PagamentoRealizado);
+    }
+
+    [Fact]
+    public void Nao_deve_atualizar_pagamento_matricula_inexistente()
+    {
+        var aluno = CriarAlunoValido();
+
+        Action act = () => aluno.AtualizarPagamentoMatricula(Guid.NewGuid());
+
+        act.Should().Throw<DomainException>().WithMessage("*Matrícula não foi localizada*");
+    }
+
+    [Fact]
+    public void Deve_registrar_historico_aprendizado_para_matricula_existente()
+    {
+        var aluno = CriarAlunoValido();
+        aluno.MatricularEmCurso(Guid.NewGuid(), "Curso Introdução ao DDD", 500);
+        var matricula = aluno.MatriculasCursos.First();
+
+        aluno.RegistrarHistoricoAprendizado(matricula.Id, Guid.NewGuid(), "Curso Introdução ao DDD", DateTime.Now.Date);
+
+        matricula.HistoricoAprendizado.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void Nao_deve_registrar_historico_aprendizado_para_matricula_inexistente()
+    {
+        var aluno = CriarAlunoValido();
+
+        Action act = () => aluno.RegistrarHistoricoAprendizado(Guid.NewGuid(), Guid.NewGuid(), "Curso Introdução ao DDD", DateTime.Now.AddDays(-1));
+
+        act.Should().Throw<DomainException>().WithMessage("*Matrícula não foi localizada*");
     }
     #endregion
 

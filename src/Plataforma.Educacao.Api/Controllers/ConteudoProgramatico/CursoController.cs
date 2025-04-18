@@ -1,28 +1,37 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Plataforma.Educacao.Api.Enumerators;
 using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Exceptions;
+using Plataforma.Educacao.Core.Messages.Comunications;
+using Plataforma.Educacao.Core.Messages;
 using System.Net;
+using AutoMapper;
+using Plataforma.Educacao.Api.ViewModels.ConteudoProgramatico;
 
 namespace Plataforma.Educacao.Api.Controllers.ConteudoProgramatico;
 
 [Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class CursoController(ICursoAppService cursoAppService) : MainController
+public class CursoController(ICursoAppService cursoAppService,
+    IMapper mapper,
+    INotificationHandler<DomainNotificacaoRaiz> notifications,
+    IMediatorHandler mediatorHandler) : MainController(notifications, mediatorHandler)
 {
     private readonly ICursoAppService _cursoAppService = cursoAppService;
+    private readonly IMapper _mapper = mapper;
 
     [HttpPost]
-    public async Task<IActionResult> CadastrarCurso([FromBody] CadastroCursoDto dto)
+    public async Task<IActionResult> CadastrarCurso([FromBody] CadastroCursoViewModel cadastroCursoViewModel)
     {
-        if (!ModelState.IsValid)
-            return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState);
+        if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
 
         try
         {
+            var dto = _mapper.Map<CadastroCursoDto>(cadastroCursoViewModel);
             var cursoId = await _cursoAppService.CadastrarCursoAsync(dto);
             return GenerateResponse(new { CursoId = cursoId }, ResponseTypeEnum.Success, HttpStatusCode.Created);
         }
@@ -37,13 +46,13 @@ public class CursoController(ICursoAppService cursoAppService) : MainController
     }
 
     [HttpPut("{cursoId:guid}")]
-    public async Task<IActionResult> AtualizarCurso(Guid cursoId, [FromBody] AtualizacaoCursoDto dto)
+    public async Task<IActionResult> AtualizarCurso(Guid cursoId, [FromBody] AtualizacaoCursoViewModel atualizacaoCursoViewModel)
     {
-        if (!ModelState.IsValid)
-            return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState);
+        if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
 
         try
         {
+            var dto = _mapper.Map<AtualizacaoCursoDto>(atualizacaoCursoViewModel);
             await _cursoAppService.AtualizarCursoAsync(cursoId, dto);
             return GenerateResponse(null, ResponseTypeEnum.Success, HttpStatusCode.NoContent);
         }

@@ -1,0 +1,93 @@
+﻿using MediatR;
+using Plataforma.Educacao.Aluno.Domain.Interfaces;
+using Plataforma.Educacao.Core.Messages.Comunications;
+using Plataforma.Educacao.Core.Messages;
+using Plataforma.Educacao.Conteudo.Application.DTO;
+using Plataforma.Educacao.Aluno.Domain.Entities;
+using Plataforma.Educacao.Conteudo.Application.Interfaces;
+
+namespace Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
+public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoRepository, ICursoAppService cursoService, IMediatorHandler mediatorHandler) : IRequestHandler<RegistrarHistoricoAprendizadoCommand, bool>
+{
+    private readonly IAlunoRepository _alunoRepository = alunoRepository;
+    private readonly ICursoAppService _cursoService = cursoService;
+    private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
+    private Guid _raizAgregacao;
+
+    public async Task<bool> Handle(RegistrarHistoricoAprendizadoCommand request, CancellationToken cancellationToken)
+    {
+        _raizAgregacao = request.RaizAgregacao;
+        if (!ValidarRequisicao(request)) { return false; }
+        if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
+        if (!ObterMatriculaCurso(request.MatriculaCursoId, request.AulaId, aluno, out AulaDto aulaDto)) { return false; }
+
+        aluno.RegistrarHistoricoAprendizado(request.MatriculaCursoId, request.AulaId, aulaDto.Descricao, request.DataTermino);
+
+        await _alunoRepository.AtualizarAsync(aluno);
+        return await _alunoRepository.UnitOfWork.Commit();
+    }
+
+    private bool ValidarRequisicao(RegistrarHistoricoAprendizadoCommand request)
+    {
+        request.DefinirValidacao(new RegistrarHistoricoAprendizadoCommandValidator().Validate(request));
+
+        if (!request.EhValido())
+        {
+            foreach (var erro in request.Erros)
+            {
+                _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), erro)).GetAwaiter().GetResult();
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool ObterAluno(Guid alunoId, out Domain.Entities.Aluno aluno)
+    {
+        aluno = _alunoRepository.ObterPorIdAsync(alunoId).Result;
+        if (aluno == null)
+        {
+            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Aluno não encontrado.")).GetAwaiter().GetResult();
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool ObterMatriculaCurso(Guid matriculaCursoId, Guid aulaId, Domain.Entities.Aluno aluno, out AulaDto aulaDto)
+    {
+        aulaDto = new();
+
+        MatriculaCurso matriculaCurso = aluno.ObterMatriculaCursoPeloId(matriculaCursoId);
+        CursoDto cursoDto = _cursoService.ObterPorIdAsync(matriculaCurso.CursoId).Result;
+        aulaDto = cursoDto?.Aulas?.FirstOrDefault(x => x.Id == aulaId) ?? aulaDto;
+
+        if (cursoDto == null)
+        {
+            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Matrícula do curso deste aluno não encontrado")).GetAwaiter().GetResult();
+            return false;
+        }
+
+        if (cursoDto?.Aulas == null)
+        {
+            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Curso informado não possui nenhuma aula cadastrada")).GetAwaiter().GetResult();
+            return false;
+        }
+
+        if (aulaDto == null) 
+        { 
+            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Aula deste curso não encontrado")).GetAwaiter().GetResult();
+            return false;
+        }
+
+        if (!aulaDto.Ativo)
+        {
+            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Aula informada está inativa")).GetAwaiter().GetResult();
+            return false;
+        }
+
+        return true;
+    }
+}

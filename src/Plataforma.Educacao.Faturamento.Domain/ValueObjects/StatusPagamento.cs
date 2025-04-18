@@ -1,4 +1,4 @@
-﻿using Plataforma.Educacao.Core.Validations;
+﻿using Plataforma.Educacao.Core.DomainValidations;
 using Plataforma.Educacao.Faturamento.Domain.Enumerators;
 
 namespace Plataforma.Educacao.Faturamento.Domain.ValueObjects

@@ -56,43 +56,5 @@ public class CertificadoTests
     #endregion
 
     #region Metodos do Dominio
-    [Fact]
-    public void Deve_atualizar_path_certificado_valido()
-    {
-        // Arrange
-        var novoPath = "/novos-caminhos/atualizado.pdf";
-        var certificado = CriarCertificado();
-
-        // Act
-        certificado.AtualizarPathCertificado(novoPath);
-
-        // Assert
-        certificado.PathCertificado.Should().Be(novoPath);
-    }
-
-    [Theory]
-    [InlineData("", "*Path do certificado não pode ser nulo ou vazio*")]
-    [InlineData(null, "*Path do certificado não pode ser nulo ou vazio*")]
-    public void Nao_deve_atualizar_path_invalido(string novoPath, string mensagemErro)
-    {
-        var certificado = CriarCertificado();
-
-        Action act = () => certificado.AtualizarPathCertificado(novoPath);
-
-        act.Should().Throw<DomainException>()
-            .WithMessage(mensagemErro);
-    }
-
-    [Fact]
-    public void Nao_deve_atualizar_certificado_com_path_muito_longo()
-    {
-        var pathLongo = new string('x', 1025);
-        var certificado = CriarCertificado();
-
-        Action act = () => certificado.AtualizarPathCertificado(pathLongo);
-
-        act.Should().Throw<DomainException>()
-            .WithMessage("*Path do certificado deve ter no máximo 1024 caracteres*");
-    }
     #endregion
 }

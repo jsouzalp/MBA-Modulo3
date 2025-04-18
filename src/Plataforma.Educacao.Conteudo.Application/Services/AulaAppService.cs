@@ -5,7 +5,7 @@ using Plataforma.Educacao.Conteudo.Domain.Interfaces;
 using Plataforma.Educacao.Core.Exceptions;
 
 namespace Plataforma.Educacao.Conteudo.Application.Services;
-public class AulaAppService(ICursoRepository cursoRepository) : BaseService, IAulaAppService
+public class AulaAppService(ICursoRepository cursoRepository) : IAulaAppService
 {
     private readonly ICursoRepository _cursoRepository = cursoRepository;
 
@@ -24,14 +24,13 @@ public class AulaAppService(ICursoRepository cursoRepository) : BaseService, IAu
     public async Task AtualizarAulaAsync(Guid cursoId, AulaDto dto)
     {
         var curso = await ObterCursoComAulaAsync(cursoId);
-        var aula = curso.Aulas.FirstOrDefault(a => a.Id == dto.Id) ?? throw new DomainException("Aula não encontrada");
-        if (curso.Aulas.Any(a => a.Id != dto.Id && a.OrdemAula == dto.OrdemAula)) throw new DomainException("Já existe uma aula com essa ordem.");
 
-        aula.AlterarDescricao(dto.Descricao);
-        aula.AlterarCargaHoraria(dto.CargaHoraria);
-        aula.AlterarOrdemAula(dto.OrdemAula);
-        if (dto.Ativo) { aula.AtivarAula(); }
-        else { aula.DesativarAula(); }
+        curso.AlterarDescricaoAula(dto.Id, dto.Descricao);
+        curso.AlterarCargaHorariaAula(dto.Id, dto.CargaHoraria);
+        curso.AlterarOrdemAula(dto.Id, dto.OrdemAula);
+        curso.AlterarUrlAula(dto.Id, dto.Url);
+        if (dto.Ativo) { curso.AtivarAula(dto.Id); }
+        else { curso.DesativarAula(dto.Id); }
 
         await _cursoRepository.AtualizarAsync(curso);
         await _cursoRepository.UnitOfWork.Commit();
@@ -40,7 +39,7 @@ public class AulaAppService(ICursoRepository cursoRepository) : BaseService, IAu
     public async Task RemoverAulaAsync(Guid cursoId, Guid aulaId)
     {
         var curso = await ObterCursoComAulaAsync(cursoId);
-        var aula = curso.Aulas.FirstOrDefault(a => a.Id == aulaId) ?? throw new DomainException("Aula não encontrada");
+        var aula = curso.ObterAulaPeloId(aulaId);
 
         curso.RemoverAula(aula);
 

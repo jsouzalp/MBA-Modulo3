@@ -1,6 +1,6 @@
 ﻿using Plataforma.Educacao.Core.Aggregates;
 using Plataforma.Educacao.Core.Entities;
-using Plataforma.Educacao.Core.Validations;
+using Plataforma.Educacao.Core.DomainValidations;
 using Plataforma.Educacao.Faturamento.Domain.Enumerators;
 using Plataforma.Educacao.Faturamento.Domain.ValueObjects;
 
