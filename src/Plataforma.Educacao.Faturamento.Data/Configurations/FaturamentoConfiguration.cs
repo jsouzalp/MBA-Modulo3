@@ -5,7 +5,7 @@ using Plataforma.Educacao.Faturamento.Domain.Entities;
 
 namespace Plataforma.Educacao.Faturamento.Data.Configurations
 {
-    public class PagamentoConfiguration : IEntityTypeConfiguration<Pagamento>
+    public class FaturamentoConfiguration : IEntityTypeConfiguration<Pagamento>
     {
         public void Configure(EntityTypeBuilder<Pagamento> builder)
         {

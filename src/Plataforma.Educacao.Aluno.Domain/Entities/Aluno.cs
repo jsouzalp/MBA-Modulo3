@@ -7,6 +7,7 @@ namespace Plataforma.Educacao.Aluno.Domain.Entities;
 public class Aluno : Entidade, IRaizAgregacao
 {
     #region Atributos
+    public Guid CodigoUsuarioAutenticacao { get; private set; }
     public string Nome { get; private set; }
     public string Email { get; private set; }
     public DateTime DataNascimento { get; private set; }
@@ -53,6 +54,15 @@ public class Aluno : Entidade, IRaizAgregacao
 
     #region Metodos do Dominio
     #region Manipuladores do Aluno
+    public void IdentificarCodigoUsuarioNoSistema(Guid codigoUsuarioAutenticacao)
+    {
+        if (codigoUsuarioAutenticacao == Guid.Empty) { throw new DomainException("Código de autenticação não pode ser vazio"); }
+        if (CodigoUsuarioAutenticacao != Guid.Empty) { throw new DomainException("Código de autenticação já foi definido"); }
+
+        DefinirId(codigoUsuarioAutenticacao);
+        CodigoUsuarioAutenticacao = codigoUsuarioAutenticacao;
+    }
+
     public void AtualizarNome(string nome)
     {
         ValidarIntegridadeAluno(novoNome: nome ?? string.Empty);

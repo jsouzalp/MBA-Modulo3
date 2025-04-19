@@ -8,7 +8,7 @@ using Plataforma.Educacao.Core.Data;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
 
-namespace Plataforma.Educacao.Aluno.Tests.Applications;
+namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
 
 public class AtualizarPagamentoMatriculaCommandHandlerTests
 {

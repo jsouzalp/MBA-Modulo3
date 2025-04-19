@@ -33,6 +33,7 @@ public class Curso : Entidade, IRaizAgregacao
         Valor = valor;
         ValidoAte = validoAte;
         ConteudoProgramatico = conteudoProgramatico;
+        Ativo = false;
 
         ValidarIntegridadeCurso();
     }

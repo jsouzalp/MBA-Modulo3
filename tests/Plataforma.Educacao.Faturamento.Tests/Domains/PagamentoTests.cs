@@ -103,18 +103,18 @@ public class PagamentoTests
         pagamento.DataVencimento.Should().Be(novaData);
     }
 
-    [Fact]
-    public void Deve_corrigir_data_pagamento_valida()
-    {
-        var dataCorreta = DateTime.Now.AddDays(-2);
+    //[Fact]
+    //public void Deve_corrigir_data_pagamento_valida()
+    //{
+    //    var dataCorreta = DateTime.Now.AddDays(-2);
 
-        var pagamento = CriarPagamento();
-        pagamento.ConfirmarPagamento(null);
+    //    var pagamento = CriarPagamento();
+    //    pagamento.ConfirmarPagamento(null);
 
-        pagamento.CorrigirDataPagamento(dataCorreta);
+    //    pagamento.CorrigirDataPagamento(dataCorreta);
 
-        pagamento.DataPagamento.Should().Be(dataCorreta);
-    }
+    //    pagamento.DataPagamento.Should().Be(dataCorreta);
+    //}
 
     [Fact]
     public void Nao_deve_permitir_confirmar_pagamento()
@@ -139,18 +139,18 @@ public class PagamentoTests
            .WithMessage(mensagemEsperada);
     }
 
-    [Theory]
-    [InlineData("2100-01-01", "*Data de pagamento deve ser igual ou menor que a data atual*")]
-    [InlineData("0001-01-01", "*Data de pagamento deve ser válida*")]
-    public void Nao_deve_corrigir_data_pagamento_invalida(string dataTexto, string mensagemEsperada)
-    {
-        var pagamento = CriarPagamento();
-        var dataFutura = DateTime.Parse(dataTexto);
+    //[Theory]
+    //[InlineData("2100-01-01", "*Data de pagamento deve ser igual ou menor que a data atual*")]
+    //[InlineData("0001-01-01", "*Data de pagamento deve ser válida*")]
+    //public void Nao_deve_corrigir_data_pagamento_invalida(string dataTexto, string mensagemEsperada)
+    //{
+    //    var pagamento = CriarPagamento();
+    //    var dataFutura = DateTime.Parse(dataTexto);
 
-        Action act = () => pagamento.CorrigirDataPagamento(dataFutura);
+    //    Action act = () => pagamento.CorrigirDataPagamento(dataFutura);
 
-        act.Should().Throw<DomainException>()
-           .WithMessage(mensagemEsperada);
-    }
+    //    act.Should().Throw<DomainException>()
+    //       .WithMessage(mensagemEsperada);
+    //}
     #endregion
 }

@@ -1,4 +1,6 @@
-﻿namespace Plataforma.Educacao.Core.Entities;
+﻿using Plataforma.Educacao.Core.Exceptions;
+
+namespace Plataforma.Educacao.Core.Entities;
 public abstract class Entidade
 {
     #region Atributos
@@ -13,6 +15,11 @@ public abstract class Entidade
     #endregion
 
     #region Metodos do Dominio
+    public void DefinirId(Guid id)
+    {
+        if (id == Guid.Empty) { throw new DomainException("Id não pode ser vazio"); }
+        Id = id;
+    }
     #endregion
 
     #region Validações  

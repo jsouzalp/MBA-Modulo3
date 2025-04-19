@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Plataforma.Educacao.Api.Authentications;
 using Plataforma.Educacao.Api.Filters;
 
 namespace Plataforma.Educacao.Api.Configurations;
@@ -7,6 +8,8 @@ public static class ApiConfiguration
 {
     public static IServiceCollection ConfigurarApi(this IServiceCollection services)
     {
+        services.AddScoped<IAppIdentityUser, AppIdentityUser>();
+
         services.AddControllers(options =>
         {
             options.Filters.Add<DomainExceptionFilter>();

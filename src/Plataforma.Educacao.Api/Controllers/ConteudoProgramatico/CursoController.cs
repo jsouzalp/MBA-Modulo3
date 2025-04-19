@@ -10,16 +10,18 @@ using Plataforma.Educacao.Core.Messages;
 using System.Net;
 using AutoMapper;
 using Plataforma.Educacao.Api.ViewModels.ConteudoProgramatico;
+using Plataforma.Educacao.Api.Authentications;
 
 namespace Plataforma.Educacao.Api.Controllers.ConteudoProgramatico;
 
-[Authorize]
+[Authorize(Roles = "Administrador")]
 [Route("api/[controller]")]
 [ApiController]
 public class CursoController(ICursoAppService cursoAppService,
     IMapper mapper,
+    IAppIdentityUser appIdentityUser,
     INotificationHandler<DomainNotificacaoRaiz> notifications,
-    IMediatorHandler mediatorHandler) : MainController(notifications, mediatorHandler)
+    IMediatorHandler mediatorHandler) : MainController(appIdentityUser, notifications, mediatorHandler)
 {
     private readonly ICursoAppService _cursoAppService = cursoAppService;
     private readonly IMapper _mapper = mapper;

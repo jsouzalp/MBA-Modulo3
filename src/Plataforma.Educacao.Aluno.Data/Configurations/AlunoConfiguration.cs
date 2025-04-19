@@ -18,6 +18,11 @@ public class AlunoConfiguration : IEntityTypeConfiguration<Domain.Entities.Aluno
                .HasColumnType(DatabaseTypeConstant.UniqueIdentifier)
                .IsRequired();
 
+        builder.Property(x => x.CodigoUsuarioAutenticacao)
+           .HasColumnName("CodigoUsuarioAutenticacao")
+           .HasColumnType(DatabaseTypeConstant.UniqueIdentifier)
+           .IsRequired();
+
         builder.Property(x => x.Nome)
                .HasColumnName("Nome")
                .HasColumnType(DatabaseTypeConstant.Varchar)

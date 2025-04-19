@@ -4,12 +4,12 @@ using Plataforma.Educacao.Faturamento.Domain.Interfaces;
 
 namespace Plataforma.Educacao.Faturamento.Data.Repositories
 {
-    public class PagamentoRepository : IPagamentoCommandRepository
+    public class FaturamentoRepository : IFaturamentoRepository
     {
-        private readonly PagamentoDbContext _context;
+        private readonly FaturamentoDbContext _context;
         public IUnitOfWork UnitOfWork => _context;
 
-        public PagamentoRepository(PagamentoDbContext context)
+        public FaturamentoRepository(FaturamentoDbContext context)
         {
             _context = context;
         }

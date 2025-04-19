@@ -6,23 +6,34 @@ using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Api.Enumerators;
 using System.Net;
 using Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
-using Plataforma.Educacao.Api.ViewModels.Aluno;
 using Plataforma.Educacao.Core.Exceptions;
 using Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
 using Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
 using Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
 using Plataforma.Educacao.Aluno.Application.Commands.SolicitarCertificado;
+using Plataforma.Educacao.Aluno.Application.Interfaces;
+using Plataforma.Educacao.Api.ViewModels.Aluno.Commands;
+using AutoMapper;
+using Plataforma.Educacao.Api.Authentications;
+//using Plataforma.Educacao.Api.ViewModels.Aluno.Queries;
 
 namespace Plataforma.Educacao.Api.Controllers.Aluno;
 
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class AlunoController(INotificationHandler<DomainNotificacaoRaiz> notifications,
-    IMediatorHandler mediatorHandler) : MainController(notifications, mediatorHandler)
+public partial class AlunoController(IAlunoQueryService alunoQueryService,
+    IMapper mapper,
+    IAppIdentityUser appIdentityUser,
+    INotificationHandler<DomainNotificacaoRaiz> notifications,
+    IMediatorHandler mediatorHandler) : MainController(appIdentityUser, notifications, mediatorHandler)
 {
+    private readonly IAlunoQueryService _alunoQueryService = alunoQueryService;
+    private readonly IMapper _mapper = mapper;
+
+    [Authorize(Roles = "Usuario")]
     [HttpPost("/matricular-aluno/")]
-    public async Task<IActionResult> MatricularAluno(Guid alunoId, MatriculaCursoViewModel matriculaCursoViewModel)
+    public async Task<IActionResult> MatricularAluno(Guid alunoId, MatricularCursoViewModel matriculaCursoViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
 
@@ -51,6 +62,7 @@ public class AlunoController(INotificationHandler<DomainNotificacaoRaiz> notific
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpPut("/atualizar-pagamento-matricula/")]
     public async Task<IActionResult> AtualizarPagamentoMatricula(Guid alunoId, AtualizarPagamentoMatriculaViewModel viewModel)
     {
@@ -82,6 +94,7 @@ public class AlunoController(INotificationHandler<DomainNotificacaoRaiz> notific
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpPost("/registrar-historico-aprendizado/")]
     public async Task<IActionResult> RegistrarHistoricoAprendizado(RegistrarHistoricoAprendizadoViewModel viewModel)
     {
@@ -119,6 +132,7 @@ public class AlunoController(INotificationHandler<DomainNotificacaoRaiz> notific
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpPut("/concluir-curso/")]
     public async Task<IActionResult> ConcluirCurso(ConcluirCursoViewModel viewModel)
     {
@@ -150,6 +164,7 @@ public class AlunoController(INotificationHandler<DomainNotificacaoRaiz> notific
         }
     }
 
+    [Authorize(Roles = "Usuario")]
     [HttpPost("/solicitar-certificado/")]
     public async Task<IActionResult> SolicitarCertificado(SolicitarCertificadoViewModel viewModel)
     {
@@ -180,5 +195,4 @@ public class AlunoController(INotificationHandler<DomainNotificacaoRaiz> notific
             return GenerateResponse(null, ResponseTypeEnum.GenericError, HttpStatusCode.BadRequest, [ex.Message]);
         }
     }
-
 }

@@ -1,4 +1,4 @@
-﻿namespace Plataforma.Educacao.Api.ViewModels.Aluno;
+﻿namespace Plataforma.Educacao.Api.ViewModels.Aluno.Commands;
 public class RegistrarHistoricoAprendizadoViewModel
 {
     public Guid AlunoId { get; set; }

@@ -4,9 +4,9 @@ using Plataforma.Educacao.Faturamento.Domain.Entities;
 
 namespace Plataforma.Educacao.Faturamento.Data.Contexts
 {
-    public class PagamentoDbContext : DbContext, IUnitOfWork
+    public class FaturamentoDbContext : DbContext, IUnitOfWork
     {
-        public PagamentoDbContext(DbContextOptions<PagamentoDbContext> options) : base(options) { }
+        public FaturamentoDbContext(DbContextOptions<FaturamentoDbContext> options) : base(options) { }
 
         public DbSet<Pagamento> Pagamentos { get; set; }
 
@@ -18,7 +18,7 @@ namespace Plataforma.Educacao.Faturamento.Data.Contexts
 
             //modelBuilder.Ignore<Event>();
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PagamentoDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(FaturamentoDbContext).Assembly);
         }
 
         public async Task<bool> Commit()

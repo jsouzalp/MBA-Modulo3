@@ -58,11 +58,11 @@ namespace Plataforma.Educacao.Faturamento.Domain.Entities
             DataVencimento = novaDataVencimento;
         }
 
-        public void CorrigirDataPagamento(DateTime novaDataPagamento)
-        {
-            ValidarIntegridadePagamento(novaDataPagamento: novaDataPagamento);
-            DataPagamento = novaDataPagamento;
-        }
+        //public void CorrigirDataPagamento(DateTime novaDataPagamento)
+        //{
+        //    ValidarIntegridadePagamento(novaDataPagamento: novaDataPagamento);
+        //    DataPagamento = novaDataPagamento;
+        //}
         #endregion
 
         #region Validações

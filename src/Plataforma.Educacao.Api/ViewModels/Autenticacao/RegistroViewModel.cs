@@ -17,4 +17,9 @@ public class RegistroViewModel
 
     [Compare("Password", ErrorMessage = "As senhas não conferem.")]
     public string ConfirmPassword { get; set; }
+
+    [Required(ErrorMessage = "Data de nascimento é obrigatório")]
+    public DateTime DataNascimento { get; set; }
+
+    public bool EhAdministrador{ get; set; }
 }

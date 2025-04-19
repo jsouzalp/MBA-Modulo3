@@ -1,10 +1,10 @@
 ﻿using MediatR;
 
 namespace Plataforma.Educacao.Core.Messages.Handlers;
-public class DomainNotificationHandler : INotificationHandler<DomainNotificacaoRaiz>
+public class DomainNotificacaoHandler : INotificationHandler<DomainNotificacaoRaiz>
 {
     private readonly List<DomainNotificacaoRaiz> _notificacoes = [];
-    public DomainNotificationHandler(){ }
+    public DomainNotificacaoHandler(){ }
 
     public async Task Handle(DomainNotificacaoRaiz notificacao, CancellationToken cancellationToken)
     {

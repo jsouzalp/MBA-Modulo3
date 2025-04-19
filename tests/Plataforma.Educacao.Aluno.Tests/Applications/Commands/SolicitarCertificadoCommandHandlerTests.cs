@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Plataforma.Educacao.Aluno.Tests.Applications;
+namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
 
 public class SolicitarCertificadoCommandHandlerTests
 {
