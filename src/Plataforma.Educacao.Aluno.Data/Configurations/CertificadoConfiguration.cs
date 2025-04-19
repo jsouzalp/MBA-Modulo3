@@ -47,7 +47,7 @@ public class CertificadoConfiguration : IEntityTypeConfiguration<Certificado>
            .WithOne(x => x.Certificado)
            .HasForeignKey<Certificado>(x => x.MatriculaCursoId)
            .HasConstraintName("CertificadoMatriculaCursoFK")
-           .OnDelete(DeleteBehavior.NoAction);
+           .OnDelete(DeleteBehavior.Cascade);
 
         #endregion Relationships
     }

@@ -11,7 +11,7 @@ using Plataforma.Educacao.Aluno.Data.Contexts;
 namespace Plataforma.Educacao.Aluno.Data.Migrations
 {
     [DbContext(typeof(AlunoDbContext))]
-    [Migration("20250419170944_InitialMigration")]
+    [Migration("20250419211215_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -150,7 +150,7 @@ namespace Plataforma.Educacao.Aluno.Data.Migrations
                     b.HasOne("Plataforma.Educacao.Aluno.Domain.Entities.MatriculaCurso", "MatriculaCurso")
                         .WithOne("Certificado")
                         .HasForeignKey("Plataforma.Educacao.Aluno.Domain.Entities.Certificado", "MatriculaCursoId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("MatriculasCursosCertificadosFK");
 

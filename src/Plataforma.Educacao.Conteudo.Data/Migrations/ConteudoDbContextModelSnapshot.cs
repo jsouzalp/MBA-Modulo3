@@ -111,7 +111,7 @@ namespace Plataforma.Educacao.Conteudo.Data.Migrations
                     b.HasOne("Plataforma.Educacao.Conteudo.Domain.Entities.Curso", "Curso")
                         .WithMany("Aulas")
                         .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("CursoAulaFK");
 

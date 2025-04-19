@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Core.Data;
 
@@ -20,6 +21,9 @@ namespace Plataforma.Educacao.Conteudo.Data.Contexts
             //modelBuilder.Ignore<Event>();
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ConteudoDbContext).Assembly);
+            //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public async Task<bool> Commit()

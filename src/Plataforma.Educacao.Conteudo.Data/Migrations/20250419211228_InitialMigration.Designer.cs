@@ -11,7 +11,7 @@ using Plataforma.Educacao.Conteudo.Data.Contexts;
 namespace Plataforma.Educacao.Conteudo.Data.Migrations
 {
     [DbContext(typeof(ConteudoDbContext))]
-    [Migration("20250413134152_InitialMigration")]
+    [Migration("20250419211228_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -114,7 +114,7 @@ namespace Plataforma.Educacao.Conteudo.Data.Migrations
                     b.HasOne("Plataforma.Educacao.Conteudo.Domain.Entities.Curso", "Curso")
                         .WithMany("Aulas")
                         .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("CursoAulaFK");
 

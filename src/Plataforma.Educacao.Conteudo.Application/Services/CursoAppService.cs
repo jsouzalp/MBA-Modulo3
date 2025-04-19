@@ -98,8 +98,9 @@ public class CursoAppService(ICursoRepository cursoRepository) : ICursoAppServic
                 Ativo = a.Ativo,
                 CargaHoraria = a.CargaHoraria,
                 OrdemAula = a.OrdemAula,
-
-            }).ToList()
+                Url = a.Url
+            }).OrderBy(x => x.OrdemAula)
+              .ToList()
         };
     }
     #endregion

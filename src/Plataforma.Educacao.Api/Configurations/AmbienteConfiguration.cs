@@ -12,7 +12,7 @@ public static class AmbienteConfiguration
             app.UseSwaggerUI();
             app.UseCors("Dev");
 
-            DbMigrationHelper.AutocarregamentoDadosAsync(app).Wait();
+            //DbMigrationHelper.AutocarregamentoDadosAsync(app).Wait();
         }
         else
         {

@@ -11,4 +11,6 @@ public interface ICursoRepository : IRepository<Curso>
     Task<IEnumerable<Curso>> ObterTodosAsync();
     Task<IEnumerable<Curso>> ObterAtivosAsync();
     Task<bool> ExisteCursoComMesmoNomeAsync(string nome);
+
+    Task AdicionarAulaAsync(Aula aula);
 }

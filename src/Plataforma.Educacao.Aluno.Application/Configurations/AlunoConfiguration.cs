@@ -8,6 +8,8 @@ using Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
 using Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
 using Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
 using Plataforma.Educacao.Aluno.Application.Commands.SolicitarCertificado;
+using Plataforma.Educacao.Aluno.Application.Interfaces;
+using Plataforma.Educacao.Aluno.Application.Queries;
 using Plataforma.Educacao.Aluno.Data.Contexts;
 using Plataforma.Educacao.Aluno.Data.Repositories;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
@@ -47,6 +49,7 @@ public static class AlunoConfiguration
         services.AddScoped<IRequestHandler<RegistrarHistoricoAprendizadoCommand, bool>, RegistrarHistoricoAprendizadoCommandHandler>();
         services.AddScoped<IRequestHandler<SolicitarCertificadoCommand, bool>, SolicitarCertificadoCommandHandler>();
 
+        services.AddScoped<IAlunoQueryService, AlunoQueryService>();
         return services;
     }
 

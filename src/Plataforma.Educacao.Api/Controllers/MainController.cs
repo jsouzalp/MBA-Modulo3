@@ -7,12 +7,14 @@ using Plataforma.Educacao.Core.Messages.Handlers;
 using Plataforma.Educacao.Core.Messages;
 using System.Net;
 using Plataforma.Educacao.Api.Authentications;
+using Plataforma.Educacao.Core.Exceptions;
+using System;
 
 namespace Plataforma.Educacao.Api.Controllers;
 
 [ApiController]
-public class MainController(IAppIdentityUser appIdentityUser, 
-    INotificationHandler<DomainNotificacaoRaiz> notifications, 
+public class MainController(IAppIdentityUser appIdentityUser,
+    INotificationHandler<DomainNotificacaoRaiz> notifications,
     IMediatorHandler mediatorHandler) : ControllerBase
 {
     private readonly IAppIdentityUser _appIdentityUser = appIdentityUser;
@@ -25,11 +27,24 @@ public class MainController(IAppIdentityUser appIdentityUser,
     public string Email => _appIdentityUser.ObterEmail();
     public bool EhAdministrador => _appIdentityUser.EhAdministrador();
 
+    protected ActionResult GenerateDomainExceptionResponse(object? result = null,
+        ResponseTypeEnum responseType = ResponseTypeEnum.Success,
+        HttpStatusCode statusCode = HttpStatusCode.OK,
+        DomainException exception = null)
+    {
+        List<string> errors = [];
+        if (exception != null)
+        {
+            errors.AddRange(exception.Errors ?? [exception.Message]);
+        }
+
+        return GenerateResponse(result, responseType, statusCode, errors);
+    }
+
     protected ActionResult GenerateResponse(object? result = null,
         ResponseTypeEnum responseType = ResponseTypeEnum.Success,
         HttpStatusCode statusCode = HttpStatusCode.OK,
-        IEnumerable<string> errors = null, 
-        Exception exception)
+        IList<string> errors = null)
     {
         if (OperacaoValida() && ((int)statusCode >= 200 && (int)statusCode <= 299))
         {
@@ -47,8 +62,8 @@ public class MainController(IAppIdentityUser appIdentityUser,
         errors ??= [];
         if (_notifications.TemNotificacao())
         {
-            var notificationErrors = _notifications.ObterNotificacoes().Select(n => $"Chave: {n.Chave} Mensagem: {n.Valor}").ToList();
-            foreach(string erro in notificationErrors)
+            var notificationErrors = _notifications.ObterNotificacoes().Select(n => $"({n.Chave}: {n.Chave}) Mensagem: {n.Valor}").ToList();
+            foreach (string erro in notificationErrors)
             {
                 errors.Add(erro);
             }

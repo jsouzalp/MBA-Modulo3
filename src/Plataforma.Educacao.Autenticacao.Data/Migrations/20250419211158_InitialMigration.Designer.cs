@@ -11,7 +11,7 @@ using Plataforma.Educacao.Autenticacao.Data.Contexts;
 namespace Plataforma.Educacao.Autenticacao.Data.Migrations
 {
     [DbContext(typeof(AutenticacaoDbContext))]
-    [Migration("20250413140835_InitialMigration")]
+    [Migration("20250419211158_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

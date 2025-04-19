@@ -32,7 +32,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
     private readonly IMapper _mapper = mapper;
 
     [Authorize(Roles = "Usuario")]
-    [HttpPost("/matricular-aluno/")]
+    [HttpPost("matricular-aluno/{alunoId}")]
     public async Task<IActionResult> MatricularAluno(Guid alunoId, MatricularCursoViewModel matriculaCursoViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -54,7 +54,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -63,7 +63,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
     }
 
     [Authorize(Roles = "Usuario")]
-    [HttpPut("/atualizar-pagamento-matricula/")]
+    [HttpPut("atualizar-pagamento-matricula/")]
     public async Task<IActionResult> AtualizarPagamentoMatricula(Guid alunoId, AtualizarPagamentoMatriculaViewModel viewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -86,7 +86,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -95,7 +95,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
     }
 
     [Authorize(Roles = "Usuario")]
-    [HttpPost("/registrar-historico-aprendizado/")]
+    [HttpPost("registrar-historico-aprendizado/")]
     public async Task<IActionResult> RegistrarHistoricoAprendizado(RegistrarHistoricoAprendizadoViewModel viewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -124,7 +124,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -133,7 +133,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
     }
 
     [Authorize(Roles = "Usuario")]
-    [HttpPut("/concluir-curso/")]
+    [HttpPut("concluir-curso/")]
     public async Task<IActionResult> ConcluirCurso(ConcluirCursoViewModel viewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -156,7 +156,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -165,14 +165,14 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
     }
 
     [Authorize(Roles = "Usuario")]
-    [HttpPost("/solicitar-certificado/")]
+    [HttpPost("solicitar-certificado/")]
     public async Task<IActionResult> SolicitarCertificado(SolicitarCertificadoViewModel viewModel)
     {
-        if (!ModelState.IsValid){return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState);}
+        if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
 
         try
         {
-            if (UserId != viewModel.AlunoId){return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação"]);}
+            if (UserId != viewModel.AlunoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação"]); }
 
             var comando = new SolicitarCertificadoCommand(viewModel.AlunoId, viewModel.MatriculaCursoId, viewModel.PathCertificado);
             var sucesso = await _mediatorHandler.EnviarComando(comando);
@@ -188,7 +188,7 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {

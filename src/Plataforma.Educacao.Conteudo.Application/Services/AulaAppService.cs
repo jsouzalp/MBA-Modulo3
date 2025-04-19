@@ -1,4 +1,5 @@
-﻿using Plataforma.Educacao.Conteudo.Application.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
@@ -14,10 +15,10 @@ public class AulaAppService(ICursoRepository cursoRepository) : IAulaAppService
         var curso = await ObterCursoComAulaAsync(cursoId);
 
         curso.AdicionarAula(dto.Descricao, dto.CargaHoraria, dto.OrdemAula, dto.Url);
-        await _cursoRepository.AtualizarAsync(curso);
+        var aulaAdicionada = curso.Aulas.Last();
+        await _cursoRepository.AdicionarAulaAsync(aulaAdicionada);
         await _cursoRepository.UnitOfWork.Commit();
 
-        var aulaAdicionada = curso.Aulas.Last();
         return aulaAdicionada.Id;
     }
 

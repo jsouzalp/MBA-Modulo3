@@ -16,14 +16,17 @@ public class Curso : Entidade, IRaizAgregacao
     #region Helper only for EF Mapping
     public ConteudoProgramatico ConteudoProgramatico { get; private set; }
 
-    private readonly List<Aula> _aulas = [];
-    public IReadOnlyCollection<Aula> Aulas => _aulas;
+    private readonly List<Aula> _aulas;
+    public IReadOnlyCollection<Aula> Aulas => _aulas.AsReadOnly();
     #endregion
     #endregion
 
     #region Construtores
     // EF Constructor
-    protected Curso() { }
+    protected Curso() 
+    {
+        _aulas = new List<Aula>();
+    }
     public Curso(string nome, 
         decimal valor, 
         DateTime? validoAte, 
@@ -33,7 +36,7 @@ public class Curso : Entidade, IRaizAgregacao
         Valor = valor;
         ValidoAte = validoAte;
         ConteudoProgramatico = conteudoProgramatico;
-        Ativo = false;
+        Ativo = true;
 
         ValidarIntegridadeCurso();
     }
@@ -81,7 +84,7 @@ public class Curso : Entidade, IRaizAgregacao
 
     public void AdicionarAula(string descricao, short cargaHoraria, byte ordemAula, string url)
     {
-        ValidarOrdemAula(ordemAula);
+        ValidarOrdemAula(Guid.Empty, ordemAula);
         _aulas.Add(new Aula(Id, descricao, cargaHoraria, ordemAula, url));
     }
 
@@ -121,7 +124,7 @@ public class Curso : Entidade, IRaizAgregacao
     public void AlterarOrdemAula(Guid aulaId, byte ordemAula)
     {
         var aula = ObterAulaPeloId(aulaId);
-        ValidarOrdemAula(ordemAula);
+        ValidarOrdemAula(aulaId, ordemAula);
         aula.AlterarOrdemAula(ordemAula);
     }
 
@@ -154,11 +157,11 @@ public class Curso : Entidade, IRaizAgregacao
         validacao.DispararExcecaoDominioSeInvalido();
     }
 
-    private void ValidarOrdemAula(byte ordemAula)
+    private void ValidarOrdemAula(Guid aulaId, byte ordemAula)
     {
         var validacao = new ResultadoValidacao<Curso>();
 
-        if (_aulas.Any(a => a.OrdemAula == ordemAula))
+        if (_aulas.Any(a => a.Id != aulaId && a.OrdemAula == ordemAula))
         {
             validacao.AdicionarErro($"Já existe uma aula com a ordem {ordemAula}. Ordem da aula deve ser única dentro do curso");
         }

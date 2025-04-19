@@ -66,7 +66,8 @@ namespace Plataforma.Educacao.Aluno.Data.Migrations
                         name: "MatriculasCursosCertificadosFK",
                         column: x => x.MatriculaCursoId,
                         principalTable: "MatriculasCursos",
-                        principalColumn: "MatriculaCursoId");
+                        principalColumn: "MatriculaCursoId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

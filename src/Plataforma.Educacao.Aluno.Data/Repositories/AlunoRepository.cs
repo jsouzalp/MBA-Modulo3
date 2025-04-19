@@ -46,6 +46,11 @@ public class AlunoRepository(AlunoDbContext context) : IAlunoRepository
     #endregion
 
     #region Matricula Curso
+    public async Task AdicionarMatriculaCursoAsync(MatriculaCurso matriculaCurso)
+    {
+        await _context.MatriculasCursos.AddAsync(matriculaCurso);
+    }
+
     public async Task<MatriculaCurso> ObterMatriculaPorIdAsync(Guid matriculaId)
     {
         return await _context.MatriculasCursos

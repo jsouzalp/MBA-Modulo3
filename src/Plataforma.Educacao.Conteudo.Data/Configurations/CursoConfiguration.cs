@@ -61,7 +61,7 @@ public class CursoConfiguration : IEntityTypeConfiguration<Curso>
         #endregion Mapping columns
 
         #region Indexes
-        builder.HasIndex(x => x.Nome).HasDatabaseName("CursosNomeIDX");        
+        builder.HasIndex(x => x.Nome).HasDatabaseName("CursosNomeIDX");
         #endregion Indexes
 
         #region Relationships
@@ -69,7 +69,12 @@ public class CursoConfiguration : IEntityTypeConfiguration<Curso>
             .WithOne(x => x.Curso)
             .HasForeignKey(x => x.CursoId)
             .HasConstraintName("CursoAulaFK")
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
+        //builder.HasMany(x => x.Aulas)
+        //    .WithOne()
+        //    .HasForeignKey(x => x.CursoId)
+        //    .HasConstraintName("CursoAulaFK")
+        //    .OnDelete(DeleteBehavior.Cascade);
         #endregion Relationships
     }
 }

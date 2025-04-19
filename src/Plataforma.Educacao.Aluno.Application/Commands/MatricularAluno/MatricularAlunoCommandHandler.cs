@@ -23,7 +23,8 @@ public class MatricularAlunoCommandHandler(IAlunoRepository alunoRepository,
         if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
 
         aluno.MatricularEmCurso(request.CursoId, cursoDto.Nome, cursoDto.Valor);
-        await _alunoRepository.AtualizarAsync(aluno);
+        var matricula = aluno.ObterMatriculaPorCursoId(request.CursoId);
+        await _alunoRepository.AdicionarMatriculaCursoAsync(matricula);
         await _alunoRepository.UnitOfWork.Commit();
 
         // Lançar aqui uma notificação para o Aluno com o link de pagamento?

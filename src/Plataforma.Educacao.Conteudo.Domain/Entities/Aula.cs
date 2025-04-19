@@ -32,6 +32,7 @@ public class Aula : Entidade
         CargaHoraria = cargaHoraria;
         OrdemAula = ordemAula;
         Url = url;
+        Ativo = true;
 
         ValidarIntegridadeAula();
     }

@@ -13,6 +13,7 @@ public interface IAlunoRepository : IRepository<Entities.Aluno>
     #endregion
 
     #region Matrícula
+    Task AdicionarMatriculaCursoAsync(MatriculaCurso matriculaCurso);
     Task<MatriculaCurso> ObterMatriculaPorIdAsync(Guid matriculaId);
     Task<MatriculaCurso> ObterMatriculaPorAlunoECursoAsync(Guid alunoId, Guid cursoId);
     #endregion

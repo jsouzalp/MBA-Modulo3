@@ -90,7 +90,7 @@ public class MatriculaCursoConfiguration : IEntityTypeConfiguration<MatriculaCur
            .WithOne(x => x.MatriculaCurso)
            .HasForeignKey<Certificado>(x => x.MatriculaCursoId)
            .HasConstraintName("MatriculasCursosCertificadosFK")
-           .OnDelete(DeleteBehavior.NoAction);
+           .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Aluno)
            .WithMany(x => x.MatriculasCursos)

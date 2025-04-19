@@ -30,6 +30,7 @@ public class AulaController(IAulaAppService aulaAppService,
     public async Task<IActionResult> AdicionarAula(Guid cursoId, [FromBody] AulaViewModel aulaViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
+        if (cursoId != aulaViewModel.CursoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação. Verifique sua requisição"]); }
 
         try
         {
@@ -39,7 +40,7 @@ public class AulaController(IAulaAppService aulaAppService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -51,6 +52,7 @@ public class AulaController(IAulaAppService aulaAppService,
     public async Task<IActionResult> AtualizarAula(Guid cursoId, [FromBody] AulaViewModel aulaViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
+        if (cursoId != aulaViewModel.CursoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação. Verifique sua requisição"]); }
 
         try
         {
@@ -60,7 +62,7 @@ public class AulaController(IAulaAppService aulaAppService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -79,7 +81,7 @@ public class AulaController(IAulaAppService aulaAppService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {

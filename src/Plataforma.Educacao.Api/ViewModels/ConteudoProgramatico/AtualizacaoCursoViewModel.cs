@@ -1,7 +1,7 @@
 ﻿namespace Plataforma.Educacao.Api.ViewModels.ConteudoProgramatico;
 public class AtualizacaoCursoViewModel
 {
-    public Guid CursoId { get; set; }
+    public Guid Id { get; set; }
     public string Nome { get; set; }
     public decimal Valor { get; set; }
     public DateTime? ValidoAte { get; set; }

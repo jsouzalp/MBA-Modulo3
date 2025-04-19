@@ -39,7 +39,7 @@ public class CursoController(ICursoAppService cursoAppService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -51,6 +51,7 @@ public class CursoController(ICursoAppService cursoAppService,
     public async Task<IActionResult> AtualizarCurso(Guid cursoId, [FromBody] AtualizacaoCursoViewModel atualizacaoCursoViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
+        if (cursoId != atualizacaoCursoViewModel.Id) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação. Verifique sua requisição"]); }
 
         try
         {
@@ -60,7 +61,7 @@ public class CursoController(ICursoAppService cursoAppService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -78,7 +79,7 @@ public class CursoController(ICursoAppService cursoAppService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
         }
         catch (Exception ex)
         {
@@ -96,7 +97,7 @@ public class CursoController(ICursoAppService cursoAppService,
         }
         catch (DomainException exDomain)
         {
-            return GenerateResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.NotFound, [exDomain.Message]);
+            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.NotFound, exDomain);
         }
         catch (Exception ex)
         {

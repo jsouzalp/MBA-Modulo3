@@ -71,7 +71,7 @@ public class AulaConfiguration : IEntityTypeConfiguration<Aula>
             .WithMany(x => x.Aulas)
             .HasForeignKey(x => x.CursoId)
             .HasConstraintName("AulaCursoFK")
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
         #endregion Relationships
 

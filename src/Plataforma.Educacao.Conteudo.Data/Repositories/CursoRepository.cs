@@ -62,6 +62,11 @@ public class CursoRepository(ConteudoDbContext context) : ICursoRepository
             .AnyAsync(c => c.Nome == nome);
     }
 
+    public async Task AdicionarAulaAsync(Aula aula)
+    {
+        await _context.Aulas.AddAsync(aula);
+    }
+
     public void Dispose()
     {
         _context?.Dispose();

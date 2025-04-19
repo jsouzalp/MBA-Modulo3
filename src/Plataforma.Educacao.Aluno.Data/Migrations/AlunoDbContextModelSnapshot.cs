@@ -147,7 +147,7 @@ namespace Plataforma.Educacao.Aluno.Data.Migrations
                     b.HasOne("Plataforma.Educacao.Aluno.Domain.Entities.MatriculaCurso", "MatriculaCurso")
                         .WithOne("Certificado")
                         .HasForeignKey("Plataforma.Educacao.Aluno.Domain.Entities.Certificado", "MatriculaCursoId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("MatriculasCursosCertificadosFK");
 

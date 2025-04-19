@@ -25,7 +25,7 @@ public class CursoAppServiceTests
 
     private AtualizacaoCursoDto CriarAtualizacaoDto(Guid cursoId) => new()
     {
-        CursoId = cursoId,
+        Id = cursoId,
         Nome = "Curso Atualizado",
         Valor = 1800m,
         ValidoAte = DateTime.Now.AddMonths(12),
@@ -101,7 +101,7 @@ public class CursoAppServiceTests
         var service = CriarAppService(out var repoMock);
         var dto = CriarAtualizacaoDto(Guid.NewGuid());
 
-        Func<Task> act = async () => await service.AtualizarCursoAsync(dto.CursoId, dto);
+        Func<Task> act = async () => await service.AtualizarCursoAsync(dto.Id, dto);
 
         await act.Should().ThrowAsync<DomainException>().WithMessage("*Curso não encontrado*");
     }
