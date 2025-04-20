@@ -27,7 +27,8 @@ internal class Program
             .ConfigurarApi()
             .ConfigurarJwt(appSettings.JwtSettings)
             .ConfigurarCors()
-            .ConfigurarSwagger();
+            .ConfigurarSwagger()
+            .ConfigurarRegrasEspeciaisEndpoint();
         #endregion Extended Services configuration
 
         var app = builder.Build();

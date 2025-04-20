@@ -62,7 +62,7 @@ public class MainController(IAppIdentityUser appIdentityUser,
         errors ??= [];
         if (_notifications.TemNotificacao())
         {
-            var notificationErrors = _notifications.ObterNotificacoes().Select(n => $"({n.Chave}: {n.Chave}) Mensagem: {n.Valor}").ToList();
+            var notificationErrors = _notifications.ObterNotificacoes().Select(n => $"({n.Chave}: {n.RaizAgregacao}) Mensagem: {n.Valor}").ToList();
             foreach (string erro in notificationErrors)
             {
                 errors.Add(erro);

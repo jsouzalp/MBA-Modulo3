@@ -5,6 +5,7 @@ using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
+using Plataforma.Educacao.Aluno.Domain.ValueObjects;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
 public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoRepository, ICursoAppService cursoService, IMediatorHandler mediatorHandler) : IRequestHandler<RegistrarHistoricoAprendizadoCommand, bool>
@@ -19,11 +20,20 @@ public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoR
         _raizAgregacao = request.RaizAgregacao;
         if (!ValidarRequisicao(request)) { return false; }
         if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
-        if (!ObterMatriculaCurso(request.MatriculaCursoId, request.AulaId, aluno, out AulaDto aulaDto)) { return false; }
+        if (!ObterAulaCurso(request.MatriculaCursoId, request.AulaId, aluno, out AulaDto aulaDto)) { return false; }
 
+        // Capturo o histórico anterior (se existir)
+        // Isto é um "bug" do EF que não consegue identificar corretamente o estado de mudança do estado
+        MatriculaCurso matriculaCurso = aluno.ObterMatriculaCursoPeloId(request.MatriculaCursoId);
+        HistoricoAprendizado historicoAntigo = aluno.ObterHistoricoAprendizado(request.MatriculaCursoId, request.AulaId);
+
+        // Registro o histórico
         aluno.RegistrarHistoricoAprendizado(request.MatriculaCursoId, request.AulaId, aulaDto.Descricao, request.DataTermino);
 
-        await _alunoRepository.AtualizarAsync(aluno);
+        // Capturo o novo histórico
+        HistoricoAprendizado historicoAtual = aluno.ObterHistoricoAprendizado(request.MatriculaCursoId, request.AulaId);
+
+        await _alunoRepository.AtualizarEstadoHistoricoAprendizadoAsync(historicoAntigo, historicoAtual);
         return await _alunoRepository.UnitOfWork.Commit();
     }
 
@@ -56,7 +66,7 @@ public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoR
         return true;
     }
 
-    private bool ObterMatriculaCurso(Guid matriculaCursoId, Guid aulaId, Domain.Entities.Aluno aluno, out AulaDto aulaDto)
+    private bool ObterAulaCurso(Guid matriculaCursoId, Guid aulaId, Domain.Entities.Aluno aluno, out AulaDto aulaDto)
     {
         aulaDto = new();
 

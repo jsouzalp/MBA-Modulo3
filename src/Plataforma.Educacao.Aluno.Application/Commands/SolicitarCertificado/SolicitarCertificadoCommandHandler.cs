@@ -25,8 +25,9 @@ public class SolicitarCertificadoCommandHandler(IAlunoRepository alunoRepository
         if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
                 
         aluno.RequisitarCertificadoConclusao(request.MatriculaCursoId, request.PathCertificado);
+        var certificado = aluno.ObterMatriculaCursoPeloId(request.MatriculaCursoId).Certificado;
 
-        await _alunoRepository.AtualizarAsync(aluno);
+        await _alunoRepository.AdicionarCertificadoMatriculaCursoAsync(certificado);
         return await _alunoRepository.UnitOfWork.Commit();
     }
 

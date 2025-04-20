@@ -2,7 +2,9 @@
 using Plataforma.Educacao.Aluno.Data.Contexts;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
+using Plataforma.Educacao.Aluno.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Data;
+using Plataforma.Educacao.Core.Extensions;
 
 namespace Plataforma.Educacao.Aluno.Data.Repositories;
 public class AlunoRepository(AlunoDbContext context) : IAlunoRepository
@@ -51,6 +53,11 @@ public class AlunoRepository(AlunoDbContext context) : IAlunoRepository
         await _context.MatriculasCursos.AddAsync(matriculaCurso);
     }
 
+    public async Task AdicionarCertificadoMatriculaCursoAsync(Certificado certificado)
+    {
+        await _context.Certificados.AddAsync(certificado);
+    }
+
     public async Task<MatriculaCurso> ObterMatriculaPorIdAsync(Guid matriculaId)
     {
         return await _context.MatriculasCursos
@@ -69,6 +76,12 @@ public class AlunoRepository(AlunoDbContext context) : IAlunoRepository
     #endregion
 
     #region Certificado
+    public async Task AtualizarEstadoHistoricoAprendizadoAsync(HistoricoAprendizado historicoAntigo, HistoricoAprendizado historicoNovo)
+    {
+        _context.AtualizarEstadoValueObject(historicoAntigo, historicoNovo);
+        await Task.CompletedTask;
+    }
+
     public async Task<Certificado> ObterCertificadoPorMatriculaAsync(Guid matriculaId)
     {
         return await _context.Certificados

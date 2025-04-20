@@ -56,16 +56,34 @@ public class MatriculaCursoConfiguration : IEntityTypeConfiguration<MatriculaCur
             .HasColumnType(DatabaseTypeConstant.Byte)
             .IsRequired();
 
+        //builder.OwnsMany(x => x.HistoricoAprendizado, ha2 =>
+        //{
+        //    ha2.ToTable("HistoricosAprendizado");
+
+        //    ha2.WithOwner().HasForeignKey("");
+
+        //    ha2.HasKey(x => x.Id)
+        //        .HasName("HistoricoAprendizadoPK");
+
+        //    ha2.Property(x => x.Id).HasColumnName("HistoricoAprendizadoId").HasColumnType(DatabaseTypeConstant.UniqueIdentifier).IsRequired();
+        //    ha2.Property(x => x.CursoId).HasColumnType(DatabaseTypeConstant.UniqueIdentifier).IsRequired();
+        //    ha2.Property(x => x.AulaId).HasColumnType(DatabaseTypeConstant.UniqueIdentifier).IsRequired();
+        //    ha2.Property(x => x.NomeAula).HasColumnType(DatabaseTypeConstant.Varchar).HasMaxLength(100).IsRequired();
+        //    ha2.Property(x => x.DataInicio).HasColumnType(DatabaseTypeConstant.SmallDateTime).IsRequired();
+        //    ha2.Property(x => x.DataTermino).HasColumnType(DatabaseTypeConstant.SmallDateTime);
+
+        //    ha2.HasIndex(x => x.CursoId).HasDatabaseName("HistoricosAprendizadoCursoIdIDX");
+        //    ha2.HasIndex(x => x.AulaId).HasDatabaseName("HistoricosAprendizadoAulaIdIDX");
+        //});
+
         builder.OwnsMany(x => x.HistoricoAprendizado, ha =>
         {
             ha.ToTable("HistoricosAprendizado");
-
-            ha.WithOwner().HasForeignKey("MatriculaCursoId");
-
-            ha.HasKey(x => x.Id)
-                .HasName("HistoricoAprendizadoPK");
+            ha.WithOwner().HasForeignKey(h => h.MatriculaCursoId); 
+            ha.HasKey(x => x.Id).HasName("HistoricoAprendizadoPK");
 
             ha.Property(x => x.Id).HasColumnName("HistoricoAprendizadoId").HasColumnType(DatabaseTypeConstant.UniqueIdentifier).IsRequired();
+            ha.Property(x => x.MatriculaCursoId).HasColumnName("MatriculaCursoId").HasColumnType(DatabaseTypeConstant.UniqueIdentifier).IsRequired();
             ha.Property(x => x.CursoId).HasColumnType(DatabaseTypeConstant.UniqueIdentifier).IsRequired();
             ha.Property(x => x.AulaId).HasColumnType(DatabaseTypeConstant.UniqueIdentifier).IsRequired();
             ha.Property(x => x.NomeAula).HasColumnType(DatabaseTypeConstant.Varchar).HasMaxLength(100).IsRequired();

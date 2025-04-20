@@ -43,6 +43,9 @@ public class MatriculaCurso : Entidade
     #endregion
 
     #region Getters
+    public int QuantidadeAulasFinalizadas => _historicoAprendizado.Count(h => h.DataTermino.HasValue);
+    public int QuantidadeAulasEmAndamento => _historicoAprendizado.Count(h => !h.DataTermino.HasValue);
+
     public bool MatriculaCursoConcluido => DataConclusao.HasValue;
     internal bool MatriculaCursoDisponivel => !DataConclusao.HasValue && EstadoMatricula == EstadoMatriculaCursoEnum.PagamentoRealizado;
     internal bool PodeFinalizarMatriculaCurso => MatriculaCursoDisponivel && _historicoAprendizado.Count(h => !h.DataTermino.HasValue) == 0;
@@ -96,7 +99,7 @@ public class MatriculaCurso : Entidade
             _historicoAprendizado.Remove(existente);
         }
 
-        _historicoAprendizado.Add(new HistoricoAprendizado(CursoId, aulaId, nomeAula, dataTermino));
+        _historicoAprendizado.Add(new HistoricoAprendizado(Id, CursoId, aulaId, nomeAula, dataTermino));
     }
     #endregion
 

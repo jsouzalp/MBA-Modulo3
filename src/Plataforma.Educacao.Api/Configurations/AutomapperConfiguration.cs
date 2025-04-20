@@ -17,5 +17,9 @@ public class AutomapperConfiguration : Profile
         CreateMap<MatriculaCursoDto, MatriculaCursoViewModel>();
         CreateMap<CertificadoDto, CertificadoViewModel>();
 
+        CreateMap<EvolucaoAlunoDto, EvolucaoAlunoViewModel>();
+        CreateMap<EvolucaoMatriculaCursoDto, EvolucaoMatriculaCursoViewModel>();
+
+        CreateMap<AulaCursoDto, AulaCursoViewModel>();        
     }
 }

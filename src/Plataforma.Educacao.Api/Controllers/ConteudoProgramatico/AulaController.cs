@@ -14,7 +14,7 @@ using Plataforma.Educacao.Api.Authentications;
 
 namespace Plataforma.Educacao.Api.Controllers.ConteudoProgramatico;
 
-[Authorize(Roles = "Administrador")]
+[Authorize(Policy = "ApenasAdministrador")]
 [ApiController]
 [Route("api/[controller]")]
 public class AulaController(IAulaAppService aulaAppService,
@@ -26,7 +26,7 @@ public class AulaController(IAulaAppService aulaAppService,
     private readonly IAulaAppService _aulaAppService = aulaAppService;
     private readonly IMapper _mapper = mapper;
 
-    [HttpPost("{cursoId:guid}")]
+    [HttpPost("{cursoId}")]
     public async Task<IActionResult> AdicionarAula(Guid cursoId, [FromBody] AulaViewModel aulaViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -48,7 +48,7 @@ public class AulaController(IAulaAppService aulaAppService,
         }
     }
 
-    [HttpPut("{cursoId:guid}")]
+    [HttpPut("{cursoId}")]
     public async Task<IActionResult> AtualizarAula(Guid cursoId, [FromBody] AulaViewModel aulaViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -71,7 +71,7 @@ public class AulaController(IAulaAppService aulaAppService,
 
     }
 
-    [HttpDelete("{cursoId:guid}/{aulaId:guid}")]
+    [HttpDelete("{cursoId}/remover/{aulaId}")]
     public async Task<IActionResult> RemoverAula(Guid cursoId, Guid aulaId)
     {
         try

@@ -2,6 +2,7 @@
 using Plataforma.Educacao.Core.Entities;
 using Plataforma.Educacao.Core.Exceptions;
 using Plataforma.Educacao.Core.DomainValidations;
+using Plataforma.Educacao.Aluno.Domain.ValueObjects;
 
 namespace Plataforma.Educacao.Aluno.Domain.Entities;
 public class Aluno : Entidade, IRaizAgregacao
@@ -44,6 +45,24 @@ public class Aluno : Entidade, IRaizAgregacao
         if (matriculaCurso == null) { throw new DomainException("Matrícula não foi localizada"); }
 
         return matriculaCurso;
+    }
+
+    public HistoricoAprendizado ObterHistoricoAprendizado(Guid matriculaCursoId, Guid aulaId)
+    {
+        var matriculaCurso = ObterMatriculaCursoPeloId(matriculaCursoId);
+        var historico = matriculaCurso.HistoricoAprendizado.FirstOrDefault(h => h.AulaId == aulaId);
+        //if (historico == null) { throw new DomainException("Histórico de aprendizado não foi localizado"); }
+        return historico;
+    }
+
+    public int ObterQuantidadeAulasMatriculaCurso(Guid cursoId)
+    {
+        return _matriculasCursos.Count(m => m.CursoId == cursoId);
+    }
+
+    public int ObterQuantidadeAulasPendenteMatriculaCurso(Guid cursoId)
+    {
+        return _matriculasCursos.Count(m => m.CursoId == cursoId && m.PodeFinalizarMatriculaCurso == false);
     }
 
     private bool AlunoJaMatriculado(Guid cursoId)

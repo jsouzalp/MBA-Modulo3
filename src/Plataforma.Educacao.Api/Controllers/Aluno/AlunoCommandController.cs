@@ -19,6 +19,7 @@ using Plataforma.Educacao.Api.Authentications;
 
 namespace Plataforma.Educacao.Api.Controllers.Aluno;
 
+//[Authorize(Policy = "ApenasAluno")]
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
@@ -31,8 +32,8 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
     private readonly IAlunoQueryService _alunoQueryService = alunoQueryService;
     private readonly IMapper _mapper = mapper;
 
-    [Authorize(Roles = "Usuario")]
-    [HttpPost("matricular-aluno/{alunoId}")]
+    [Authorize(Policy = "ApenasAluno")]
+    [HttpPost("{alunoId}/matricular-aluno")]
     public async Task<IActionResult> MatricularAluno(Guid alunoId, MatricularCursoViewModel matriculaCursoViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -62,8 +63,8 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
     }
 
-    [Authorize(Roles = "Usuario")]
-    [HttpPut("atualizar-pagamento-matricula/")]
+    [Authorize(Policy = "ApenasAluno")]
+    [HttpPut("{alunoId}/atualizar-pagamento-matricula")]
     public async Task<IActionResult> AtualizarPagamentoMatricula(Guid alunoId, AtualizarPagamentoMatriculaViewModel viewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -94,8 +95,8 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
     }
 
-    [Authorize(Roles = "Usuario")]
-    [HttpPost("registrar-historico-aprendizado/")]
+    [Authorize(Policy = "ApenasAluno")]
+    [HttpPost("{alunoId}/registrar-historico-aprendizado")]
     public async Task<IActionResult> RegistrarHistoricoAprendizado(RegistrarHistoricoAprendizadoViewModel viewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -132,8 +133,8 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
     }
 
-    [Authorize(Roles = "Usuario")]
-    [HttpPut("concluir-curso/")]
+    [Authorize(Policy = "ApenasAluno")]
+    [HttpPut("{alunoId}/concluir-curso")]
     public async Task<IActionResult> ConcluirCurso(ConcluirCursoViewModel viewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -164,8 +165,8 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
     }
 
-    [Authorize(Roles = "Usuario")]
-    [HttpPost("solicitar-certificado/")]
+    [Authorize(Policy = "ApenasAluno")]
+    [HttpPost("{alunoId}/solicitar-certificado")]
     public async Task<IActionResult> SolicitarCertificado(SolicitarCertificadoViewModel viewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }

@@ -14,7 +14,7 @@ using Plataforma.Educacao.Api.Authentications;
 
 namespace Plataforma.Educacao.Api.Controllers.ConteudoProgramatico;
 
-[Authorize(Roles = "Administrador")]
+[Authorize(Policy = "ApenasAdministrador")]
 [Route("api/[controller]")]
 [ApiController]
 public class CursoController(ICursoAppService cursoAppService,
@@ -47,7 +47,7 @@ public class CursoController(ICursoAppService cursoAppService,
         }
     }
 
-    [HttpPut("{cursoId:guid}")]
+    [HttpPut("{cursoId}")]
     public async Task<IActionResult> AtualizarCurso(Guid cursoId, [FromBody] AtualizacaoCursoViewModel atualizacaoCursoViewModel)
     {
         if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
@@ -69,7 +69,7 @@ public class CursoController(ICursoAppService cursoAppService,
         }
     }
 
-    [HttpPatch("{cursoId:guid}/desativar")]
+    [HttpPatch("{cursoId}/desativar")]
     public async Task<IActionResult> DesativarCurso(Guid cursoId)
     {
         try
@@ -87,7 +87,7 @@ public class CursoController(ICursoAppService cursoAppService,
         }
     }
 
-    [HttpGet("{cursoId:guid}")]
+    [HttpGet("{cursoId}")]
     public async Task<IActionResult> ObterPorId(Guid cursoId)
     {
         try

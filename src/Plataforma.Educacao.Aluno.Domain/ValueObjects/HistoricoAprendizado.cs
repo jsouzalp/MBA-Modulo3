@@ -5,6 +5,7 @@ public class HistoricoAprendizado
 {
     #region Atributos
     public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid MatriculaCursoId { get; private set; }
     public Guid CursoId { get; }
     public Guid AulaId { get; }
     public string NomeAula { get; }
@@ -14,8 +15,9 @@ public class HistoricoAprendizado
 
     #region Construtores
     protected HistoricoAprendizado() { }
-    public HistoricoAprendizado(Guid cursoId, Guid aulaId, string nomeAula, DateTime? dataTermino = null)
+    public HistoricoAprendizado(Guid matriculaCursoId, Guid cursoId, Guid aulaId, string nomeAula, DateTime? dataTermino = null)
     {
+        MatriculaCursoId = matriculaCursoId;
         CursoId = cursoId;
         AulaId = aulaId;
         NomeAula = nomeAula;

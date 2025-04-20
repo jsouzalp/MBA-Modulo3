@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Domain.Entities;
+using Plataforma.Educacao.Aluno.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Data;
 
 namespace Plataforma.Educacao.Aluno.Data.Contexts;
@@ -20,6 +21,7 @@ public class AlunoDbContext : DbContext, IUnitOfWork
         //modelBuilder.Ignore<Event>();
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AlunoDbContext).Assembly);
+        base.OnModelCreating(modelBuilder);
     }
 
     public async Task<bool> Commit()
