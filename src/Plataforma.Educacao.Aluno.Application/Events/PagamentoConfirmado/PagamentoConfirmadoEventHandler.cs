@@ -2,50 +2,48 @@
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Plataforma.Educacao.Core.Messages.Integration;
+using Azure.Core;
+using Plataforma.Educacao.Aluno.Application.Events.AtualizarPagamento;
 using Plataforma.Educacao.Conteudo.Application.DTO;
+using Plataforma.Educacao.Core.Aggregates;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 
-namespace Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
-public class AtualizarPagamentoMatriculaCommandHandler(IAlunoRepository alunoRepository,
+namespace Plataforma.Educacao.Aluno.Application.Events.PagamentoConfirmado;
+public class PagamentoConfirmadoEventHandler(IAlunoRepository alunoRepository, 
     ICursoAppService cursoService,
-    IMediatorHandler mediatorHandler) : IRequestHandler<AtualizarPagamentoMatriculaCommand, bool>
+    IMediatorHandler mediatorHandler) : INotificationHandler<PagamentoConfirmadoEvent>
 {
     private readonly IAlunoRepository _alunoRepository = alunoRepository;
     private readonly ICursoAppService _cursoService = cursoService;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
     private Guid _raizAgregacao;
 
-    public async Task<bool> Handle(AtualizarPagamentoMatriculaCommand request, CancellationToken cancellationToken)
+    public async Task Handle(PagamentoConfirmadoEvent notification, CancellationToken cancellationToken)
     {
-        // TODO :: Devo manter este Command? 
-        // Quem faz a orquestração de dizer que MatriculaCurso foi pago é o BC de Faturamento!
-        // Revisar e aguardar a opinião do Eduardo
+        _raizAgregacao = notification.RaizAgregacao;
+        if (!ValidarRequisicao(notification)) { return; }
+        if (!ObterCurso(notification.CursoId, out CursoDto cursoDto)) { return; }
+        if (!ObterAluno(notification.AlunoId, out Domain.Entities.Aluno aluno)) { return; }
 
-
-
-
-
-
-        _raizAgregacao = request.RaizAgregacao;
-        if (!ValidarRequisicao(request)) { return false; }
-        if (!ObterCurso(request.CursoId, out CursoDto cursoDto)) { return false; }
-        if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }       
-
-        var matricula = aluno.ObterMatriculaPorCursoId(request.CursoId);
+        var matricula = aluno.ObterMatriculaPorCursoId(notification.CursoId);
         aluno.AtualizarPagamentoMatricula(matricula.Id);
 
         await _alunoRepository.AtualizarAsync(aluno);
         await _alunoRepository.UnitOfWork.Commit();
-
-        return true;
     }
 
-    private bool ValidarRequisicao(AtualizarPagamentoMatriculaCommand request)
+    private bool ValidarRequisicao(PagamentoConfirmadoEvent notification)
     {
-        request.DefinirValidacao(new AtualizarPagamentoMatriculaCommandValidator().Validate(request));
-        if (!request.EhValido())
+        notification.DefinirValidacao(new PagamentoConfirmadoEventValidator().Validate(notification));
+        if (!notification.EhValido())
         {
-            foreach (var erro in request.Erros)
+            foreach (var erro in notification.Erros)
             {
                 _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), erro)).GetAwaiter().GetResult();
             }

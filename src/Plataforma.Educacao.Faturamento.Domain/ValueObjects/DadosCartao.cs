@@ -27,40 +27,11 @@ namespace Plataforma.Educacao.Faturamento.Domain.ValueObjects
         #endregion
 
         #region Metodos do Dominio
-        //public void AtualizarNumero(string numero)
-        //{
-        //    ValidarIntegridadeDadosCartao(novoNumero: numero ?? string.Empty);
-        //    Numero = numero;
-        //}
-
-        //public void AtualizarNomeTitular(string nomeTitular)
-        //{
-        //    ValidarIntegridadeDadosCartao(novoNomeTitular: nomeTitular ?? string.Empty);
-        //    NomeTitular = nomeTitular;
-        //}
-
-        //public void AtualizarValidade(string validade)
-        //{
-        //    ValidarIntegridadeDadosCartao(novaValidade: validade ?? string.Empty);
-        //    Validade = validade;
-        //}
-
-        //public void AtualizarCVV(string cvv)
-        //{
-        //    ValidarIntegridadeDadosCartao(novoCvv: cvv ?? string.Empty);
-        //    CVV = cvv;
-        //}
         #endregion
 
         #region Validações
-        //private void ValidarIntegridadeDadosCartao(string novoNumero = null, string novoNomeTitular = null, string novaValidade = null, string novoCvv = null)
         private void ValidarIntegridadeDadosCartao()
         {
-            //string numero = novoNumero ?? Numero;
-            //string nomeTitular = novoNomeTitular ?? NomeTitular;
-            //string validade = novaValidade ?? Validade;
-            //string cvv = novoCvv ?? CVV;
-
             var validacao = new ResultadoValidacao<DadosCartao>();
             ValidacaoTexto.DevePossuirConteudo(Numero, "Número do cartão deve ser informado", validacao);
             ValidacaoTexto.DevePossuirTamanho(Numero, 16, 16, "Número do cartão deve possuir 16 caracteres", validacao);

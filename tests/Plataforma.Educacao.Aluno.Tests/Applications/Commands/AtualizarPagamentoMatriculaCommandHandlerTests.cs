@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
+using Plataforma.Educacao.Aluno.Application.Events.AtualizarPagamento;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;

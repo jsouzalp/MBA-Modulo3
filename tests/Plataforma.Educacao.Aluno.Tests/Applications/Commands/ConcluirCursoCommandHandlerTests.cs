@@ -2,6 +2,7 @@
 using Moq;
 using Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
+using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Data;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
@@ -14,12 +15,15 @@ using System.Threading.Tasks;
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
 public class ConcluirCursoCommandHandlerTests
 {
+    
+    private readonly Mock<ICursoAppService> _cursoServiceMock;
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
     private readonly Mock<IMediatorHandler> _mediatorHandlerMock;
     private readonly ConcluirCursoCommandHandler _handler;
 
     public ConcluirCursoCommandHandlerTests()
     {
+        _cursoServiceMock = new Mock<ICursoAppService>();
         _alunoRepositoryMock = new Mock<IAlunoRepository>();
         _mediatorHandlerMock = new Mock<IMediatorHandler>();
 
@@ -29,6 +33,7 @@ public class ConcluirCursoCommandHandlerTests
 
         _handler = new ConcluirCursoCommandHandler(
             _alunoRepositoryMock.Object,
+            _cursoServiceMock.Object,
             _mediatorHandlerMock.Object
         );
     }

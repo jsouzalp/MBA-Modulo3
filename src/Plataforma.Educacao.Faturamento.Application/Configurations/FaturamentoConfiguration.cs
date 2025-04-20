@@ -2,26 +2,22 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
-using Plataforma.Educacao.Aluno.Application.Commands.CadastrarAluno;
-using Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
-using Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
-using Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
-using Plataforma.Educacao.Aluno.Application.Commands.SolicitarCertificado;
-using Plataforma.Educacao.Aluno.Application.Events.AtualizarPagamento;
-using Plataforma.Educacao.Aluno.Application.Interfaces;
-using Plataforma.Educacao.Aluno.Application.Queries;
-using Plataforma.Educacao.Aluno.Data.Contexts;
-using Plataforma.Educacao.Aluno.Data.Repositories;
-using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages.Handlers;
+using Plataforma.Educacao.Faturamento.Application.Commands.RealizarPagamento;
+using Plataforma.Educacao.Faturamento.Data.Contexts;
+using Plataforma.Educacao.Faturamento.Data.Repositories;
+using Plataforma.Educacao.Faturamento.Domain.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Plataforma.Educacao.Aluno.Application.Configurations;
-public static class AlunoConfiguration
+namespace Plataforma.Educacao.Faturamento.Application.Configurations;
+public static class FaturamentoConfiguration
 {
     public static IServiceCollection ConfigurarAlunoApplication(this IServiceCollection services, string stringConexao, bool ehProducao)
     {
@@ -33,7 +29,7 @@ public static class AlunoConfiguration
 
     private static IServiceCollection ConfigurarInjecoesDependenciasRepository(this IServiceCollection services)
     {
-        services.AddScoped<IAlunoRepository, AlunoRepository>();
+        services.AddScoped<IFaturamentoRepository, FaturamentoRepository>();
         return services;
     }
 
@@ -43,23 +39,14 @@ public static class AlunoConfiguration
 
         services.AddScoped<INotificationHandler<DomainNotificacaoRaiz>, DomainNotificacaoHandler>();
 
-        services.AddScoped<IRequestHandler<CadastrarAlunoCommand, bool>, CadastrarAlunoCommandHandler>();
-        
-        // TODO :: Definir se devo ou não manter este Command
-        //services.AddScoped<IRequestHandler<AtualizarPagamentoMatriculaCommand, bool>, AtualizarPagamentoMatriculaCommandHandler>();        
-        
-        services.AddScoped<IRequestHandler<ConcluirCursoCommand, bool>, ConcluirCursoCommandHandler>();
-        services.AddScoped<IRequestHandler<MatricularAlunoCommand, bool>, MatricularAlunoCommandHandler>();
-        services.AddScoped<IRequestHandler<RegistrarHistoricoAprendizadoCommand, bool>, RegistrarHistoricoAprendizadoCommandHandler>();
-        services.AddScoped<IRequestHandler<SolicitarCertificadoCommand, bool>, SolicitarCertificadoCommandHandler>();
+        services.AddScoped<IRequestHandler<RealizarPagamentoCommand, bool>, RealizarPagamentoCommandHandler>();
 
-        services.AddScoped<IAlunoQueryService, AlunoQueryService>();
         return services;
     }
 
     private static IServiceCollection ConfigurarRepositorios(this IServiceCollection services, string stringConexao, bool ehProducao)
     {
-        services.AddDbContext<AlunoDbContext>(o =>
+        services.AddDbContext<FaturamentoDbContext>(o =>
         {
             if (ehProducao)
             {

@@ -45,10 +45,11 @@ public class MatriculaCurso : Entidade
     #region Getters
     public int QuantidadeAulasFinalizadas => _historicoAprendizado.Count(h => h.DataTermino.HasValue);
     public int QuantidadeAulasEmAndamento => _historicoAprendizado.Count(h => !h.DataTermino.HasValue);
-
     public bool MatriculaCursoConcluido => DataConclusao.HasValue;
     internal bool MatriculaCursoDisponivel => !DataConclusao.HasValue && EstadoMatricula == EstadoMatriculaCursoEnum.PagamentoRealizado;
     internal bool PodeFinalizarMatriculaCurso => MatriculaCursoDisponivel && _historicoAprendizado.Count(h => !h.DataTermino.HasValue) == 0;
+    
+    public bool PagamentoPodeSerRealizado => EstadoMatricula == EstadoMatriculaCursoEnum.PendentePagamento || EstadoMatricula == EstadoMatriculaCursoEnum.Abandonado;
 
     internal HistoricoAprendizado ObterHistoricoAulaPeloId(Guid aulaId)
     {

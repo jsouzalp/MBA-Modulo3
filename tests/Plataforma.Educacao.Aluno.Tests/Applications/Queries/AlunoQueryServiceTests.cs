@@ -3,6 +3,7 @@ using Moq;
 using Plataforma.Educacao.Aluno.Application.Queries;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
+using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,15 @@ using System.Threading.Tasks;
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Queries;
 public class AlunoQueryServiceTests
 {
+    private readonly Mock<ICursoAppService> _cursoServiceMock;
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
     private readonly AlunoQueryService _service;
 
     public AlunoQueryServiceTests()
     {
+        _cursoServiceMock = new Mock<ICursoAppService>();
         _alunoRepositoryMock = new Mock<IAlunoRepository>();
-        _service = new AlunoQueryService(_alunoRepositoryMock.Object);
+        _service = new AlunoQueryService(_alunoRepositoryMock.Object, _cursoServiceMock.Object);
     }
 
     [Fact]

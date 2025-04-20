@@ -115,6 +115,30 @@ public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppServic
         });
     }
 
+    public async Task<MatriculaCursoDto> ObterInformacaoMatriculaCursoParaPagamentoAsync(Guid matriculaCursoId)
+    {
+        var matriculaCurso = await _alunoRepository.ObterMatriculaPorIdAsync(matriculaCursoId);
+        if (matriculaCurso == null) return null;
+
+        return new MatriculaCursoDto
+        {
+            Id = matriculaCurso.Id,
+            AlunoId = matriculaCurso.AlunoId,
+            CursoId = matriculaCurso.CursoId,
+            NomeCurso = matriculaCurso.NomeCurso,
+            Valor = matriculaCurso.Valor,
+            PagamentoPodeSerRealizado = matriculaCurso.PagamentoPodeSerRealizado,
+            DataMatricula = matriculaCurso.DataMatricula,
+            DataConclusao = matriculaCurso.DataConclusao,
+            EstadoMatricula = matriculaCurso.EstadoMatricula.GetDescription(),
+            Certificado = matriculaCurso.Certificado != null ? new CertificadoDto
+            {
+                Id = matriculaCurso.Certificado.Id,
+                DataSolicitacao = matriculaCurso.Certificado.DataSolicitacao,
+                PathCertificado = matriculaCurso.Certificado.PathCertificado,
+            } : null
+        };
+    }
     public async Task<CertificadoDto> ObterCertificadoPorMatriculaIdAsync(Guid matriculaCursoId)
     {
         var matricula = await _alunoRepository.ObterMatriculaPorIdAsync(matriculaCursoId);

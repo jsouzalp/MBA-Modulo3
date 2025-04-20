@@ -13,12 +13,11 @@ public class MediatorHandler : IMediatorHandler
         //_eventSourcingRepository = eventSourcingRepository;
     }
 
-    //public async Task PublicarEvento<T>(T evento) where T : Event
-    //{
-    //    await _mediator.Publish(evento);
-    //    await _eventSourcingRepository.SalvarEvento(evento);
-
-    //}
+    public async Task PublicarEvento<T>(T evento) where T : EventoRaiz
+    {
+        await _mediator.Publish(evento);
+        //await _eventSourcingRepository.SalvarEvento(evento);
+    }
 
     public async Task<bool> EnviarComando<T>(T comando) where T : CommandRaiz
     {

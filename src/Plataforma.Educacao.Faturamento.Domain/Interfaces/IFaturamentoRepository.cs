@@ -5,8 +5,8 @@ namespace Plataforma.Educacao.Faturamento.Domain.Interfaces
 {
     public interface IFaturamentoRepository : IRepository<Pagamento>
     {
-        //Task Adicionar(Pagamento pagamento);
-        //Task Atualizar(Pagamento pagamento);
-        //Task SalvarAlteracoesAsync();
+        Task AdicionarAsync(Pagamento pagamento);
+        Task AtualizarAsync(Pagamento pagamento);
+        Task<Pagamento> ObterPorMatriculaIdAsync(Guid matriculaId);
     }
 }

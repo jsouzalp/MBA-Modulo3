@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Plataforma.Educacao.Aluno.Data\Plataforma.Educacao.Aluno.Data.csproj" />
     <ProjectReference Include="..\Plataforma.Educacao.Aluno.Domain\Plataforma.Educacao.Aluno.Domain.csproj" />
     <ProjectReference Include="..\Plataforma.Educacao.Conteudo.Application\Plataforma.Educacao.Conteudo.Application.csproj" />

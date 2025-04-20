@@ -22,8 +22,18 @@ public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoR
         if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
         if (!ObterAulaCurso(request.MatriculaCursoId, request.AulaId, aluno, out AulaDto aulaDto)) { return false; }
 
+
+
+
+
+        // TODO :: Este método precisa ser refatorado. Caso haja algum problema no registro do histórico, o mesmo não deve ser registrado e o Aluno deve ser alertado
+
+
+
+
+
         // Capturo o histórico anterior (se existir)
-        // Isto é um "bug" do EF que não consegue identificar corretamente o estado de mudança do estado
+        // Isto é um "bug" do EF que não consegue identificar corretamente o estado de mudança do objeto
         MatriculaCurso matriculaCurso = aluno.ObterMatriculaCursoPeloId(request.MatriculaCursoId);
         HistoricoAprendizado historicoAntigo = aluno.ObterHistoricoAprendizado(request.MatriculaCursoId, request.AulaId);
 

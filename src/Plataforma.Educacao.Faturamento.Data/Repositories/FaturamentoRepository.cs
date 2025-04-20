@@ -1,22 +1,34 @@
-﻿using Plataforma.Educacao.Core.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Plataforma.Educacao.Core.Data;
 using Plataforma.Educacao.Faturamento.Data.Contexts;
+using Plataforma.Educacao.Faturamento.Domain.Entities;
 using Plataforma.Educacao.Faturamento.Domain.Interfaces;
 
-namespace Plataforma.Educacao.Faturamento.Data.Repositories
+namespace Plataforma.Educacao.Faturamento.Data.Repositories;
+public class FaturamentoRepository(FaturamentoDbContext context) : IFaturamentoRepository
 {
-    public class FaturamentoRepository : IFaturamentoRepository
+    private readonly FaturamentoDbContext _context = context;
+    public IUnitOfWork UnitOfWork => _context;
+
+    public async Task AdicionarAsync(Pagamento pagamento)
     {
-        private readonly FaturamentoDbContext _context;
-        public IUnitOfWork UnitOfWork => _context;
+        await _context.Pagamentos.AddAsync(pagamento);
+    }
 
-        public FaturamentoRepository(FaturamentoDbContext context)
-        {
-            _context = context;
-        }
+    public async Task AtualizarAsync(Pagamento pagamento)
+    {
+        _context.Pagamentos.Update(pagamento);
+        await Task.CompletedTask;
+    }
 
-        public void Dispose()
-        {
-            _context?.Dispose();
-        }
+    public async Task<Pagamento> ObterPorMatriculaIdAsync(Guid matriculaId)
+    {
+        return await _context.Pagamentos
+            .FirstOrDefaultAsync(p => p.MatriculaId == matriculaId);
+    }
+
+    public void Dispose()
+    {
+        _context?.Dispose();
     }
 }

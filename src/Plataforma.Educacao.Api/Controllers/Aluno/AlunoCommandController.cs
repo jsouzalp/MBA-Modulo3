@@ -63,37 +63,39 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         }
     }
 
-    [Authorize(Policy = "ApenasAluno")]
-    [HttpPut("{alunoId}/atualizar-pagamento-matricula")]
-    public async Task<IActionResult> AtualizarPagamentoMatricula(Guid alunoId, AtualizarPagamentoMatriculaViewModel viewModel)
-    {
-        if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
+    #region Devo ou não manter isto???
+    //[Authorize(Policy = "ApenasAluno")]
+    //[HttpPut("{alunoId}/atualizar-pagamento-matricula")]
+    //public async Task<IActionResult> AtualizarPagamentoMatricula(Guid alunoId, AtualizarPagamentoMatriculaViewModel viewModel)
+    //{
+    //    if (!ModelState.IsValid) { return GenerateModelStateResponse(ResponseTypeEnum.ValidationError, HttpStatusCode.BadRequest, ModelState); }
 
-        try
-        {
-            if (UserId != viewModel.AlunoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação"]); }
+    //    try
+    //    {
+    //        if (UserId != viewModel.AlunoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação"]); }
 
-            var comando = new AtualizarPagamentoMatriculaCommand(viewModel.AlunoId, viewModel.CursoId);
-            var sucesso = await _mediatorHandler.EnviarComando(comando);
+    //        var comando = new AtualizarPagamentoMatriculaCommand(viewModel.AlunoId, viewModel.CursoId);
+    //        var sucesso = await _mediatorHandler.EnviarComando(comando);
 
-            if (sucesso)
-            {
-                return GenerateResponse(new { viewModel.AlunoId, viewModel.CursoId },
-                    responseType: ResponseTypeEnum.Success,
-                    statusCode: HttpStatusCode.NoContent);
-            }
+    //        if (sucesso)
+    //        {
+    //            return GenerateResponse(new { viewModel.AlunoId, viewModel.CursoId },
+    //                responseType: ResponseTypeEnum.Success,
+    //                statusCode: HttpStatusCode.NoContent);
+    //        }
 
-            return GenerateResponse(responseType: ResponseTypeEnum.GenericError, statusCode: HttpStatusCode.BadRequest);
-        }
-        catch (DomainException exDomain)
-        {
-            return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
-        }
-        catch (Exception ex)
-        {
-            return GenerateResponse(null, ResponseTypeEnum.GenericError, HttpStatusCode.BadRequest, [ex.Message]);
-        }
-    }
+    //        return GenerateResponse(responseType: ResponseTypeEnum.GenericError, statusCode: HttpStatusCode.BadRequest);
+    //    }
+    //    catch (DomainException exDomain)
+    //    {
+    //        return GenerateDomainExceptionResponse(null, ResponseTypeEnum.DomainError, HttpStatusCode.BadRequest, exDomain);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return GenerateResponse(null, ResponseTypeEnum.GenericError, HttpStatusCode.BadRequest, [ex.Message]);
+    //    }
+    //}
+    #endregion
 
     [Authorize(Policy = "ApenasAluno")]
     [HttpPost("{alunoId}/registrar-historico-aprendizado")]
