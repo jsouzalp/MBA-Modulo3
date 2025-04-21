@@ -72,12 +72,6 @@ public class CursoAppService(ICursoRepository cursoRepository) : ICursoAppServic
         return cursos.Select(MapearParaCursoDto);
     }
 
-    public void Dispose()
-    {
-        _cursoRepository?.Dispose();
-        GC.SuppressFinalize(this);
-    }
-
     #region Mapeamento Manual
     private CursoDto MapearParaCursoDto(Curso curso)
     {

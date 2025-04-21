@@ -1,7 +1,9 @@
 using FluentValidation;
 using Plataforma.Educacao.Api.Configurations;
-using Plataforma.Educacao.Api.Configurations.BCs;
 using Plataforma.Educacao.Api.Settings;
+using Plataforma.Educacao.Conteudo.Application.Configurations;
+using Plataforma.Educacao.Aluno.Application.Configurations;
+using Plataforma.Educacao.Faturamento.Application.Configurations;
 using System.Reflection;
 
 internal class Program
@@ -22,8 +24,9 @@ internal class Program
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
             .ConfigurarAutenticacao(appSettings.DatabaseSettings, builder.Environment.IsProduction())
-            .ConfigurarConteudoProgramatico(appSettings.DatabaseSettings, builder.Environment.IsProduction())
-            .ConfigurarAluno(appSettings.DatabaseSettings, builder.Environment.IsProduction())
+            .ConfigurarConteudoApplication(appSettings.DatabaseSettings.ConnectionStringConteudoProgramatico, builder.Environment.IsProduction())
+            .ConfigurarAlunoApplication(appSettings.DatabaseSettings.ConnectionStringAluno, builder.Environment.IsProduction())
+            .ConfigurarFaturamentoApplication(appSettings.DatabaseSettings.ConnectionStringFaturamento, builder.Environment.IsProduction())
             .ConfigurarApi()
             .ConfigurarJwt(appSettings.JwtSettings)
             .ConfigurarCors()

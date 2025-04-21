@@ -2,20 +2,13 @@
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Plataforma.Educacao.Core.Messages.Integration;
-using Azure.Core;
 using Plataforma.Educacao.Aluno.Application.Events.AtualizarPagamento;
 using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Core.Aggregates;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
+using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
 
 namespace Plataforma.Educacao.Aluno.Application.Events.PagamentoConfirmado;
-public class PagamentoConfirmadoEventHandler(IAlunoRepository alunoRepository, 
+public class PagamentoConfirmadoEventHandler(IAlunoRepository alunoRepository,
     ICursoAppService cursoService,
     IMediatorHandler mediatorHandler) : INotificationHandler<PagamentoConfirmadoEvent>
 {

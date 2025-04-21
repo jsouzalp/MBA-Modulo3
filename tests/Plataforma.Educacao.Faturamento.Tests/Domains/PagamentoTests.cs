@@ -27,7 +27,7 @@ public class PagamentoTests
         DateTime? vencimento = null,
         DadosCartao cartao = null)
     {
-        return new Pagamento(Guid.Parse(matriculaId), (decimal)valor, vencimento ?? _dataVencimentoFutura, cartao ?? _cartaoValido);
+        return new Pagamento(Guid.Parse(matriculaId), (decimal)valor, vencimento ?? _dataVencimentoFutura);
     }
     #endregion
 
@@ -64,7 +64,8 @@ public class PagamentoTests
     {
         var pagamento = CriarPagamento();
 
-        pagamento.ConfirmarPagamento(null, null);
+        DadosCartao dadosCartao = new DadosCartao(_numeroValido, _nomeValido, _validadeValida, _cvvValido);
+        pagamento.ConfirmarPagamento(null, null, dadosCartao);
 
         pagamento.StatusPagamento.Status.Should().Be(StatusPagamentoEnum.Aprovado);
         pagamento.DataPagamento.Should().NotBeNull();

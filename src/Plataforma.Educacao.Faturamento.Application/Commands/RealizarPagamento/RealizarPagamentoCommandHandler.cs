@@ -4,15 +4,10 @@ using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Faturamento.Domain.Entities;
 using Plataforma.Educacao.Faturamento.Domain.Interfaces;
 using Plataforma.Educacao.Faturamento.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Plataforma.Educacao.Aluno.Application.Interfaces;
 using Plataforma.Educacao.Aluno.Application.DTO;
-using Plataforma.Educacao.Aluno.Domain.Entities;
-using Plataforma.Educacao.Core.Messages.Integration;
+using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
+using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoCommands;
 
 namespace Plataforma.Educacao.Faturamento.Application.Commands.RealizarPagamento;
 public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoRepository,
@@ -28,8 +23,8 @@ public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoR
     {
         _raizAgregacao = request.RaizAgregacao;
         if (!ValidarRequisicaoAsync(request)) { return false; }
-        if (!ObterPagamentoMatriculaCurso(request.MatriculaId, out Pagamento pagamento)) { return false; }
-        if (!ObterMatriculaCurso(request.MatriculaId, out MatriculaCursoDto matriculaCurso)) { return false; }
+        if (!ObterPagamentoMatriculaCurso(request.MatriculaCursoId, out Pagamento pagamento)) { return false; }
+        if (!ObterMatriculaCurso(request.MatriculaCursoId, out MatriculaCursoDto matriculaCurso)) { return false; }
         if (!ValidarValorPagamentoMatriculaCurso(request.Valor, pagamento?.Valor ?? matriculaCurso.Valor)) { return false; }
 
         if (!matriculaCurso.PagamentoPodeSerRealizado)
@@ -40,7 +35,7 @@ public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoR
 
         bool ehInclusaoPagamento = pagamento == null;
         var dadosCartao = new DadosCartao(request.NumeroCartao, request.NomeTitularCartao, request.ValidadeCartao, request.CvvCartao);
-        pagamento ??= new Pagamento(request.MatriculaId, request.Valor, DateTime.Now.Date, dadosCartao);
+        pagamento ??= new Pagamento(request.MatriculaCursoId, request.Valor, DateTime.Now.Date);
 
 
 
@@ -52,34 +47,30 @@ public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoR
         #region Pendente de definição
         // TODO :: Refatorar os pontos abaixo:
         // 1) Este Handle precisa ser refatorado porque neste momento deve ser acionado algum proxy de pagamento para poder confirmar ou não o pagamento
-        // 2) Deve ser lançado também alguma coisa para atualizar o estado da matrícula caso o pagamento seja aprovado
-        // 3) Caso o pagamento não seja autorizado, deve ser criado um evento para notificar o Aluno
+        // 2) [OK-Falta testar] Deve ser lançado também alguma coisa para atualizar o estado da matrícula caso o pagamento seja aprovado
+        // 3) [OK-Falta testar] Caso o pagamento não seja autorizado, deve ser criado um evento para notificar o Aluno. A ideia é enviar uma notificação de envio de email
         //    As variáveis abaixo foram criadas apenas para dar um melhor sentido no fluxo atual
         bool confirmado = true;
         string comprovante = "90874231390128301";
 
-        if (confirmado) 
+        if (!confirmado)
         {
-            pagamento.ConfirmarPagamento(DateTime.Now.Date, comprovante);
+            await _mediatorHandler.PublicarEvento(new PagamentoRecusadoEvent(matriculaCurso.Id, matriculaCurso.AlunoId, matriculaCurso.CursoId, "Pagamento foi recusado pela operadora"));
+            await _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Pagamento), "Este pagamento não foi confirmado. Tente novamente ou entre em contato com nosso SAC"));
+            return false;
+        }
 
-            await _mediatorHandler.PublicarEvento(new PagamentoConfirmadoEvent(matriculaCurso.Id, matriculaCurso.AlunoId, matriculaCurso.CursoId)); 
-        }
-        else 
-        { 
-            await _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Pagamento), "Este pagamento não foi confirmado. Tente novamente ou entre em contato com nosso SAC")); 
-        }
+        pagamento.ConfirmarPagamento(DateTime.Now.Date, comprovante, dadosCartao);
+        await _mediatorHandler.PublicarEvento(new PagamentoConfirmadoEvent(matriculaCurso.Id, matriculaCurso.AlunoId, matriculaCurso.CursoId));
+
+        if (ehInclusaoPagamento) { await _faturamentoRepository.AdicionarAsync(pagamento); }
+        else await _faturamentoRepository.AtualizarAsync(pagamento);
         #endregion Pendente de definição
 
 
 
 
 
-
-
-
-
-        if (ehInclusaoPagamento) { await _faturamentoRepository.AdicionarAsync(pagamento); }
-        else await _faturamentoRepository.AtualizarAsync(pagamento);
 
         await _faturamentoRepository.UnitOfWork.Commit();
 

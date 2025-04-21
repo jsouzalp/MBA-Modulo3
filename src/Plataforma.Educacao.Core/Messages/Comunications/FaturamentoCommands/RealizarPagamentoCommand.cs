@@ -1,14 +1,7 @@
-﻿using Plataforma.Educacao.Core.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plataforma.Educacao.Faturamento.Application.Commands.RealizarPagamento;
+﻿namespace Plataforma.Educacao.Core.Messages.Comunications.FaturamentoCommands;
 public class RealizarPagamentoCommand : CommandRaiz
 {
-    public Guid MatriculaId { get; init; }
+    public Guid MatriculaCursoId { get; init; }
     public decimal Valor { get; init; }
     public string NumeroCartao { get; init; }
     public string NomeTitularCartao { get; init; }
@@ -18,7 +11,7 @@ public class RealizarPagamentoCommand : CommandRaiz
     public RealizarPagamentoCommand(Guid matriculaId, decimal valor, string numeroCartao, string nomeTitularCartao, string validadeCartao, string cvvCartao)
     {
         DefinirRaizAgregacao(matriculaId);
-        MatriculaId = matriculaId;
+        MatriculaCursoId = matriculaId;
         Valor = valor;
         NumeroCartao = numeroCartao;
         NomeTitularCartao = nomeTitularCartao;

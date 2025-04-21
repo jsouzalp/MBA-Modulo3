@@ -1,17 +1,10 @@
 ﻿using Plataforma.Educacao.Aluno.Application.DTO;
 using Plataforma.Educacao.Aluno.Application.Interfaces;
-using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Aluno.Domain.ValueObjects;
 using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
-using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Core.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Aluno.Application.Queries;
 public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppService cursoAppService) : IAlunoQueryService
@@ -139,6 +132,7 @@ public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppServic
             } : null
         };
     }
+
     public async Task<CertificadoDto> ObterCertificadoPorMatriculaIdAsync(Guid matriculaCursoId)
     {
         var matricula = await _alunoRepository.ObterMatriculaPorIdAsync(matriculaCursoId);

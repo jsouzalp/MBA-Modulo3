@@ -4,22 +4,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
-using Plataforma.Educacao.Core.Messages.Handlers;
+using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoCommands;
+using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
+using Plataforma.Educacao.Core.Messages.DomainHandlers;
 using Plataforma.Educacao.Faturamento.Application.Commands.RealizarPagamento;
+using Plataforma.Educacao.Faturamento.Application.Events.GerarLinkPagamento;
 using Plataforma.Educacao.Faturamento.Data.Contexts;
 using Plataforma.Educacao.Faturamento.Data.Repositories;
 using Plataforma.Educacao.Faturamento.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Faturamento.Application.Configurations;
 public static class FaturamentoConfiguration
 {
-    public static IServiceCollection ConfigurarAlunoApplication(this IServiceCollection services, string stringConexao, bool ehProducao)
+    public static IServiceCollection ConfigurarFaturamentoApplication(this IServiceCollection services, string stringConexao, bool ehProducao)
     {
         return services
             .ConfigurarInjecoesDependenciasRepository()
@@ -38,6 +36,7 @@ public static class FaturamentoConfiguration
         services.AddScoped<IMediatorHandler, MediatorHandler>();
 
         services.AddScoped<INotificationHandler<DomainNotificacaoRaiz>, DomainNotificacaoHandler>();
+        services.AddScoped<INotificationHandler<GerarLinkPagamentoEvent>, GerarLinkPagamentoEventHandler>();
 
         services.AddScoped<IRequestHandler<RealizarPagamentoCommand, bool>, RealizarPagamentoCommandHandler>();
 

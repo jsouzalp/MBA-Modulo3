@@ -1,8 +1,6 @@
-﻿namespace Plataforma.Educacao.Api.ViewModels.Aluno.Commands
+﻿namespace Plataforma.Educacao.Api.ViewModels.Aluno.Commands;
+public class MatricularCursoViewModel
 {
-    public class MatricularCursoViewModel
-    {
-        public Guid AlunoId { get; set; }
-        public Guid CursoId { get; set; }
-    }
+    public Guid AlunoId { get; set; }
+    public Guid CursoId { get; set; }
 }

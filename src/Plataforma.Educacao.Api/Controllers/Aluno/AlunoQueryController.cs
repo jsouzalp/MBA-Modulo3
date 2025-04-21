@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Plataforma.Educacao.Aluno.Application.DTO;
 using Plataforma.Educacao.Api.Enumerators;
 using Plataforma.Educacao.Api.ViewModels.Aluno.Queries;
 using System.Net;

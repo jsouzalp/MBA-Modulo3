@@ -1,16 +1,15 @@
 ﻿using FluentAssertions;
 using Moq;
 using Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
-using Plataforma.Educacao.Aluno.Application.Events.AtualizarPagamento;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Data;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
-
 public class AtualizarPagamentoMatriculaCommandHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;

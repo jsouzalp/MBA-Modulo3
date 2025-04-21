@@ -8,6 +8,7 @@ using Plataforma.Educacao.Core.Data;
 using Plataforma.Educacao.Core.Exceptions;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
 

@@ -6,6 +6,8 @@ using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Aluno.Domain.ValueObjects;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoEvents;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
 public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoRepository, ICursoAppService cursoService, IMediatorHandler mediatorHandler) : IRequestHandler<RegistrarHistoricoAprendizadoCommand, bool>
@@ -17,34 +19,37 @@ public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoR
 
     public async Task<bool> Handle(RegistrarHistoricoAprendizadoCommand request, CancellationToken cancellationToken)
     {
-        _raizAgregacao = request.RaizAgregacao;
-        if (!ValidarRequisicao(request)) { return false; }
-        if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
-        if (!ObterAulaCurso(request.MatriculaCursoId, request.AulaId, aluno, out AulaDto aulaDto)) { return false; }
+        try
+        {
+            _raizAgregacao = request.RaizAgregacao;
+            if (!ValidarRequisicao(request)) { return false; }
+            if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
+            if (!ObterAulaCurso(request.MatriculaCursoId, request.AulaId, aluno, out AulaDto aulaDto)) { return false; }
 
+            // Capturo o histórico anterior (se existir)
+            // Isto é um "bug" do EF que não consegue identificar corretamente o estado de mudança do objeto
+            MatriculaCurso matriculaCurso = aluno.ObterMatriculaCursoPeloId(request.MatriculaCursoId);
+            HistoricoAprendizado historicoAntigo = aluno.ObterHistoricoAprendizado(request.MatriculaCursoId, request.AulaId);
 
+            // Registro o histórico
+            aluno.RegistrarHistoricoAprendizado(request.MatriculaCursoId, request.AulaId, aulaDto.Descricao, request.DataTermino);
 
+            // Capturo o novo histórico
+            HistoricoAprendizado historicoAtual = aluno.ObterHistoricoAprendizado(request.MatriculaCursoId, request.AulaId);
 
-
-        // TODO :: Este método precisa ser refatorado. Caso haja algum problema no registro do histórico, o mesmo não deve ser registrado e o Aluno deve ser alertado
-
-
-
-
-
-        // Capturo o histórico anterior (se existir)
-        // Isto é um "bug" do EF que não consegue identificar corretamente o estado de mudança do objeto
-        MatriculaCurso matriculaCurso = aluno.ObterMatriculaCursoPeloId(request.MatriculaCursoId);
-        HistoricoAprendizado historicoAntigo = aluno.ObterHistoricoAprendizado(request.MatriculaCursoId, request.AulaId);
-
-        // Registro o histórico
-        aluno.RegistrarHistoricoAprendizado(request.MatriculaCursoId, request.AulaId, aulaDto.Descricao, request.DataTermino);
-
-        // Capturo o novo histórico
-        HistoricoAprendizado historicoAtual = aluno.ObterHistoricoAprendizado(request.MatriculaCursoId, request.AulaId);
-
-        await _alunoRepository.AtualizarEstadoHistoricoAprendizadoAsync(historicoAntigo, historicoAtual);
-        return await _alunoRepository.UnitOfWork.Commit();
+            await _alunoRepository.AtualizarEstadoHistoricoAprendizadoAsync(historicoAntigo, historicoAtual);
+            return await _alunoRepository.UnitOfWork.Commit();
+        }
+        catch (Exception ex)
+        {
+            string mensagem = $"Erro registrando histórico de Aprendizado. Exception: {ex}";
+            await _mediatorHandler.PublicarEvento(new RegistrarProblemaHistoricoAprendizadoEvent(request.AlunoId, 
+                request.MatriculaCursoId, 
+                request.AulaId, 
+                request.DataTermino, 
+                mensagem));
+            throw;
+        }
     }
 
     private bool ValidarRequisicao(RegistrarHistoricoAprendizadoCommand request)

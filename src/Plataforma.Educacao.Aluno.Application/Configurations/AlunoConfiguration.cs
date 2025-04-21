@@ -2,13 +2,11 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
 using Plataforma.Educacao.Aluno.Application.Commands.CadastrarAluno;
 using Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
 using Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
 using Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
 using Plataforma.Educacao.Aluno.Application.Commands.SolicitarCertificado;
-using Plataforma.Educacao.Aluno.Application.Events.AtualizarPagamento;
 using Plataforma.Educacao.Aluno.Application.Interfaces;
 using Plataforma.Educacao.Aluno.Application.Queries;
 using Plataforma.Educacao.Aluno.Data.Contexts;
@@ -16,9 +14,14 @@ using Plataforma.Educacao.Aluno.Data.Repositories;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
-using Plataforma.Educacao.Core.Messages.Handlers;
+using Plataforma.Educacao.Core.Messages.DomainHandlers;
 using System.Globalization;
-using System.Reflection;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
+using Plataforma.Educacao.Aluno.Application.Events.PagamentoConfirmado;
+using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
+using Plataforma.Educacao.Aluno.Application.Events.PagamentoRecusado;
+using Plataforma.Educacao.Aluno.Application.Events.ProblemaRegistroHistoricoAprendizado;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoEvents;
 
 namespace Plataforma.Educacao.Aluno.Application.Configurations;
 public static class AlunoConfiguration
@@ -42,12 +45,13 @@ public static class AlunoConfiguration
         services.AddScoped<IMediatorHandler, MediatorHandler>();
 
         services.AddScoped<INotificationHandler<DomainNotificacaoRaiz>, DomainNotificacaoHandler>();
-
-        services.AddScoped<IRequestHandler<CadastrarAlunoCommand, bool>, CadastrarAlunoCommandHandler>();
+        services.AddScoped<INotificationHandler<PagamentoConfirmadoEvent>, PagamentoConfirmadoEventHandler>();
+        services.AddScoped<INotificationHandler<PagamentoRecusadoEvent>, PagamentoRecusadoEventHandler>();
+        services.AddScoped<INotificationHandler<RegistrarProblemaHistoricoAprendizadoEvent>, RegistrarProblemaHistoricoAprendizadoEventHandler>();
         
         // TODO :: Definir se devo ou não manter este Command
-        //services.AddScoped<IRequestHandler<AtualizarPagamentoMatriculaCommand, bool>, AtualizarPagamentoMatriculaCommandHandler>();        
-        
+        //services.AddScoped<IRequestHandler<AtualizarPagamentoMatriculaCommand, bool>, AtualizarPagamentoMatriculaCommandHandler>();                
+        services.AddScoped<IRequestHandler<CadastrarAlunoCommand, bool>, CadastrarAlunoCommandHandler>();
         services.AddScoped<IRequestHandler<ConcluirCursoCommand, bool>, ConcluirCursoCommandHandler>();
         services.AddScoped<IRequestHandler<MatricularAlunoCommand, bool>, MatricularAlunoCommandHandler>();
         services.AddScoped<IRequestHandler<RegistrarHistoricoAprendizadoCommand, bool>, RegistrarHistoricoAprendizadoCommandHandler>();

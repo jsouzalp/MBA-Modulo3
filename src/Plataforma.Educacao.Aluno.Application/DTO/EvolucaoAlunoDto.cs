@@ -1,12 +1,4 @@
-﻿using Plataforma.Educacao.Aluno.Domain.Entities;
-using Plataforma.Educacao.Aluno.Domain.Enumerators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plataforma.Educacao.Aluno.Application.DTO;
+﻿namespace Plataforma.Educacao.Aluno.Application.DTO;
 public class EvolucaoAlunoDto
 {
     public Guid Id { get; set; }

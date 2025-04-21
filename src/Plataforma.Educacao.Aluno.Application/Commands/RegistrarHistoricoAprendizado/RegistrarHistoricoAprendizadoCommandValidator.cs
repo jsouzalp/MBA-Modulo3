@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
 public class RegistrarHistoricoAprendizadoCommandValidator : AbstractValidator<RegistrarHistoricoAprendizadoCommand>

@@ -1,7 +1,6 @@
 ﻿using Plataforma.Educacao.Api.Migrations;
 
 namespace Plataforma.Educacao.Api.Configurations;
-
 public static class AmbienteConfiguration
 {
     public static WebApplication ExecutarConfiguracaoAmbiente(this WebApplication app)
@@ -12,7 +11,7 @@ public static class AmbienteConfiguration
             app.UseSwaggerUI();
             app.UseCors("Dev");
 
-            //DbMigrationHelper.AutocarregamentoDadosAsync(app).Wait();
+            DbMigrationHelper.AutocarregamentoDadosAsync(app).Wait();
         }
         else
         {

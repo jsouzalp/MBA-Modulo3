@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Plataforma.Educacao.Conteudo.Application.DTO;
+﻿using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;

@@ -1,7 +1,4 @@
-﻿using Plataforma.Educacao.Core.Aggregates;
-using Plataforma.Educacao.Core.Messages;
-
-namespace Plataforma.Educacao.Aluno.Application.Commands.SolicitarCertificado;
+﻿namespace Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 public class SolicitarCertificadoCommand : CommandRaiz
 {
     public Guid AlunoId { get; private set; }

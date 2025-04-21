@@ -5,21 +5,15 @@ using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Api.Enumerators;
 using System.Net;
-using Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
 using Plataforma.Educacao.Core.Exceptions;
-using Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
-using Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
-using Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
-using Plataforma.Educacao.Aluno.Application.Commands.SolicitarCertificado;
-using Plataforma.Educacao.Aluno.Application.Interfaces;
 using Plataforma.Educacao.Api.ViewModels.Aluno.Commands;
 using AutoMapper;
 using Plataforma.Educacao.Api.Authentications;
-//using Plataforma.Educacao.Api.ViewModels.Aluno.Queries;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
+using Plataforma.Educacao.Aluno.Application.Interfaces;
 
 namespace Plataforma.Educacao.Api.Controllers.Aluno;
 
-//[Authorize(Policy = "ApenasAluno")]
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]

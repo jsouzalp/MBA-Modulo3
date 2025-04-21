@@ -1,6 +1,4 @@
-﻿using Plataforma.Educacao.Core.Messages;
-
-namespace Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
+﻿namespace Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 public class RegistrarHistoricoAprendizadoCommand : CommandRaiz
 {
     public Guid AlunoId { get; private set; }

@@ -1,6 +1,4 @@
-﻿namespace Plataforma.Educacao.Core.Aggregates
+﻿namespace Plataforma.Educacao.Core.Aggregates;
+public interface IRaizAgregacao
 {
-    public interface IRaizAgregacao
-    {
-    }
 }

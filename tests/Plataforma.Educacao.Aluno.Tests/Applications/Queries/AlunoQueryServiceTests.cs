@@ -4,11 +4,6 @@ using Plataforma.Educacao.Aluno.Application.Queries;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Queries;
 public class AlunoQueryServiceTests
