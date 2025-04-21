@@ -1,6 +1,4 @@
-﻿using Plataforma.Educacao.Core.Messages;
-
-namespace Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
+﻿namespace Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 public class MatricularAlunoCommand : CommandRaiz
 {
     public Guid AlunoId { get; init; }

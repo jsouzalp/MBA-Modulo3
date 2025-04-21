@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-
-namespace Plataforma.Educacao.Api.Configurations;
-
+﻿namespace Plataforma.Educacao.Api.Configurations;
 public static class SegurancaEndpointsConfiguration
 {
     public static IServiceCollection ConfigurarRegrasEspeciaisEndpoint(this IServiceCollection services)

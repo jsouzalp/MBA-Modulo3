@@ -1,11 +1,9 @@
-﻿namespace Plataforma.Educacao.Core.DomainValidations
+﻿namespace Plataforma.Educacao.Core.DomainValidations;
+public static class ValidacaoObjeto
 {
-    public static class ValidacaoObjeto
+    public static void DeveEstarInstanciado<T>(object valor, string mensagem, ResultadoValidacao<T> resultado) where T : class
     {
-        public static void DeveEstarInstanciado<T>(object valor, string mensagem, ResultadoValidacao<T> resultado) where T : class
-        {
-            if (valor == null)
-                resultado.AdicionarErro(mensagem);
-        }
+        if (valor == null)
+            resultado.AdicionarErro(mensagem);
     }
 }

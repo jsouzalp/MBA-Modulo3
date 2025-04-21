@@ -4,6 +4,7 @@ using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
 public class AtualizarPagamentoMatriculaCommandHandler(IAlunoRepository alunoRepository,
@@ -21,15 +22,10 @@ public class AtualizarPagamentoMatriculaCommandHandler(IAlunoRepository alunoRep
         // Quem faz a orquestração de dizer que MatriculaCurso foi pago é o BC de Faturamento!
         // Revisar e aguardar a opinião do Eduardo
 
-
-
-
-
-
         _raizAgregacao = request.RaizAgregacao;
         if (!ValidarRequisicao(request)) { return false; }
         if (!ObterCurso(request.CursoId, out CursoDto cursoDto)) { return false; }
-        if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }       
+        if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
 
         var matricula = aluno.ObterMatriculaPorCursoId(request.CursoId);
         aluno.AtualizarPagamentoMatricula(matricula.Id);

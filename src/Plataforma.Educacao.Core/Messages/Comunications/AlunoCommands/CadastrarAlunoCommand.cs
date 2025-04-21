@@ -1,12 +1,4 @@
-﻿using Plataforma.Educacao.Core.Aggregates;
-using Plataforma.Educacao.Core.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plataforma.Educacao.Aluno.Application.Commands.CadastrarAluno;
+﻿namespace Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 public class CadastrarAlunoCommand : CommandRaiz
 {
     public Guid AlunoId { get; private set; }

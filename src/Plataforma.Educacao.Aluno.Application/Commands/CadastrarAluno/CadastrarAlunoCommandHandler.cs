@@ -2,14 +2,9 @@
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
-namespace Plataforma.Educacao.Aluno.Application.Commands.CadastrarAluno; 
+namespace Plataforma.Educacao.Aluno.Application.Commands.CadastrarAluno;
 public class CadastrarAlunoCommandHandler : IRequestHandler<CadastrarAlunoCommand, bool>
 {
     private readonly IAlunoRepository _alunoRepository;

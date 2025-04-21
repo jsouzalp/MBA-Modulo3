@@ -4,6 +4,8 @@ using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
+using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
 public class MatricularAlunoCommandHandler(IAlunoRepository alunoRepository,
@@ -27,7 +29,7 @@ public class MatricularAlunoCommandHandler(IAlunoRepository alunoRepository,
         await _alunoRepository.AdicionarMatriculaCursoAsync(matricula);
         await _alunoRepository.UnitOfWork.Commit();
 
-        // Lançar aqui uma notificação para o Aluno com o link de pagamento?
+        await _mediatorHandler.PublicarEvento(new GerarLinkPagamentoEvent(matricula.Id, request.AlunoId, request.CursoId, cursoDto.Valor));
 
         return true;
     }

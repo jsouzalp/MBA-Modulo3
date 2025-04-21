@@ -2,14 +2,13 @@
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
-using Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
 using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
-using Plataforma.Educacao.Aluno.Domain.Entities;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
 public class ConcluirCursoCommandHandler(IAlunoRepository alunoRepository,
-    ICursoAppService cursoService, 
+    ICursoAppService cursoService,
     IMediatorHandler mediatorHandler) : IRequestHandler<ConcluirCursoCommand, bool>
 {
     private readonly IAlunoRepository _alunoRepository = alunoRepository;
@@ -23,7 +22,7 @@ public class ConcluirCursoCommandHandler(IAlunoRepository alunoRepository,
         if (!ValidarRequisicao(request)) { return false; }
         if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
         var matriculaCurso = aluno.ObterMatriculaCursoPeloId(request.MatriculaCursoId);
-        
+
         if (!ObterCurso(matriculaCurso.CursoId, out CursoDto cursoDto)) { return false; }
         if (!ValidarSeMatriculaCursoPodeSerConcluido(aluno, cursoDto)) { return false; }
 

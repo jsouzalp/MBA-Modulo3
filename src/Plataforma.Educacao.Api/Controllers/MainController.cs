@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Plataforma.Educacao.Api.Enumerators;
 using Plataforma.Educacao.Core.Messages.Comunications;
-using Plataforma.Educacao.Core.Messages.Handlers;
+using Plataforma.Educacao.Core.Messages.DomainHandlers;
 using Plataforma.Educacao.Core.Messages;
 using System.Net;
 using Plataforma.Educacao.Api.Authentications;
 using Plataforma.Educacao.Core.Exceptions;
-using System;
 
 namespace Plataforma.Educacao.Api.Controllers;
 

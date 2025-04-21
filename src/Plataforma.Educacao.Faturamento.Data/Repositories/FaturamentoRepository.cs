@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Core.Data;
+using Plataforma.Educacao.Core.Extensions;
 using Plataforma.Educacao.Faturamento.Data.Contexts;
 using Plataforma.Educacao.Faturamento.Domain.Entities;
 using Plataforma.Educacao.Faturamento.Domain.Interfaces;
@@ -18,13 +19,18 @@ public class FaturamentoRepository(FaturamentoDbContext context) : IFaturamentoR
     public async Task AtualizarAsync(Pagamento pagamento)
     {
         _context.Pagamentos.Update(pagamento);
+
+        if (pagamento.Cartao != null)
+        {
+            _context.AtualizarEstadoValueObject(null, pagamento.Cartao);
+        }
+
         await Task.CompletedTask;
     }
 
     public async Task<Pagamento> ObterPorMatriculaIdAsync(Guid matriculaId)
     {
-        return await _context.Pagamentos
-            .FirstOrDefaultAsync(p => p.MatriculaId == matriculaId);
+        return await _context.Pagamentos.FirstOrDefaultAsync(p => p.MatriculaId == matriculaId);
     }
 
     public void Dispose()

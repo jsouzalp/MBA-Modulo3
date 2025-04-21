@@ -1,6 +1,4 @@
-﻿using Plataforma.Educacao.Core.Messages;
-
-namespace Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
+﻿namespace Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 public class AtualizarPagamentoMatriculaCommand : CommandRaiz
 {
     public Guid AlunoId { get; init; }

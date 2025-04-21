@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Plataforma.Educacao.Core.Messages.Handlers;
+namespace Plataforma.Educacao.Core.Messages.DomainHandlers;
 public class DomainNotificacaoHandler : INotificationHandler<DomainNotificacaoRaiz>
 {
     private readonly List<DomainNotificacaoRaiz> _notificacoes = [];

@@ -2,14 +2,7 @@
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
-using Plataforma.Educacao.Aluno.Domain.Entities;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.SolicitarCertificado;
 public class SolicitarCertificadoCommandHandler(IAlunoRepository alunoRepository, IMediatorHandler mediatorHandler) : IRequestHandler<SolicitarCertificadoCommand, bool>
@@ -23,7 +16,7 @@ public class SolicitarCertificadoCommandHandler(IAlunoRepository alunoRepository
         _raizAgregacao = request.RaizAgregacao;
         if (!ValidarRequisicao(request)) { return false; }
         if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
-                
+
         aluno.RequisitarCertificadoConclusao(request.MatriculaCursoId, request.PathCertificado);
         var certificado = aluno.ObterMatriculaCursoPeloId(request.MatriculaCursoId).Certificado;
 

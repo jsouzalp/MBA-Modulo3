@@ -5,11 +5,7 @@ using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Data;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
 public class CadastrarAlunoCommandHandlerTests

@@ -12,9 +12,8 @@ using Plataforma.Educacao.Core.Messages;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
-using Plataforma.Educacao.Aluno.Application.Commands.CadastrarAluno;
 using Plataforma.Educacao.Api.Authentications;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Api.Controllers.Autenticacao;
 

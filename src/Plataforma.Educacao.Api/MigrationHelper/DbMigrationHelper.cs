@@ -23,7 +23,7 @@ public static class DbMigrationHelper
         var identityContext = scope.ServiceProvider.GetRequiredService<AutenticacaoDbContext>();
         var conteudoContext = scope.ServiceProvider.GetRequiredService<ConteudoDbContext>();
         var alunoContext = scope.ServiceProvider.GetRequiredService<AlunoDbContext>();
-        //var faturamentoContext =  scope.ServiceProvider.GetRequiredService<FaturamentoDbContext>();
+        var faturamentoContext =  scope.ServiceProvider.GetRequiredService<FaturamentoDbContext>();
         
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
@@ -32,8 +32,8 @@ public static class DbMigrationHelper
             await identityContext.Database.MigrateAsync();
             await conteudoContext.Database.MigrateAsync();
             await alunoContext.Database.MigrateAsync();
-            //await faturamentoContext.Database.MigrateAsync();
-            await PopularDatabaseAsync(identityContext, conteudoContext, alunoContext, null, userManager);
+            await faturamentoContext.Database.MigrateAsync();
+            //await PopularDatabaseAsync(identityContext, conteudoContext, alunoContext, null, userManager);
         }
     }
 

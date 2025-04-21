@@ -1,7 +1,7 @@
 ﻿using Plataforma.Educacao.Conteudo.Application.DTO;
 
 namespace Plataforma.Educacao.Conteudo.Application.Interfaces;
-public interface ICursoAppService : IDisposable
+public interface ICursoAppService 
 {
     Task<Guid> CadastrarCursoAsync(CadastroCursoDto dto);
     Task AtualizarCursoAsync(Guid cursoId, AtualizacaoCursoDto dto);

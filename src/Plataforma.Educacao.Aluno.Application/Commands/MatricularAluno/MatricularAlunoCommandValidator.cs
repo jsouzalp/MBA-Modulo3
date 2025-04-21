@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.MatricularAluno;
 public class MatricularAlunoCommandValidator : AbstractValidator<MatricularAlunoCommand>

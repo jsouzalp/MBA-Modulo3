@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Core.Data;
 

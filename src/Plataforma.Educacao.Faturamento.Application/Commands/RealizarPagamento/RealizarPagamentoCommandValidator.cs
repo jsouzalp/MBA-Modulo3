@@ -1,16 +1,12 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoCommands;
 
 namespace Plataforma.Educacao.Faturamento.Application.Commands.RealizarPagamento;
 public class RealizarPagamentoCommandValidator : AbstractValidator<RealizarPagamentoCommand>
 {
     public RealizarPagamentoCommandValidator()
     {
-        RuleFor(c => c.MatriculaId).NotEqual(Guid.Empty).WithMessage("Id da matrícula é inválida");
+        RuleFor(c => c.MatriculaCursoId).NotEqual(Guid.Empty).WithMessage("Id da matrícula é inválida");
         RuleFor(c => c.Valor).GreaterThan(0).WithMessage("Valor de pagamento é inválido");
         RuleFor(c => c.NumeroCartao).NotEmpty().Length(16).WithMessage("Número do cartão não reconhecido");
         RuleFor(c => c.NomeTitularCartao).NotEmpty().Length(3, 50).WithMessage("Nome do titular é inválido");

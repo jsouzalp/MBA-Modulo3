@@ -1,6 +1,4 @@
-﻿using Plataforma.Educacao.Core.Messages;
-
-namespace Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
+﻿namespace Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 public class ConcluirCursoCommand : CommandRaiz
 {
     public Guid AlunoId { get; private set; }
