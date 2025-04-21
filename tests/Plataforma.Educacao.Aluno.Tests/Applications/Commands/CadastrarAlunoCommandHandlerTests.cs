@@ -1,0 +1,63 @@
+﻿using FluentAssertions;
+using Moq;
+using Plataforma.Educacao.Aluno.Application.Commands.CadastrarAluno;
+using Plataforma.Educacao.Aluno.Domain.Interfaces;
+using Plataforma.Educacao.Core.Data;
+using Plataforma.Educacao.Core.Messages;
+using Plataforma.Educacao.Core.Messages.Comunications;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
+public class CadastrarAlunoCommandHandlerTests
+{
+    private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
+    private readonly Mock<IMediatorHandler> _mediatorHandlerMock;
+    private readonly CadastrarAlunoCommandHandler _handler;
+
+    public CadastrarAlunoCommandHandlerTests()
+    {
+        _alunoRepositoryMock = new Mock<IAlunoRepository>();
+        _mediatorHandlerMock = new Mock<IMediatorHandler>();
+
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        unitOfWorkMock.Setup(u => u.Commit()).ReturnsAsync(true);
+        _alunoRepositoryMock.Setup(r => r.UnitOfWork).Returns(unitOfWorkMock.Object);
+
+        _handler = new CadastrarAlunoCommandHandler(
+            _alunoRepositoryMock.Object,
+            _mediatorHandlerMock.Object
+        );
+    }
+
+    [Fact]
+    public async Task Deve_retornar_false_quando_requisicao_invalida()
+    {
+        // Arrange
+        var command = new CadastrarAlunoCommand(Guid.Empty, "", "emailinvalido", DateTime.Today.AddDays(1));
+
+        // Act
+        var resultado = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        resultado.Should().BeFalse();
+        _mediatorHandlerMock.Verify(m => m.PublicarNotificacaoDominio(It.IsAny<DomainNotificacaoRaiz>()), Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task Deve_cadastrar_aluno_com_sucesso()
+    {
+        // Arrange
+        var command = new CadastrarAlunoCommand(Guid.NewGuid(), "Aluno Teste", "teste@email.com", new DateTime(1995, 5, 15));
+
+        // Act
+        var resultado = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        resultado.Should().BeTrue();
+        _alunoRepositoryMock.Verify(r => r.AdicionarAsync(It.IsAny<Domain.Entities.Aluno>()), Times.Once);
+    }
+}

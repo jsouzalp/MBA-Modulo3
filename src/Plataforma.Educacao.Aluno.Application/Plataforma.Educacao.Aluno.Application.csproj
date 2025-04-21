@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Plataforma.Educacao.Aluno.Data\Plataforma.Educacao.Aluno.Data.csproj" />
+    <ProjectReference Include="..\Plataforma.Educacao.Aluno.Domain\Plataforma.Educacao.Aluno.Domain.csproj" />
+    <ProjectReference Include="..\Plataforma.Educacao.Conteudo.Application\Plataforma.Educacao.Conteudo.Application.csproj" />
+    <ProjectReference Include="..\Plataforma.Educacao.Core\Plataforma.Educacao.Core.csproj" />
+  </ItemGroup>
+
+</Project>
