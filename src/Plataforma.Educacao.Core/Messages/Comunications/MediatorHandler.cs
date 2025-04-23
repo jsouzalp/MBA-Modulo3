@@ -1,14 +1,9 @@
 ﻿using MediatR;
 
 namespace Plataforma.Educacao.Core.Messages.Comunications;
-public class MediatorHandler : IMediatorHandler
+public class MediatorHandler(IMediator mediator) : IMediatorHandler
 {
-    private readonly IMediator _mediator;
-    public MediatorHandler(IMediator mediator)
-    {
-        _mediator = mediator;
-        //_eventSourcingRepository = eventSourcingRepository;
-    }
+    private readonly IMediator _mediator = mediator;
 
     public async Task PublicarEvento<T>(T evento) where T : EventoRaiz
     {

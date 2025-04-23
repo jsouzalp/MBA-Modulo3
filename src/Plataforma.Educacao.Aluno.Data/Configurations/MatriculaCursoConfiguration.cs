@@ -2,8 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Core.Data.Constants;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plataforma.Educacao.Aluno.Data.Configurations;
+
+[ExcludeFromCodeCoverage]
 public class MatriculaCursoConfiguration : IEntityTypeConfiguration<MatriculaCurso>
 {
     public void Configure(EntityTypeBuilder<MatriculaCurso> builder)

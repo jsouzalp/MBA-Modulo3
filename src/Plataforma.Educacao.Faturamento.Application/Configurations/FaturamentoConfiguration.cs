@@ -12,9 +12,12 @@ using Plataforma.Educacao.Faturamento.Application.Events.GerarLinkPagamento;
 using Plataforma.Educacao.Faturamento.Data.Contexts;
 using Plataforma.Educacao.Faturamento.Data.Repositories;
 using Plataforma.Educacao.Faturamento.Domain.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace Plataforma.Educacao.Faturamento.Application.Configurations;
+
+[ExcludeFromCodeCoverage]
 public static class FaturamentoConfiguration
 {
     public static IServiceCollection ConfigurarFaturamentoApplication(this IServiceCollection services, string stringConexao, bool ehProducao)

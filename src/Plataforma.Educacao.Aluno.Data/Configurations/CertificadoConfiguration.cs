@@ -2,8 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Core.Data.Constants;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plataforma.Educacao.Aluno.Data.Configurations;
+
+[ExcludeFromCodeCoverage]
 public class CertificadoConfiguration : IEntityTypeConfiguration<Certificado>
 {
     public void Configure(EntityTypeBuilder<Certificado> builder)

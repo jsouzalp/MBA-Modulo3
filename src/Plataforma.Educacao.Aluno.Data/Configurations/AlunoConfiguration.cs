@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Core.Data.Constants;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plataforma.Educacao.Aluno.Data.Configurations;
+
+[ExcludeFromCodeCoverage]
 public class AlunoConfiguration : IEntityTypeConfiguration<Domain.Entities.Aluno>
 {
     public void Configure(EntityTypeBuilder<Domain.Entities.Aluno> builder)
