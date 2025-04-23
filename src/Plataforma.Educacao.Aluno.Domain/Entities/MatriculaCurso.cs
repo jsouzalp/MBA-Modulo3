@@ -47,7 +47,7 @@ public class MatriculaCurso : Entidade
     public int QuantidadeAulasEmAndamento => _historicoAprendizado.Count(h => !h.DataTermino.HasValue);
     public bool MatriculaCursoConcluido => DataConclusao.HasValue;
     internal bool MatriculaCursoDisponivel => !DataConclusao.HasValue && EstadoMatricula == EstadoMatriculaCursoEnum.PagamentoRealizado;
-    internal bool PodeFinalizarMatriculaCurso => MatriculaCursoDisponivel && _historicoAprendizado.Count(h => !h.DataTermino.HasValue) == 0;
+    internal bool PodeFinalizarMatriculaCurso => EstadoMatricula == EstadoMatriculaCursoEnum.PagamentoRealizado && _historicoAprendizado.Count(h => !h.DataTermino.HasValue) == 0;
     
     public bool PagamentoPodeSerRealizado => EstadoMatricula == EstadoMatriculaCursoEnum.PendentePagamento || EstadoMatricula == EstadoMatriculaCursoEnum.Abandonado;
 
@@ -76,9 +76,9 @@ public class MatriculaCurso : Entidade
 
     internal void ConcluirCurso()
     {
+        if (EstadoMatricula == EstadoMatriculaCursoEnum.Abandonado) { throw new DomainException("Não é possível concluir um curso com estado de pagamento abandonado"); }
         if (!PodeFinalizarMatriculaCurso) { throw new DomainException("Não é possível concluir o curso, existem aulas não finalizadas"); }
         if (MatriculaCursoConcluido) { throw new DomainException("Curso já foi concluído"); }
-        if (EstadoMatricula == EstadoMatriculaCursoEnum.Abandonado) { throw new DomainException("Não é possível concluir um curso com estado de pagamento abandonado"); }
 
         var dataAtual = DateTime.Now;
         ValidarIntegridadeMatriculaCurso(novaDataConclusao: dataAtual);

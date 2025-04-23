@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Enumerators;
+using Plataforma.Educacao.Aluno.Domain.ValueObjects;
+using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Core.Exceptions;
 
 namespace Plataforma.Educacao.Aluno.Tests.Domains;
@@ -99,11 +101,18 @@ public class MatriculaCursoTests
     [Fact]
     public void Deve_requisitar_certificado()
     {
-        var matricula = CriarMatricula();
-        matricula.ConcluirCurso();
-
+        var aulaId1 = Guid.NewGuid();
+        var aulaId2 = Guid.NewGuid();
+        var dataTermino = DateTime.Today;
         var path = "/certificados/teste.pdf";
 
+        var matricula = CriarMatricula();
+        matricula.AtualizarPagamentoMatricula();
+
+        matricula.RegistrarHistoricoAprendizado(aulaId1, "Aula de teste unitário 1", dataTermino);
+        matricula.RegistrarHistoricoAprendizado(aulaId2, "Aula de teste unitário 2", dataTermino);
+
+        matricula.ConcluirCurso();
         matricula.RequisitarCertificadoConclusao(path);
 
         matricula.Certificado.Should().NotBeNull();
@@ -113,7 +122,16 @@ public class MatriculaCursoTests
     [Fact]
     public void Nao_deve_requisitar_certificado_duplicado()
     {
+        var aulaId1 = Guid.NewGuid();
+        var aulaId2 = Guid.NewGuid();
+        var dataTermino = DateTime.Today;
+
         var matricula = CriarMatricula();
+        matricula.AtualizarPagamentoMatricula();
+
+        matricula.RegistrarHistoricoAprendizado(aulaId1, "Aula de teste unitário 1", dataTermino);
+        matricula.RegistrarHistoricoAprendizado(aulaId2, "Aula de teste unitário 2", dataTermino);
+
         matricula.ConcluirCurso();
         matricula.RequisitarCertificadoConclusao("/certificados/teste.pdf");
 
@@ -128,8 +146,10 @@ public class MatriculaCursoTests
     public void Deve_registrar_historico_de_aula()
     {
         var matricula = CriarMatricula();
+        matricula.AtualizarPagamentoMatricula();
+
         var aulaId = Guid.NewGuid();
-        var nomeAula = "Aula 01";
+        var nomeAula = "Aula Teste 0000001";
 
         matricula.RegistrarHistoricoAprendizado(aulaId, nomeAula);
 
@@ -141,10 +161,11 @@ public class MatriculaCursoTests
     public void Nao_deve_reinserir_aula_concluida()
     {
         var matricula = CriarMatricula();
+        matricula.AtualizarPagamentoMatricula();
         var aulaId = Guid.NewGuid();
-        matricula.RegistrarHistoricoAprendizado(aulaId, "Aula 01", DateTime.Now);
+        matricula.RegistrarHistoricoAprendizado(aulaId, "Aula teste 01", DateTime.Now);
 
-        Action act = () => matricula.RegistrarHistoricoAprendizado(aulaId, "Aula 01");
+        Action act = () => matricula.RegistrarHistoricoAprendizado(aulaId, "Aula teste 01");
 
         act.Should().Throw<DomainException>().WithMessage("*já foi concluída*");
     }
@@ -153,10 +174,10 @@ public class MatriculaCursoTests
     public void Deve_substituir_historico_em_andamento()
     {
         var matricula = CriarMatricula();
+        matricula.AtualizarPagamentoMatricula();
         var aulaId = Guid.NewGuid();
-        matricula.RegistrarHistoricoAprendizado(aulaId, "Aula 01");
-
-        matricula.RegistrarHistoricoAprendizado(aulaId, "Aula 01", DateTime.Now);
+        matricula.RegistrarHistoricoAprendizado(aulaId, "Aula de teste 01");
+        matricula.RegistrarHistoricoAprendizado(aulaId, "Aula de teste 01", DateTime.Now);
 
         var historico = matricula.ObterHistoricoAulaPeloId(aulaId);
         historico.DataTermino.Should().NotBeNull();
@@ -170,6 +191,27 @@ public class MatriculaCursoTests
         Action act = () => matricula.ObterHistoricoAulaPeloId(Guid.NewGuid());
 
         act.Should().Throw<DomainException>().WithMessage("*não foi localizado*");
+    }
+
+    [Fact]
+    public void Deve_retornar_true_quando_matricula_pode_ser_finalizada()
+    {
+        // Arrange
+        var aulaId1 = Guid.NewGuid();
+        var aulaId2 = Guid.NewGuid();
+        var dataTermino = DateTime.Today;
+
+        var matricula = CriarMatricula();
+        matricula.AtualizarPagamentoMatricula();
+
+        matricula.RegistrarHistoricoAprendizado(aulaId1, "Aula de teste unitário 1", dataTermino);
+        matricula.RegistrarHistoricoAprendizado(aulaId2, "Aula de teste unitário 2", dataTermino);
+
+        // Act
+        var podeFinalizar = matricula.PodeFinalizarMatriculaCurso;
+
+        // Assert
+        podeFinalizar.Should().BeTrue();
     }
     #endregion
 

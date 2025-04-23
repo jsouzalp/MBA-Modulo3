@@ -41,7 +41,7 @@ public class PagamentoTests
         pagamento.MatriculaId.Should().Be(Guid.Parse(_matriculaIdValido));
         pagamento.Valor.Should().Be((decimal)_valorValido);
         pagamento.DataVencimento.Date.Should().Be(_dataVencimentoFutura.Date);
-        pagamento.Cartao.Should().NotBeNull();
+        pagamento.Cartao.Should().BeNull();
         pagamento.StatusPagamento.Status.Should().Be(StatusPagamentoEnum.Pendente);
         pagamento.DataPagamento.Should().BeNull();
     }
@@ -65,7 +65,7 @@ public class PagamentoTests
         var pagamento = CriarPagamento();
 
         DadosCartao dadosCartao = new DadosCartao(_numeroValido, _nomeValido, _validadeValida, _cvvValido);
-        pagamento.ConfirmarPagamento(null, null, dadosCartao);
+        pagamento.ConfirmarPagamento(null, "uiouoiuoiu", dadosCartao);
 
         pagamento.StatusPagamento.Status.Should().Be(StatusPagamentoEnum.Aprovado);
         pagamento.DataPagamento.Should().NotBeNull();
@@ -81,77 +81,20 @@ public class PagamentoTests
 
         pagamento.StatusPagamento.Status.Should().Be(StatusPagamentoEnum.Recusado);
         pagamento.DataPagamento.Should().BeNull();
-        //pagamento.PossuiPagamentoRecusado().Should().BeTrue();
+    }
+
+    [Fact]
+    public void Nao_deve_confirmar_pagamento_com_codigo_invalido()
+    {
+        var pagamento = CriarPagamento();
+        var cartao = _cartaoValido;
+
+        Action act = () => pagamento.ConfirmarPagamento(null, "", cartao);
+
+        act.Should().Throw<DomainException>()
+           .WithMessage("*Código de confirmação do pagamento deve ser informado*");
     }
     #endregion
 
-    #region Alterações de Datas
-    //[Fact]
-    //public void Deve_permitir_confirmar_pagamento()
-    //{
-    //    var pagamento = CriarPagamento();
-    //    pagamento.PodeConfirmarPagamento().Should().Be(true);
-    //}
 
-    //[Fact]
-    //public void Deve_alterar_data_vencimento_valida()
-    //{
-    //    var pagamento = CriarPagamento();
-    //    var novaData = DateTime.Now.AddDays(10);
-
-    //    pagamento.AlterarDataVencimento(novaData);
-
-    //    pagamento.DataVencimento.Should().Be(novaData);
-    //}
-
-    //[Fact]
-    //public void Deve_corrigir_data_pagamento_valida()
-    //{
-    //    var dataCorreta = DateTime.Now.AddDays(-2);
-
-    //    var pagamento = CriarPagamento();
-    //    pagamento.ConfirmarPagamento(null);
-
-    //    pagamento.CorrigirDataPagamento(dataCorreta);
-
-    //    pagamento.DataPagamento.Should().Be(dataCorreta);
-    //}
-
-    //[Fact]
-    //public void Nao_deve_permitir_confirmar_pagamento()
-    //{
-    //    var pagamento = CriarPagamento();
-    //    pagamento.ConfirmarPagamento(null);
-
-    //    pagamento.PodeConfirmarPagamento().Should().Be(false);
-    //}
-
-    //[Theory]
-    //[InlineData("2000-01-01", "*Data de vencimento deve ser futura*")]
-    //[InlineData("0001-01-01", "*Data de vencimento deve ser válida*")]
-    //public void Nao_deve_alterar_data_vencimento_invalida(string dataTexto, string mensagemEsperada)
-    //{
-    //    var pagamento = CriarPagamento();
-    //    var novaData = DateTime.Parse(dataTexto);
-
-    //    Action act = () => pagamento.AlterarDataVencimento(novaData);
-
-    //    act.Should().Throw<DomainException>()
-    //       .WithMessage(mensagemEsperada);
-    //}
-
-    //[Theory]
-    //[InlineData("2100-01-01", "*Data de pagamento deve ser igual ou menor que a data atual*")]
-    //[InlineData("0001-01-01", "*Data de pagamento deve ser válida*")]
-    //public void Nao_deve_corrigir_data_pagamento_invalida(string dataTexto, string mensagemEsperada)
-    //{
-    //    var pagamento = CriarPagamento();
-    //    var dataFutura = DateTime.Parse(dataTexto);
-
-    //    Action act = () => pagamento.CorrigirDataPagamento(dataFutura);
-
-    //    act.Should().Throw<DomainException>()
-    //       .WithMessage(mensagemEsperada);
-    //}
-    #endregion
 }

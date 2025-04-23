@@ -58,102 +58,15 @@ public class DadosCartaoTests
     #endregion
 
     #region Metodos do Dominio
-    //[Fact]
-    //public void Deve_atualizar_numero_valido()
-    //{
-    //    var cartao = CriarCartao();
-    //    var novoNumero = "8765432187654321";
+    #endregion
 
-    //    cartao.AtualizarNumero(novoNumero);
-
-    //    cartao.Numero.Should().Be(novoNumero);
-    //}
-
-    //[Theory]
-    //[InlineData(null, "*Número do cartão deve ser informado*")]
-    //[InlineData("123", "*Número do cartão deve possuir 16 caracteres*")]
-    //public void Nao_deve_atualizar_numero_invalido(string numeroInvalido, string mensagemErro)
-    //{
-    //    var cartao = CriarCartao();
-
-    //    Action act = () => cartao.AtualizarNumero(numeroInvalido);
-
-    //    act.Should().Throw<DomainException>()
-    //       .WithMessage(mensagemErro);
-    //}
-
-    //[Fact]
-    //public void Deve_atualizar_nome_valido()
-    //{
-    //    var cartao = CriarCartao();
-    //    var novoNome = "Beltrano da Silva";
-
-    //    cartao.AtualizarNomeTitular(novoNome);
-
-    //    cartao.NomeTitular.Should().Be(novoNome);
-    //}
-
-    //[Theory]
-    //[InlineData(null, "*Nome do titular deve ser informado*")]
-    //[InlineData("ab", "*Nome do titular deve ter entre 3 e 50 caracteres*")]
-    //public void Nao_deve_atualizar_nome_invalido(string nome, string mensagemErro)
-    //{
-    //    var cartao = CriarCartao();
-
-    //    Action act = () => cartao.AtualizarNomeTitular(nome);
-
-    //    act.Should().Throw<DomainException>()
-    //       .WithMessage(mensagemErro);
-    //}
-
-    //[Fact]
-    //public void Deve_atualizar_validade_valida()
-    //{
-    //    var cartao = CriarCartao();
-    //    var novaValidade = "11/30";
-
-    //    cartao.AtualizarValidade(novaValidade);
-
-    //    cartao.Validade.Should().Be(novaValidade);
-    //}
-
-    //[Theory]
-    //[InlineData(null, "*Validade do cartão deve ser informada*")]
-    //[InlineData("13/29", "*Validade do cartão deve estar no formato MM/AA*")]
-    //public void Nao_deve_atualizar_validade_invalida(string validade, string mensagemErro)
-    //{
-    //    var cartao = CriarCartao();
-
-    //    Action act = () => cartao.AtualizarValidade(validade);
-
-    //    act.Should().Throw<DomainException>()
-    //       .WithMessage(mensagemErro);
-    //}
-
-    //[Fact]
-    //public void Deve_atualizar_cvv_valido()
-    //{
-    //    var cartao = CriarCartao();
-    //    var novoCvv = "999";
-
-    //    cartao.AtualizarCVV(novoCvv);
-
-    //    cartao.CVV.Should().Be(novoCvv);
-    //}
-
-    //[Theory]
-    //[InlineData(null, "*CVV deve ser informado*")]
-    //[InlineData("12", "*CVV deve possuir 3 caracteres*")]
-    //[InlineData("1235", "*CVV deve possuir 3 caracteres*")]
-    //[InlineData("abc", "*CVV deve conter apenas números*")]
-    //public void Nao_deve_atualizar_cvv_invalido(string cvv, string mensagemErro)
-    //{
-    //    var cartao = CriarCartao();
-
-    //    Action act = () => cartao.AtualizarCVV(cvv);
-
-    //    act.Should().Throw<DomainException>()
-    //       .WithMessage(mensagemErro);
-    //}
+    #region Overrides
+    [Fact]
+    public void ToString_deve_conter_nome_e_validade()
+    {
+        var cartao = CriarCartao();
+        cartao.ToString().Should().Contain(_nomeValido)
+                              .And.Contain(_validadeValida);
+    }
     #endregion
 }

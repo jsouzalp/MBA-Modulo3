@@ -57,4 +57,16 @@ public class CertificadoTests
 
     #region Metodos do Dominio
     #endregion
+
+    #region Overrides
+    [Fact]
+    public void ToString_deve_retornar_descricao_formatada()
+    {
+        var certificado = CriarCertificado();
+        var texto = certificado.ToString();
+
+        texto.Should().Contain("Certificado da matrícula")
+              .And.Contain(certificado.MatriculaCursoId.ToString("D"));
+    }
+    #endregion
 }

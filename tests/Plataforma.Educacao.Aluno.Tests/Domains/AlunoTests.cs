@@ -264,8 +264,11 @@ public class AlunoTests
     public void Deve_solicitar_certificado_quando_matricula_concluida()
     {
         var aluno = CriarAlunoValido();
-        aluno.MatricularEmCurso(Guid.NewGuid(), "Curso Introdução ao DDD", 500);
-        var matricula = aluno.MatriculasCursos.First();
+        var cursoId = Guid.NewGuid();
+        aluno.MatricularEmCurso(cursoId, "Curso Introdução ao DDD", 500);
+        var matricula = aluno.ObterMatriculaPorCursoId(cursoId);
+        aluno.AtualizarPagamentoMatricula(matricula.Id);
+
         aluno.ConcluirCurso(matricula.Id);
 
         aluno.RequisitarCertificadoConclusao(matricula.Id, "/var/tmp/certificados/JairoSouza.pdf");
@@ -311,8 +314,10 @@ public class AlunoTests
     public void Deve_registrar_historico_aprendizado_para_matricula_existente()
     {
         var aluno = CriarAlunoValido();
-        aluno.MatricularEmCurso(Guid.NewGuid(), "Curso Introdução ao DDD", 500);
-        var matricula = aluno.MatriculasCursos.First();
+        var cursoId = Guid.NewGuid();
+        aluno.MatricularEmCurso(cursoId, "Curso Introdução ao DDD", 500);
+        var matricula = aluno.ObterMatriculaPorCursoId(cursoId);
+        aluno.AtualizarPagamentoMatricula(matricula.Id);
 
         aluno.RegistrarHistoricoAprendizado(matricula.Id, Guid.NewGuid(), "Curso Introdução ao DDD", DateTime.Now.Date);
 

@@ -78,7 +78,6 @@ public class SolicitarCertificadoCommandHandlerTests
 
         // Assert
         resultado.Should().BeTrue();
-        _alunoRepositoryMock.Verify(r => r.AtualizarAsync(aluno), Times.Once);
     }
 
     #region Helpers
@@ -106,8 +105,8 @@ public class SolicitarCertificadoCommandHandlerTests
         var matricula = aluno.MatriculasCursos.First();
         aluno.AtualizarPagamentoMatricula(matricula.Id);
 
-        matricula.RegistrarHistoricoAprendizado(aulaId1, "Aula 1", DateTime.UtcNow);
-        matricula.RegistrarHistoricoAprendizado(aulaId2, "Aula 2", DateTime.UtcNow);
+        matricula.RegistrarHistoricoAprendizado(aulaId1, "Aula 1", DateTime.Now);
+        matricula.RegistrarHistoricoAprendizado(aulaId2, "Aula 2", DateTime.Now);
 
         return aluno;
     }

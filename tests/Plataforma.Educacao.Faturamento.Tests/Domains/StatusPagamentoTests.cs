@@ -43,5 +43,18 @@ public class StatusPagamentoTests
         act.Should().Throw<DomainException>()
            .WithMessage(mensagemEsperada);
     }
+
+    [Theory]
+    [InlineData(StatusPagamentoEnum.Pendente, true, false, false)]
+    [InlineData(StatusPagamentoEnum.Aprovado, false, true, false)]
+    [InlineData(StatusPagamentoEnum.Recusado, false, false, true)]
+    public void Deve_retornar_estado_correto(StatusPagamentoEnum status, bool pendente, bool aprovado, bool recusado)
+    {
+        var s = new StatusPagamento(status);
+
+        s.EstahPendente.Should().Be(pendente);
+        s.EstahAprovado.Should().Be(aprovado);
+        s.EstahRecusado.Should().Be(recusado);
+    }
     #endregion
 }

@@ -16,7 +16,7 @@ public class Curso : Entidade, IRaizAgregacao
     #region Helper only for EF Mapping
     public ConteudoProgramatico ConteudoProgramatico { get; private set; }
 
-    private readonly List<Aula> _aulas;
+    private readonly List<Aula> _aulas = [];
     public IReadOnlyCollection<Aula> Aulas => _aulas.AsReadOnly();
     #endregion
     #endregion
@@ -27,6 +27,7 @@ public class Curso : Entidade, IRaizAgregacao
     {
         _aulas = new List<Aula>();
     }
+
     public Curso(string nome, 
         decimal valor, 
         DateTime? validoAte, 
