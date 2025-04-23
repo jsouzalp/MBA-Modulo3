@@ -2,8 +2,11 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Core.Data.Constants;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plataforma.Educacao.Conteudo.Data.Configurations;
+
+[ExcludeFromCodeCoverage]
 public class CursoConfiguration : IEntityTypeConfiguration<Curso>
 {
     public void Configure(EntityTypeBuilder<Curso> builder)

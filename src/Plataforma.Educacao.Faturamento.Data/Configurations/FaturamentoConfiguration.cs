@@ -2,8 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Core.Data.Constants;
 using Plataforma.Educacao.Faturamento.Domain.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plataforma.Educacao.Faturamento.Data.Configurations;
+
+[ExcludeFromCodeCoverage]
 public class FaturamentoConfiguration : IEntityTypeConfiguration<Pagamento>
 {
     public void Configure(EntityTypeBuilder<Pagamento> builder)

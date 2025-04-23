@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Core.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plataforma.Educacao.Aluno.Data.Contexts;
+
+[ExcludeFromCodeCoverage]
 public class AlunoDbContext : DbContext, IUnitOfWork
 {
     public AlunoDbContext(DbContextOptions<AlunoDbContext> options) : base(options) { }

@@ -22,8 +22,11 @@ using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
 using Plataforma.Educacao.Aluno.Application.Events.PagamentoRecusado;
 using Plataforma.Educacao.Aluno.Application.Events.ProblemaRegistroHistoricoAprendizado;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoEvents;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plataforma.Educacao.Aluno.Application.Configurations;
+
+[ExcludeFromCodeCoverage]
 public static class AlunoConfiguration
 {
     public static IServiceCollection ConfigurarAlunoApplication(this IServiceCollection services, string stringConexao, bool ehProducao)

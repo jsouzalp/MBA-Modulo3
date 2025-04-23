@@ -6,9 +6,12 @@ using Plataforma.Educacao.Conteudo.Application.Services;
 using Plataforma.Educacao.Conteudo.Data.Contexts;
 using Plataforma.Educacao.Conteudo.Data.Repositories;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace Plataforma.Educacao.Conteudo.Application.Configurations;
+
+[ExcludeFromCodeCoverage]
 public static class ConteudoProgramaticoConfiguration
 {
     public static IServiceCollection ConfigurarConteudoApplication(this IServiceCollection services, string stringConexao, bool ehProducao)
