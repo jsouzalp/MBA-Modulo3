@@ -162,4 +162,19 @@ public class CursoAppServiceTests
 
         await act.Should().ThrowAsync<DomainException>().WithMessage("*Já existe um curso cadastrado com esse nome*");
     }
+
+    [Fact]
+    public async Task Deve_obter_apenas_cursos_ativos()
+    {
+        var cursoAtivo = CriarCurso();
+        var repoMock = new Mock<ICursoRepository>();
+        repoMock.Setup(r => r.ObterAtivosAsync()).ReturnsAsync([cursoAtivo]);
+
+        var service = new CursoAppService(repoMock.Object);
+
+        var lista = await service.ObterAtivosAsync();
+
+        lista.Should().ContainSingle();
+        lista.First().Id.Should().Be(cursoAtivo.Id);
+    }
 }

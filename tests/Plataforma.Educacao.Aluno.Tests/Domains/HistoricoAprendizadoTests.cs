@@ -100,16 +100,6 @@ public class HistoricoAprendizadoTests
         // Assert
         act.Should().Throw<DomainException>().WithMessage("*Data de término não pode ser superior à data atual*");
     }
-
-    //[Fact]
-    //public void Historicos_com_mesmo_curso_e_aula_devem_ser_iguais()
-    //{
-    //    var h1 = CriarHistorico();
-    //    var h2 = CriarHistorico();
-
-    //    h1.Should().BeSameAs(h2);
-    //    h1.GetHashCode().Should().Be(h2.GetHashCode());
-    //}
     #endregion
 
     #region ToString

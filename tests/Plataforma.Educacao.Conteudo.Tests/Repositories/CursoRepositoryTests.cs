@@ -180,5 +180,27 @@ public class CursoRepositoryTests
 
         act.Should().NotThrow();
     }
+
+    [Fact]
+    public async Task Deve_adicionar_aula_ao_contexto()
+    {
+        // Arrange
+        var curso = CriarCursoValido();
+        
+        var repository = CriarRepository(out var context);
+        await repository.AdicionarAsync(curso);
+        await repository.UnitOfWork.Commit();
+
+        // Act
+        curso.AdicionarAula("Aula de criptografia avançada", 2, 9, "https://jwt.io");
+        Aula aulaCriada = curso.Aulas.Last();
+        await repository.AdicionarAulaAsync(aulaCriada);
+        await repository.UnitOfWork.Commit();
+
+        var cursoDb = await repository.ObterPorIdAsync(curso.Id);
+
+        // Assert
+        cursoDb.Aulas.Should().ContainSingle(a => a.Id == aulaCriada.Id);
+    }
     #endregion
 }

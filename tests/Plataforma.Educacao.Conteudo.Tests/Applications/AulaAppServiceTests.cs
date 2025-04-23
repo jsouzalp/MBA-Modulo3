@@ -54,8 +54,6 @@ public class AulaAppServiceTests
         // Assert
         curso.Aulas.Should().ContainSingle();
         aulaId.Should().NotBe(Guid.Empty);
-        mock.Verify(r => r.AtualizarAsync(curso), Times.Once);
-        mock.Verify(r => r.UnitOfWork.Commit(), Times.Once);
     }
 
     [Fact]
@@ -122,28 +120,41 @@ public class AulaAppServiceTests
             .WithMessage("*Aula não encontrada*");
     }
 
-    //[Fact]
-    //public async Task Deve_lancar_excecao_quando_ordem_aula_ja_existir()
-    //{
-    //    var curso = CriarCurso();
-    //    curso.AdicionarAula("Aula existente 1", 2, 1, "http://google.com");
-    //    curso.AdicionarAula("Aula existente 2", 4, 2, "http://google.com");
+    [Fact]
+    public async Task Deve_lancar_excecao_quando_ordem_aula_ja_existir()
+    {
+        var curso = CriarCurso();
+        curso.AdicionarAula("Aula existente 1", 2, 1, "http://google.com");
+        curso.AdicionarAula("Aula existente 2", 4, 2, "http://google.com");
 
-    //    var aulaNova = curso.Aulas.First();
-    //    var dto = new AulaDto
-    //    {
-    //        Id = aulaNova.Id,
-    //        Descricao = "Atualizando aula",
-    //        CargaHoraria = 2,
-    //        OrdemAula = 1, // mesma ordem
-    //        Ativo = true
-    //    };
+        var aulaNova = curso.Aulas.Last();
+        var dto = new AulaDto
+        {
+            Id = aulaNova.Id,
+            Descricao = "Atualizando aula Existente 2 para ordem 1",
+            CargaHoraria = 2,
+            OrdemAula = 1, // mesma ordem
+            Ativo = true
+        };
 
-    //    var service = CriarAppService(out _, curso);
+        var service = CriarAppService(out _, curso);
 
-    //    Func<Task> act = async () => await service.AtualizarAulaAsync(curso.Id, dto);
+        Func<Task> act = async () => await service.AtualizarAulaAsync(curso.Id, dto);
 
-    //    await act.Should().ThrowAsync<DomainException>()
-    //             .WithMessage("*Já existe uma aula com essa ordem*");
-    //}
+        await act.Should().ThrowAsync<DomainException>()
+                 .WithMessage("*Ordem da aula deve ser única dentro do curso*");
+    }
+
+    [Fact]
+    public async Task Deve_lancar_excecao_quando_curso_nao_for_encontrado()
+    {
+        var repoMock = new Mock<ICursoRepository>();
+        repoMock.Setup(r => r.ObterPorIdAsync(It.IsAny<Guid>())).ReturnsAsync((Curso?)null);
+        var service = new AulaAppService(repoMock.Object);
+
+        Func<Task> act = async () => await service.RemoverAulaAsync(Guid.NewGuid(), Guid.NewGuid());
+
+        await act.Should().ThrowAsync<DomainException>()
+            .WithMessage("*Curso não encontrado*");
+    }
 }

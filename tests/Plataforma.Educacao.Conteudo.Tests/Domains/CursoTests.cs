@@ -193,6 +193,7 @@ public class CursoTests
     public void Nao_deve_retornar_curso_disponivel_quando_desativado()
     {
         var curso = CriarCurso(); 
+        curso.DesativarCurso();
 
         curso.CursoDisponivel().Should().BeFalse();
     }
@@ -316,6 +317,30 @@ public class CursoTests
         resultado.Should().Contain(_nomeValido);
         resultado.Should().Contain(_valorValido.ToString("N2"));
         resultado.Should().Contain("Sim");
+    }
+
+    [Fact]
+    public void Deve_retornar_aula_ao_buscar_por_id()
+    {
+        var curso = CriarCursoValidoComAula();
+        var aula = curso.Aulas.First();
+
+        var aulaEncontrada = curso.ObterAulaPeloId(aula.Id);
+
+        aulaEncontrada.Should().NotBeNull();
+        aulaEncontrada.Id.Should().Be(aula.Id);
+    }
+
+    [Fact]
+    public void Nao_deve_retornar_aula_quando_id_nao_existir()
+    {
+        var curso = CriarCurso();
+        var idInexistente = Guid.NewGuid();
+
+        Action act = () => curso.ObterAulaPeloId(idInexistente);
+
+        act.Should().Throw<DomainException>()
+           .WithMessage("*Aula não encontrada*");
     }
     #endregion
 }

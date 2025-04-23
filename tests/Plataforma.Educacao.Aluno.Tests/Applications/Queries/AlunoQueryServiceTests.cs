@@ -3,6 +3,7 @@ using Moq;
 using Plataforma.Educacao.Aluno.Application.Queries;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
+using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Queries;
@@ -104,6 +105,43 @@ public class AlunoQueryServiceTests
         // Assert
         certificado.Should().NotBeNull();
         certificado.PathCertificado.Should().Be(matricula.Certificado.PathCertificado);
+    }
+
+    [Fact]
+    public async Task Deve_retornar_evolucao_matriculas_quando_existir()
+    {
+        var aluno = CriarAlunoValido();
+        var cursoMock = new CursoDto { Id = aluno.MatriculasCursos.First().CursoId, QuantidadeAulas = 2 };
+
+        _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(aluno.Id)).ReturnsAsync(aluno);
+        _cursoServiceMock.Setup(r => r.ObterPorIdAsync(It.IsAny<Guid>())).ReturnsAsync(cursoMock);
+
+        var resultado = await _service.ObterEvolucaoMatriculasCursoDoAlunoPorIdAsync(aluno.Id);
+
+        resultado.Should().NotBeNull();
+        resultado.MatriculasCursos.Should().HaveCountGreaterThan(0);
+    }
+
+    [Fact]
+    public async Task Deve_retornar_aulas_com_historico()
+    {
+        var aluno = CriarAlunoValido();
+        var matricula = aluno.MatriculasCursos.First();
+
+        _alunoRepositoryMock.Setup(r => r.ObterMatriculaPorIdAsync(matricula.Id)).ReturnsAsync(matricula);
+        _cursoServiceMock.Setup(r => r.ObterPorIdAsync(matricula.CursoId)).ReturnsAsync(new CursoDto
+        {
+            Id = matricula.CursoId,
+            Aulas = new List<AulaDto>
+        {
+            new() { Id = matricula.HistoricoAprendizado.First().AulaId, Descricao = "Aula 1", OrdemAula = 1, Ativo = true, Url = "http://aula" }
+        }
+        });
+
+        var aulas = await _service.ObterAulasPorMatriculaIdAsync(matricula.Id);
+
+        aulas.Should().NotBeEmpty();
+        aulas.First().NomeAula.Should().NotBeNullOrWhiteSpace();
     }
 
     #region Helpers

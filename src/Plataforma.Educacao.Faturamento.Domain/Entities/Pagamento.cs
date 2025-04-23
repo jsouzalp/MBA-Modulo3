@@ -84,13 +84,13 @@ public class Pagamento : Entidade, IRaizAgregacao
 
         if (dataPagamento.HasValue)
         {
+            ValidacaoTexto.DevePossuirConteudo(codigoConfirmacaoPagamento, "Código de confirmação do pagamento deve ser informado", validacao);
             ValidacaoData.DeveSerValido(dataPagamento.Value, "Data de pagamento deve ser válida", validacao);
             ValidacaoData.DeveSerMenorQue(dataPagamento.Value, DateTime.Now.AddDays(1), "Data de pagamento deve ser igual ou menor que a data atual", validacao);
         }
 
         if (!string.IsNullOrEmpty(codigoConfirmacaoPagamento))
         {
-            ValidacaoTexto.DevePossuirConteudo(codigoConfirmacaoPagamento, "Código de confirmação do pagamento deve ser informado", validacao);
             ValidacaoTexto.DevePossuirTamanho(codigoConfirmacaoPagamento, 1, 100, "Código de confirmação do pagamento deve ter entre 1 e 100 caracteres", validacao);
         }
 

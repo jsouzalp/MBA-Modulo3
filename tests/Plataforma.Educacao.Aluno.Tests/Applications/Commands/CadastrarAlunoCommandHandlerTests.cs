@@ -56,4 +56,20 @@ public class CadastrarAlunoCommandHandlerTests
         resultado.Should().BeTrue();
         _alunoRepositoryMock.Verify(r => r.AdicionarAsync(It.IsAny<Domain.Entities.Aluno>()), Times.Once);
     }
+
+    [Fact]
+    public async Task Deve_retornar_false_quando_commit_falhar()
+    {
+        var command = new CadastrarAlunoCommand(Guid.NewGuid(), "Aluno Teste", "teste@email.com", new DateTime(1995, 5, 15));
+
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        unitOfWorkMock.Setup(u => u.Commit()).ReturnsAsync(false);
+        _alunoRepositoryMock.Setup(r => r.UnitOfWork).Returns(unitOfWorkMock.Object);
+
+        var handler = new CadastrarAlunoCommandHandler(_alunoRepositoryMock.Object, _mediatorHandlerMock.Object);
+
+        var resultado = await handler.Handle(command, CancellationToken.None);
+
+        resultado.Should().BeFalse();
+    }
 }

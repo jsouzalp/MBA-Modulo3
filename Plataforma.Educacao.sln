@@ -42,7 +42,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Helpers", ".Helpers", "{C5B069F4-834D-40F5-89E4-E65E27C0FE68}"
 	ProjectSection(SolutionItems) = preProject
 		src\ClearBinObj.cmd = src\ClearBinObj.cmd
-		tests\run-tests-with-coverage.cmd = tests\run-tests-with-coverage.cmd
+		run-tests-with-coverage.cmd = run-tests-with-coverage.cmd
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3A9E2770-0B7C-45B8-8D31-9FCD8F9688F6}"

@@ -398,3 +398,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+tests/coverage-report
+tests/Plataforma.Educacao.Conteudo.Tests/coverage-report
+tests/tests/coverage-report

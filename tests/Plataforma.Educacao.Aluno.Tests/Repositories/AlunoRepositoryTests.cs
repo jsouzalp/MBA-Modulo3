@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Data.Contexts;
 using Plataforma.Educacao.Aluno.Data.Repositories;
 using Plataforma.Educacao.Aluno.Domain.Entities;
+using Plataforma.Educacao.Aluno.Domain.ValueObjects;
+using Plataforma.Educacao.Conteudo.Domain.Entities;
 
 namespace Plataforma.Educacao.Aluno.Tests.Repositories;
 public class AlunoRepositoryTests
@@ -134,6 +136,26 @@ public class AlunoRepositoryTests
         var resultado = await repository.ObterMatriculaPorAlunoECursoAsync(aluno.Id, cursoId);
         resultado.Should().NotBeNull();
         resultado.CursoId.Should().Be(cursoId);
+    }
+
+    [Fact]
+    public async Task Deve_adicionar_certificado_e_matricula()
+    {
+        var repo = CriarRepository(out var context);
+        var aluno = CriarAlunoValido();
+        var matricula = new MatriculaCurso(aluno.Id, Guid.NewGuid(), "Curso de TDD - Iniciante", 100);
+        var certificado = new Certificado(matricula.Id, "tmp/certificado.pdf");
+
+        context.Alunos.Add(aluno);
+        await repo.AdicionarMatriculaCursoAsync(matricula);
+        await repo.AdicionarCertificadoMatriculaCursoAsync(certificado);
+        await repo.UnitOfWork.Commit();
+
+        var certificadoDb = await context.Certificados.FirstOrDefaultAsync();
+        var matriculaDb = await context.MatriculasCursos.FirstOrDefaultAsync();
+
+        certificadoDb.Should().NotBeNull();
+        matriculaDb.Should().NotBeNull();
     }
     #endregion
 
