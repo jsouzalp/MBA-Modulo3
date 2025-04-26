@@ -99,6 +99,7 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
    - Acesse a documentação da API em: http://localhost:5001/swagger
    
 4. **Migrations (dotnet tools):**
+   
    Autenticação
    ```bash
    dotnet ef migrations add InitialMigration --project .\src\Plataforma.Educacao.Autenticacao.Data --startup-project .\src\Plataforma.Educacao.Api --context AutenticacaoDbContext --output-dir Migrations
