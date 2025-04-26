@@ -39,6 +39,10 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
 ## **4. Arquitetura e Estrutura**
 
 ```plaintext
+├── collections
+│   └──Postman                                       # Coleção de testes da API no Postman
+├── data                                             # Arquivos de base de dados
+├── docs                                             # Especificação, cronograma e outros documentos do projeto
 ├── src
 │   ├── Plataforma.Educacao.Aluno.Application        # AppServices do BC Aluno
 │   ├── Plataforma.Educacao.Aluno.Data               # Repositório do BC Aluno
@@ -123,7 +127,7 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
 ## **7. Instruções de Configuração**
 
 - **JWT para API:** As chaves de configuração do JWT estão no `appsettings.json`.
-- **Migrações do Banco de Dados:** As migrações são gerenciadas pelo Entity Framework Core. Não é necessário aplicar devido a configuração do Seed de dados.
+- **Migrações do Banco de Dados:** As migrações são gerenciadas pelo Entity Framework Core (já existe uma configuração feita e não é preciso executar de novo esta configuração).
 
 ## **8. Documentação da API**
 
