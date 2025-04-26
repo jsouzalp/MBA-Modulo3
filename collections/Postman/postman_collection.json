@@ -1,0 +1,1628 @@
+{
+	"info": {
+		"_postman_id": "f47314dc-7fbd-421f-a58d-551e6b7bdeb9",
+		"name": "MBA - Project3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3078282"
+	},
+	"item": [
+		{
+			"name": "Administrador",
+			"item": [
+				{
+					"name": "Autenticacao",
+					"item": [
+						{
+							"name": "Registro",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseData = pm.response.json();\r",
+											"var accessToken = responseData.result.accessToken;\r",
+											"pm.collectionVariables.set(\"_accessToken\", accessToken);\r",
+											"\r",
+											"var id = responseData.result.id;\r",
+											"pm.collectionVariables.set(\"_usuarioId\", id);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Jairo Azevedo\",\r\n  \"email\": \"jsouza.lp@gmail.com\",\r\n  \"password\": \"Password@2025\",\r\n  \"confirmPassword\": \"Password@2025\",\r\n  \"dataNascimento\": \"1973-06-25\",\r\n  \"ehAdministrador\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/Autenticacao/registro",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"Autenticacao",
+										"registro"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseData = pm.response.json();\r",
+											"var accessToken = responseData.result.accessToken;\r",
+											"pm.collectionVariables.set(\"_accessToken\", accessToken);\r",
+											"\r",
+											"var id = responseData.result.id;\r",
+											"pm.collectionVariables.set(\"_usuarioId\", id);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"jsouza.nz@gmail.com\",\r\n  \"password\": \"Password@2025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/Autenticacao/login",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"Autenticacao",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Curso",
+					"item": [
+						{
+							"name": "Cadastrar",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseData = pm.response.json();\r",
+											"var cursoId = responseData.result.cursoId;\r",
+											"pm.collectionVariables.set(\"_cursoId\", cursoId);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Curso de Orientação a objetos4\",\r\n    \"valor\": 1500,\r\n    \"validoAte\": \"2027-12-31\",\r\n    \"finalidade\": \"Este curso tem finalidade de formar os alunos em experts em orientação a objetos\",\r\n    \"ementa\": \"1. Introdução à Programação Orientada a Objetos|2. Classes e Objetos|3. Herança|4. Encapsulamento|5. Polimorfismo|6. Abstração|7. Modelagem e Design de Software|8. Tópicos Avançados (Opcional)\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/curso",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"curso"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Alterar",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"{{_cursoId}}\",\r\n    \"nome\": \"Curso de Orientação a objetos (Avançado)5\",\r\n    \"valor\": 2500,\r\n    \"validoAte\": \"2030-12-31\",\r\n    \"ativo\": true,\r\n    \"finalidade\": \"Este curso tem finalidade de formar os alunos em MESTRES em orientação a objetos\",\r\n    \"ementa\": \"1. Tópicos avançados|2. Como ser um mestre|3. Compre este curso porque vai dar bom\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/curso/{{_cursoId}}",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"curso",
+										"{{_cursoId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Desativar",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"744bbfd0-becf-47c8-8408-21cc696e279e\",\r\n    \"nome\": \"Curso de Orientação a objetos (Avançado)\",\r\n    \"valor\": 2500,\r\n    \"validoAte\": \"2030-12-31\",\r\n    \"ativo\": true,\r\n    \"finalidade\": \"Este curso tem finalidade de formar os alunos em MESTRES em orientação a objetos\",\r\n    \"ementa\": \"1. Tópicos avançados|2. Como ser um mestre|3. Compre este curso porque vai dar bom\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/curso/{{_cursoId}}/desativar",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"curso",
+										"{{_cursoId}}",
+										"desativar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Cursos (TODOS)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/curso/",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"curso",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Curso pelo ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/curso/{{_cursoId}}",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"curso",
+										"{{_cursoId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Cursos Ativos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/curso/ativos",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"curso",
+										"ativos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Aula",
+					"item": [
+						{
+							"name": "Cadastrar 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"cursoId\": \"{{_cursoId}}\",\r\n  \"descricao\": \"1. Introdução à Programação Orientada a Objetos\",\r\n  \"cargaHoraria\": 2,\r\n  \"ordemAula\": 1,\r\n  \"ativo\": true,\r\n  \"url\": \"http://stackoverflow.com\"\r\n//    \"ementa\": \"|2. Classes e Objetos|3. Herança|4. Encapsulamento|5. Polimorfismo|6. Abstração|7. Modelagem e Design de Software|8. Tópicos Avançados (Opcional)\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aula/{{_cursoId}}",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aula",
+										"{{_cursoId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cadastrar 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"cursoId\": \"{{_cursoId}}\",\r\n  \"descricao\": \"2. Classes e Objetos\",\r\n  \"cargaHoraria\": 4,\r\n  \"ordemAula\": 2,\r\n  \"ativo\": true,\r\n  \"url\": \"http://stackoverflow.com\"\r\n//    \"ementa\": \"||3. Herança|4. Encapsulamento|5. Polimorfismo|6. Abstração|7. Modelagem e Design de Software|8. Tópicos Avançados (Opcional)\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aula/{{_cursoId}}",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aula",
+										"{{_cursoId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cadastrar 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"cursoId\": \"{{_cursoId}}\",\r\n  \"descricao\": \"3. Herança\",\r\n  \"cargaHoraria\": 1,\r\n  \"ordemAula\": 3,\r\n  \"ativo\": true,\r\n  \"url\": \"http://stackoverflow.com\"\r\n//    \"ementa\": \"|2. Classes e Objetos||4. Encapsulamento|5. Polimorfismo|6. Abstração|7. Modelagem e Design de Software|8. Tópicos Avançados (Opcional)\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aula/{{_cursoId}}",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aula",
+										"{{_cursoId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atualizar",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"76799577-4df2-4c71-9b36-510b8d819f9c\",\r\n  \"cursoId\": \"{{_cursoId}}\",\r\n  \"descricao\": \"3. Herança\",\r\n  \"cargaHoraria\": 1,\r\n  \"ordemAula\": 3,\r\n  \"ativo\": true,\r\n  \"url\": \"http://google.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aula/{{_cursoId}}",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aula",
+										"{{_cursoId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remover",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aula/{{_cursoId}}/remover/3ae7ece3-00e7-4d8d-be78-8e30dc38f177",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aula",
+										"{{_cursoId}}",
+										"remover",
+										"3ae7ece3-00e7-4d8d-be78-8e30dc38f177"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Aluno",
+			"item": [
+				{
+					"name": "Autenticacao",
+					"item": [
+						{
+							"name": "Registro",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseData = pm.response.json();\r",
+											"var accessToken = responseData.result.accessToken;\r",
+											"pm.collectionVariables.set(\"_accessToken\", accessToken);\r",
+											"\r",
+											"var id = responseData.result.id;\r",
+											"pm.collectionVariables.set(\"_usuarioId\", id);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Cath Oliveira\",\r\n  \"email\": \"cath.lp@gmail.com\",\r\n  \"password\": \"Password@2025\",\r\n  \"confirmPassword\": \"Password@2025\",\r\n  \"dataNascimento\": \"2016-06-09\",\r\n  \"ehAdministrador\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/Autenticacao/registro",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"Autenticacao",
+										"registro"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseData = pm.response.json();\r",
+											"var accessToken = responseData.result.accessToken;\r",
+											"pm.collectionVariables.set(\"_accessToken\", accessToken);\r",
+											"\r",
+											"var id = responseData.result.id;\r",
+											"pm.collectionVariables.set(\"_usuarioId\", id);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"cath.lp@gmail.com\",\r\n  \"password\": \"Password@2025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/Autenticacao/login",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"Autenticacao",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Matricula Aluno",
+					"item": [
+						{
+							"name": "Realizar Matricula",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"cursoId\": \"{{_cursoId}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/{{_usuarioId}}/matricular-aluno",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"{{_usuarioId}}",
+										"matricular-aluno"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Registrar Historico Inicio Aula",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"aulaId\": \"1334d375-13b8-4b48-98bb-77bae320ed72\",\r\n  \"dataTermino\": null\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/{{_usuarioId}}/registrar-historico-aprendizado",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"{{_usuarioId}}",
+										"registrar-historico-aprendizado"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Registrar Historico Conclusao Aula",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"aulaId\": \"1334d375-13b8-4b48-98bb-77bae320ed72\",\r\n  \"dataTermino\": \"2025-04-20\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/{{_usuarioId}}/registrar-historico-aprendizado",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"{{_usuarioId}}",
+										"registrar-historico-aprendizado"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Concluir Curso",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/{{_usuarioId}}/concluir-curso",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"{{_usuarioId}}",
+										"concluir-curso"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Solicitar Certificado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"pathCertificado\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/{{_usuarioId}}/solicitar-certificado",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"{{_usuarioId}}",
+										"solicitar-certificado"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Aluno por ID (Aluno)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"pathCertificado\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/{{_usuarioId}}",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"{{_usuarioId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Aluno por ID (Administrador)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"pathCertificado\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/371bea1e-1223-4c03-8115-ce318a4362fb",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"371bea1e-1223-4c03-8115-ce318a4362fb"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Aluno por ID (Anonimo - 403)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"pathCertificado\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/371bea1e-1223-4c03-8115-ce318a4362fb",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"371bea1e-1223-4c03-8115-ce318a4362fb"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Evolucao Aluno por ID (Administrador)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"pathCertificado\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/371bea1e-1223-4c03-8115-ce318a4362fb/evolucao",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"371bea1e-1223-4c03-8115-ce318a4362fb",
+										"evolucao"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Matriculas Aluno por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"pathCertificado\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/{{_usuarioId}}/todas-matriculas",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"{{_usuarioId}}",
+										"todas-matriculas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Certificado Matricula por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"pathCertificado\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/matricula/08bddf69-8d3a-4bd3-9259-965a3963733d/certificado",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"matricula",
+										"08bddf69-8d3a-4bd3-9259-965a3963733d",
+										"certificado"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obter Aulas por Matricula ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"matriculaCursoId\": \"{{_matriculaId}}\",\r\n  \"pathCertificado\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/aulas/08bddf69-8d3a-4bd3-9259-965a3963733d",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"aulas",
+										"08bddf69-8d3a-4bd3-9259-965a3963733d"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Faturamento",
+			"item": [
+				{
+					"name": "Autenticacao",
+					"item": [
+						{
+							"name": "Registro",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseData = pm.response.json();\r",
+											"var accessToken = responseData.result.accessToken;\r",
+											"pm.collectionVariables.set(\"_accessToken\", accessToken);\r",
+											"\r",
+											"var id = responseData.result.id;\r",
+											"pm.collectionVariables.set(\"_usuarioId\", id);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Cath Oliveira\",\r\n  \"email\": \"cath.lp@gmail.com\",\r\n  \"password\": \"Password@2025\",\r\n  \"confirmPassword\": \"Password@2025\",\r\n  \"dataNascimento\": \"2016-06-09\",\r\n  \"ehAdministrador\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/Autenticacao/registro",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"Autenticacao",
+										"registro"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseData = pm.response.json();\r",
+											"var accessToken = responseData.result.accessToken;\r",
+											"pm.collectionVariables.set(\"_accessToken\", accessToken);\r",
+											"\r",
+											"var id = responseData.result.id;\r",
+											"pm.collectionVariables.set(\"_usuarioId\", id);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"cath.lp@gmail.com\",\r\n  \"password\": \"Password@2025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/Autenticacao/login",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"Autenticacao",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Pagamento",
+					"item": [
+						{
+							"name": "Atualizar Pagamento",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{_accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"alunoId\": \"{{_usuarioId}}\",\r\n  \"cursoId\": \"{{_cursoId}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{_BaseEndpoint}}/api/aluno/{{_usuarioId}}/atualizar-pagamento-matricula",
+									"host": [
+										"{{_BaseEndpoint}}"
+									],
+									"path": [
+										"api",
+										"aluno",
+										"{{_usuarioId}}",
+										"atualizar-pagamento-matricula"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "_BaseEndpoint",
+			"value": "https://localhost:5001",
+			"type": "string"
+		},
+		{
+			"key": "_accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "_usuarioId",
+			"value": ""
+		},
+		{
+			"key": "_cursoId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "_matriculaId",
+			"value": "08BDDF69-8D3A-4BD3-9259-965A3963733D",
+			"type": "string"
+		}
+	]
+}

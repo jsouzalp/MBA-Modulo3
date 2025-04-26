@@ -63,8 +63,8 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
 - **BC Alunos**: Cadastrar, matricular e controlar histórico escolar do aluno
 - **BC ConteúdoProgramático**: Cadastrar e controlar cursos e aulas
 - **BC Pagamentos**: Realizar o controle de pagamento da matrícula do aluno
-- **Autenticação e Autorização:** Diferenciação entre usuários comuns e administradores.
-- **API RESTful:** Exposição de endpoints para operações CRUD via API.
+- **Autenticação e Autorização:** Diferenciação entre alunos e administradores.
+- **API RESTful:** Exposição de endpoints para operações via API com restrições de acessos de acordo com regras definidas.
 - **Documentação da API:** Documentação automática dos endpoints da API utilizando Swagger.
 
 ## **6. Como Executar**
@@ -72,7 +72,6 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
 ### **Pré-requisitos**
 
 - .NET SDK 8.0 ou superior
-- Angular (instalar o Node.js e o Angular CLI)
 - SQLite
 - Git
 
@@ -99,6 +98,8 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
    - Acesse a documentação da API em: http://localhost:5001/swagger
    
 4. **Migrations (dotnet tools):**
+   Se for preciso regerar a estrutura de base de dados, os passos abaixo ajudarão nesse processo (validar também o seed de informações feito na classe DbMigrationHelper.cs na camada de API)
+   
    Autenticação
    ```bash
    dotnet ef migrations add InitialMigration --project .\src\Plataforma.Educacao.Autenticacao.Data --startup-project .\src\Plataforma.Educacao.Api --context AutenticacaoDbContext --output-dir Migrations
