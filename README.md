@@ -63,7 +63,7 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
 - **BC Alunos**: Cadastrar, matricular e controlar histórico escolar do aluno
 - **BC ConteúdoProgramático**: Cadastrar e controlar cursos e aulas
 - **BC Pagamentos**: Realizar o controle de pagamento da matrícula do aluno
-- **Autenticação e Autorização:** Diferenciação entre usuários comuns e administradores.
+- **Autenticação e Autorização:** Diferenciação entre alunos e administradores.
 - **API RESTful:** Exposição de endpoints para operações CRUD via API.
 - **Documentação da API:** Documentação automática dos endpoints da API utilizando Swagger.
 
