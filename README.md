@@ -72,7 +72,6 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
 ### **Pré-requisitos**
 
 - .NET SDK 8.0 ou superior
-- Angular (instalar o Node.js e o Angular CLI)
 - SQLite
 - Git
 
@@ -99,6 +98,7 @@ Criar uma plataforma robusta de ensino composta por três Bounded Contexts princ
    - Acesse a documentação da API em: http://localhost:5001/swagger
    
 4. **Migrations (dotnet tools):**
+   Se for preciso regerar a estrutura de base de dados, os passos abaixo ajudarão nesse processo (validar também o seed de informações feito na classe DbMigrationHelper.cs na camada de API)
    
    Autenticação
    ```bash
