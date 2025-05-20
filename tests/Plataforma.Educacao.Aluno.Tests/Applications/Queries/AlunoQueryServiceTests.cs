@@ -3,8 +3,8 @@ using Moq;
 using Plataforma.Educacao.Aluno.Application.Queries;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
-using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Queries;
 public class AlunoQueryServiceTests

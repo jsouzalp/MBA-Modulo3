@@ -10,13 +10,9 @@ public class Certificado : Entidade
     public DateTime DataSolicitacao { get; private set; }
     public string PathCertificado { get; private set; }
 
-    #region Helper only for EF Mapping
     [JsonIgnore]
     public MatriculaCurso MatriculaCurso { get; private set; }
-    #endregion
-    #endregion
 
-    #region Construtores
     protected Certificado() { }
 
     public Certificado(Guid matriculaCursoId, string pathCertificado)
@@ -29,7 +25,7 @@ public class Certificado : Entidade
     }
     #endregion
 
-    #region Validações
+    #region Metodos
     private void ValidarIntegridadeCertificado()
     {
         var validacao = new ResultadoValidacao<Certificado>();
@@ -40,9 +36,7 @@ public class Certificado : Entidade
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides
     public override string ToString() => $"Certificado da matrícula {MatriculaCursoId}, gerado em {DataSolicitacao:dd/MM/yyyy}";
     #endregion
 }

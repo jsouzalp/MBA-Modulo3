@@ -4,10 +4,10 @@ using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Faturamento.Domain.Entities;
 using Plataforma.Educacao.Faturamento.Domain.Interfaces;
 using Plataforma.Educacao.Faturamento.Domain.ValueObjects;
-using Plataforma.Educacao.Aluno.Application.Interfaces;
-using Plataforma.Educacao.Aluno.Application.DTO;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoCommands;
+using Plataforma.Educacao.Core.SharedDto.Aluno;
+using Plataforma.Educacao.Aluno.Application.Interfaces;
 
 namespace Plataforma.Educacao.Faturamento.Application.Commands.RealizarPagamento;
 public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoRepository,
@@ -36,7 +36,6 @@ public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoR
         bool ehInclusaoPagamento = pagamento == null;
         var dadosCartao = new DadosCartao(request.NumeroCartao, request.NomeTitularCartao, request.ValidadeCartao, request.CvvCartao);
         pagamento ??= new Pagamento(request.MatriculaCursoId, request.Valor, DateTime.Now.Date);
-
 
 
 

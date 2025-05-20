@@ -2,9 +2,10 @@
 using Plataforma.Educacao.Aluno.Application.Interfaces;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Aluno.Domain.ValueObjects;
-using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Extensions;
+using Plataforma.Educacao.Core.SharedDto.Aluno;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Aluno.Application.Queries;
 public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppService cursoAppService) : IAlunoQueryService

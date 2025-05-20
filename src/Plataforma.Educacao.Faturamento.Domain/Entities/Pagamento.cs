@@ -15,9 +15,7 @@ public class Pagamento : Entidade, IRaizAgregacao
     public DadosCartao Cartao { get; private set; }
     public StatusPagamento StatusPagamento { get; private set; }
     public string CodigoConfirmacaoPagamento { get; private set; }
-    #endregion
 
-    #region Construtores
     protected Pagamento() { }
     public Pagamento(Guid matriculaId, decimal valor, DateTime dataVencimento)
     {
@@ -30,14 +28,12 @@ public class Pagamento : Entidade, IRaizAgregacao
     }
     #endregion
 
-    #region Getters
+    #region Métodos
     public bool PossuiPagamentoAprovado() => StatusPagamento.EstahAprovado;
     //public bool PossuiPagamentoRecusado() => StatusPagamento.EstahRecusado;
     //public bool EstaVencido() => StatusPagamento.EstahPendente && DateTime.Now.Date > DataVencimento;
     //public bool PodeConfirmarPagamento() => StatusPagamento.EstahPendente && !DataPagamento.HasValue;
-    #endregion
 
-    #region Metodos do Dominio
     public void ConfirmarPagamento(DateTime? dataPagamento, string codigoConfirmacaoPagamento, DadosCartao cartao)
     {
         dataPagamento ??= DateTime.Now;
@@ -65,9 +61,7 @@ public class Pagamento : Entidade, IRaizAgregacao
     //    ValidarIntegridadePagamento(novaDataPagamento: novaDataPagamento);
     //    DataPagamento = novaDataPagamento;
     //}
-    #endregion
 
-    #region Validações
     private void ValidarIntegridadePagamento(DateTime? novaDataPagamento = null, string novoCodigoConfirmacaoPagamento = null)
     {
         var matriculaId = MatriculaId;
@@ -96,9 +90,7 @@ public class Pagamento : Entidade, IRaizAgregacao
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides
     public override string ToString() => $"Pagamento de R${Valor:0.00}, vencimento: {DataVencimento:dd/MM/yyyy}, status: {StatusPagamento}";
     #endregion    
 }

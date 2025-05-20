@@ -1,8 +1,8 @@
-﻿using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
+﻿using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
 using Plataforma.Educacao.Core.Exceptions;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Conteudo.Application.Services;
 public class AulaAppService(ICursoRepository cursoRepository) : IAulaAppService

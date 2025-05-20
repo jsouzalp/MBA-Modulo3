@@ -1,4 +1,4 @@
-﻿namespace Plataforma.Educacao.Conteudo.Application.DTO;
+﻿namespace Plataforma.Educacao.Core.SharedDto.Conteudo;
 public class CursoDto
 {
     public Guid Id { get; set; }

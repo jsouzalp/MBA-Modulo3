@@ -8,9 +8,7 @@ public class DadosCartao
     public string NomeTitular { get; private set; }
     public string Validade { get; private set; }
     public string CVV { get; private set; }
-    #endregion
 
-    #region Construtores    
     protected DadosCartao() { }
 
     public DadosCartao(string numero, string nomeTitular, string validade, string cvv)
@@ -24,13 +22,7 @@ public class DadosCartao
     }
     #endregion
 
-    #region Getters
-    #endregion
-
-    #region Metodos do Dominio
-    #endregion
-
-    #region Validações
+    #region Metodos 
     private void ValidarIntegridadeDadosCartao()
     {
         var validacao = new ResultadoValidacao<DadosCartao>();
@@ -46,9 +38,7 @@ public class DadosCartao
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides
     override public string ToString() => $"Dados do cartão: {NomeTitular}, validade: {Validade}";
     #endregion
 }

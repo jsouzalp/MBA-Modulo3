@@ -2,11 +2,6 @@
 using Plataforma.Educacao.Aluno.Application.Events.ProblemaRegistroHistoricoAprendizado;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoEvents;
 using Plataforma.Educacao.Core.Messages.Comunications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Plataforma.Educacao.Core.Messages;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Events;

@@ -4,11 +4,6 @@ using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Faturamento.Application.Events.GerarLinkPagamento;
 using Plataforma.Educacao.Faturamento.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Plataforma.Educacao.Core.Messages;
 
 namespace Plataforma.Educacao.Faturamento.Tests.Applications.Events;

@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Data.Contexts;
 using Plataforma.Educacao.Aluno.Data.Repositories;
 using Plataforma.Educacao.Aluno.Domain.Entities;
-using Plataforma.Educacao.Aluno.Domain.ValueObjects;
-using Plataforma.Educacao.Conteudo.Domain.Entities;
 
 namespace Plataforma.Educacao.Aluno.Tests.Repositories;
 public class AlunoRepositoryTests

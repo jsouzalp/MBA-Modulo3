@@ -13,13 +13,9 @@ public class Aula : Entidade
     public byte OrdemAula { get; private set; }
     public string Url { get; private set; }
 
-    #region Helper only for EF Mapping
     [JsonIgnore]
     public Curso Curso { get; set; }
-    #endregion Helper only for EF Mapping
-    #endregion
 
-    #region Construtores
     protected Aula() { }
     public Aula(Guid cursoId, 
         string descricao, 
@@ -36,9 +32,6 @@ public class Aula : Entidade
 
         ValidarIntegridadeAula();
     }
-    #endregion
-
-    #region Getters
     #endregion
 
     #region Metodos do Dominio
@@ -68,9 +61,7 @@ public class Aula : Entidade
         ValidarIntegridadeAula(novoUrl: url);
         Url = url;
     }
-    #endregion
 
-    #region Validacoes
     private void ValidarIntegridadeAula(string novaDescricao = null, short? novaCargaHoraria = null, byte? novaOrdemAula = null, string novoUrl = null)
     {
         var descricao = novaDescricao ?? Descricao;
@@ -90,9 +81,7 @@ public class Aula : Entidade
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides        
     public override string ToString()
     {
         string aulaAtiva = Ativo ? "Sim" : "Não";

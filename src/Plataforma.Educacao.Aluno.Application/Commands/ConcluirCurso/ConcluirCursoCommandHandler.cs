@@ -2,9 +2,9 @@
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
-using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
+using Plataforma.Educacao.Conteudo.Application.Interfaces;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
 public class ConcluirCursoCommandHandler(IAlunoRepository alunoRepository,

@@ -1,4 +1,4 @@
-﻿namespace Plataforma.Educacao.Aluno.Application.DTO;
+﻿namespace Plataforma.Educacao.Core.SharedDto.Aluno;
 public class MatriculaCursoDto
 {
     public Guid Id { get; set; }

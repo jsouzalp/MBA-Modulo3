@@ -4,6 +4,7 @@ using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Conteudo.Domain.Interfaces;
 using Plataforma.Educacao.Conteudo.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Exceptions;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Conteudo.Application.Services;
 public class CursoAppService(ICursoRepository cursoRepository) : ICursoAppService

@@ -1,4 +1,6 @@
-﻿namespace Plataforma.Educacao.Aluno.Application.DTO;
+﻿using Plataforma.Educacao.Core.SharedDto.Aluno;
+
+namespace Plataforma.Educacao.Aluno.Application.DTO;
 public class AlunoDto
 {
     public Guid Id { get; set; }

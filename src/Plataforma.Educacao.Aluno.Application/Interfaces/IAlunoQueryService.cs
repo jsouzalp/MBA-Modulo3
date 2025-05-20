@@ -1,4 +1,5 @@
 ﻿using Plataforma.Educacao.Aluno.Application.DTO;
+using Plataforma.Educacao.Core.SharedDto.Aluno;
 
 namespace Plataforma.Educacao.Aluno.Application.Interfaces;
 public interface IAlunoQueryService 

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
-using Moq;
+﻿using Moq;
 using FluentAssertions;
 using Plataforma.Educacao.Core.Data;
-using Plataforma.Educacao.Core.Exceptions;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoCommands;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
 using Plataforma.Educacao.Core.Messages.Comunications;
@@ -16,6 +11,7 @@ using Plataforma.Educacao.Aluno.Application.Interfaces;
 using Plataforma.Educacao.Faturamento.Application.Commands.RealizarPagamento;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Aluno.Application.DTO;
+using Plataforma.Educacao.Core.SharedDto.Aluno;
 
 
 namespace Plataforma.Educacao.Faturamento.Tests.Applications.Commands;

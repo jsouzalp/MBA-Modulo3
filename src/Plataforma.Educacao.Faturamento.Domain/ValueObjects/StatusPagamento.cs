@@ -6,9 +6,7 @@ public class StatusPagamento
 {
     #region Atributos
     public StatusPagamentoEnum Status { get; private set; }
-    #endregion
 
-    #region Construtores
     protected StatusPagamento() { }
 
     public StatusPagamento(StatusPagamentoEnum status)
@@ -17,21 +15,17 @@ public class StatusPagamento
     }
     #endregion
 
-    #region Getters
+    #region Métodos
     public bool EstahPendente => Status == StatusPagamentoEnum.Pendente;
     public bool EstahAprovado => Status == StatusPagamentoEnum.Aprovado;
     public bool EstahRecusado => Status == StatusPagamentoEnum.Recusado;
-    #endregion
 
-    #region Metodos do Dominio
     public void TransicionarPara(StatusPagamentoEnum novoStatus)
     {
         ValidarIntegridadeStatusPagamento(novoStatus);
         Status = novoStatus;
     }
-    #endregion
 
-    #region Validação
     private void ValidarIntegridadeStatusPagamento(StatusPagamentoEnum status)
     {
         var validacao = new ResultadoValidacao<StatusPagamento>();
@@ -42,9 +36,7 @@ public class StatusPagamento
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides
     public override string ToString() => Status.ToString();
     #endregion
 }

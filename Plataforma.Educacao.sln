@@ -59,6 +59,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Api", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Autenticacao.Data", "src\Plataforma.Educacao.Autenticacao.Data\Plataforma.Educacao.Autenticacao.Data.csproj", "{D82E1500-7354-4DB3-830D-44D03A0ACC3D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1E021D5B-0A65-42AB-BB65-7FA5CB7987F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma.Educacao.Api.Tests", "tests\Plataforma.Educacao.Api.Tests\Plataforma.Educacao.Api.Tests.csproj", "{9DBD6FCF-1528-46EB-AA23-B1E54DBA5DEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +129,10 @@ Global
 		{D82E1500-7354-4DB3-830D-44D03A0ACC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D82E1500-7354-4DB3-830D-44D03A0ACC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D82E1500-7354-4DB3-830D-44D03A0ACC3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBD6FCF-1528-46EB-AA23-B1E54DBA5DEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBD6FCF-1528-46EB-AA23-B1E54DBA5DEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBD6FCF-1528-46EB-AA23-B1E54DBA5DEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBD6FCF-1528-46EB-AA23-B1E54DBA5DEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,5 +161,7 @@ Global
 		{71E1FCC1-0429-420E-AA3B-C1780B37ABD2} = {967E5D10-5C50-4FFD-AC5F-B731799383B7}
 		{1A8C00A6-935A-4453-AD9F-9AE8F564BA68} = {A8E9ECA9-CC87-479A-952C-87EC16458016}
 		{D82E1500-7354-4DB3-830D-44D03A0ACC3D} = {71E1FCC1-0429-420E-AA3B-C1780B37ABD2}
+		{1E021D5B-0A65-42AB-BB65-7FA5CB7987F1} = {A8E9ECA9-CC87-479A-952C-87EC16458016}
+		{9DBD6FCF-1528-46EB-AA23-B1E54DBA5DEC} = {1E021D5B-0A65-42AB-BB65-7FA5CB7987F1}
 	EndGlobalSection
 EndGlobal

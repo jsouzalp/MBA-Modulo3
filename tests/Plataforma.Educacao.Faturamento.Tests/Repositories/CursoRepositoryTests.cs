@@ -4,11 +4,6 @@ using Plataforma.Educacao.Faturamento.Data.Contexts;
 using Plataforma.Educacao.Faturamento.Data.Repositories;
 using Plataforma.Educacao.Faturamento.Domain.Entities;
 using Plataforma.Educacao.Faturamento.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Plataforma.Educacao.Faturamento.Tests.Repositories;
 public class FaturamentoRepositoryTests

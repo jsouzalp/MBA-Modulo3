@@ -21,13 +21,9 @@ public class MatriculaCurso : Entidade
     private readonly List<HistoricoAprendizado> _historicoAprendizado = [];
     public IReadOnlyCollection<HistoricoAprendizado> HistoricoAprendizado => _historicoAprendizado.AsReadOnly();
 
-    #region Helper only for EF Mapping
     [JsonIgnore]
     public Aluno Aluno { get; private set; }
-    #endregion
-    #endregion
 
-    #region Construtores   
     protected MatriculaCurso() { }
     public MatriculaCurso(Guid alunoId, Guid cursoId, string nomeCurso, decimal valor)
     {
@@ -42,7 +38,7 @@ public class MatriculaCurso : Entidade
     }
     #endregion
 
-    #region Getters
+    #region Metodso
     public int QuantidadeAulasFinalizadas => _historicoAprendizado.Count(h => h.DataTermino.HasValue);
     public int QuantidadeAulasEmAndamento => _historicoAprendizado.Count(h => !h.DataTermino.HasValue);
     public bool MatriculaCursoConcluido => DataConclusao.HasValue;
@@ -58,9 +54,7 @@ public class MatriculaCurso : Entidade
 
         return historico;
     }
-    #endregion
 
-    #region Metodos do Dominio
     #region Manipuladores de MatriculaCurso
     internal void AtualizarPagamentoMatricula()
     {
@@ -113,9 +107,7 @@ public class MatriculaCurso : Entidade
         Certificado = new Certificado(Id, pathCertificado);
     }
     #endregion
-    #endregion
 
-    #region Validações
     private void ValidarIntegridadeMatriculaCurso(DateTime? novaDataConclusao = null, EstadoMatriculaCursoEnum? novoEstadoMatriculaCurso = null)
     {
         var dataConclusao = novaDataConclusao ?? DataConclusao;
@@ -158,9 +150,7 @@ public class MatriculaCurso : Entidade
             validacao.AdicionarErro("Não é possível alterar o estado da matrícula para pagamento abandonado com o curso concluído");
         }
     }
-    #endregion
 
-    #region Overrides
     public override string ToString()
     {
         string concluido = MatriculaCursoConcluido ? "Sim" : "Não";

@@ -3,9 +3,9 @@ using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Aluno.Application.Events.AtualizarPagamento;
-using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
+using Plataforma.Educacao.Conteudo.Application.Interfaces;
 
 namespace Plataforma.Educacao.Aluno.Application.Events.PagamentoConfirmado;
 public class PagamentoConfirmadoEventHandler(IAlunoRepository alunoRepository,
