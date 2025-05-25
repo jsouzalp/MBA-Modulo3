@@ -2,7 +2,6 @@
 using Moq;
 using Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Data;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
@@ -13,14 +12,12 @@ namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
 public class ConcluirCursoCommandHandlerTests
 {
 
-    private readonly Mock<ICursoAppService> _cursoServiceMock;
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
     private readonly Mock<IMediatorHandler> _mediatorHandlerMock;
     private readonly ConcluirCursoCommandHandler _handler;
 
     public ConcluirCursoCommandHandlerTests()
     {
-        _cursoServiceMock = new Mock<ICursoAppService>();
         _alunoRepositoryMock = new Mock<IAlunoRepository>();
         _mediatorHandlerMock = new Mock<IMediatorHandler>();
 
@@ -30,7 +27,6 @@ public class ConcluirCursoCommandHandlerTests
 
         _handler = new ConcluirCursoCommandHandler(
             _alunoRepositoryMock.Object,
-            _cursoServiceMock.Object,
             _mediatorHandlerMock.Object
         );
     }
@@ -39,7 +35,7 @@ public class ConcluirCursoCommandHandlerTests
     public async Task Deve_retornar_false_quando_requisicao_invalida()
     {
         // Arrange
-        var command = new ConcluirCursoCommand(Guid.Empty, Guid.Empty);
+        var command = new ConcluirCursoCommand(Guid.Empty, Guid.Empty, null);
 
         // Act
         var resultado = await _handler.Handle(command, CancellationToken.None);
@@ -53,7 +49,7 @@ public class ConcluirCursoCommandHandlerTests
     public async Task Deve_retornar_false_quando_aluno_nao_encontrado()
     {
         // Arrange
-        var command = CriarComandoValido();
+        var command = new ConcluirCursoCommand(Guid.NewGuid(), Guid.NewGuid(), new CursoDto());
 
         _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(It.IsAny<Guid>())).ReturnsAsync((Domain.Entities.Aluno)null);
 
@@ -70,12 +66,20 @@ public class ConcluirCursoCommandHandlerTests
     {
         // Arrange
         var cursoId = Guid.NewGuid();
-        _cursoServiceMock.Setup(r => r.ObterPorIdAsync(cursoId)).ReturnsAsync(new CursoDto { Id = cursoId, Nome = "Curso de DDD do básico ao avançado", Valor = 1000, CursoDisponivel = true });
 
         var aluno = CriarAlunoComMatriculaECurtsoPorConcluir(cursoId);
         _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(aluno.Id)).ReturnsAsync(aluno);
 
-        var command = new ConcluirCursoCommand(aluno.Id, aluno.MatriculasCursos.Last().Id);
+        var curso = new CursoDto
+        {
+            Id = cursoId,
+            Nome = "Curso Teste",
+            Valor = 500,
+            CursoDisponivel = true,
+            Aulas = new List<AulaDto> { new() { Id = Guid.NewGuid(), Descricao = "Aula de refatoração 01", Ativo = true } }
+        };
+
+        var command = new ConcluirCursoCommand(aluno.Id, aluno.MatriculasCursos.Last().Id, curso);
 
         // Act
         var resultado = await _handler.Handle(command, CancellationToken.None);
@@ -100,10 +104,9 @@ public class ConcluirCursoCommandHandlerTests
 
 
         var aluno = CriarAlunoComMatriculaECurtsoConcluido(cursoId);
-        _cursoServiceMock.Setup(r => r.ObterPorIdAsync(cursoId)).ReturnsAsync(curso);
         _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(aluno.Id)).ReturnsAsync(aluno);
 
-        var command = new ConcluirCursoCommand(aluno.Id, aluno.MatriculasCursos.Last().Id);
+        var command = new ConcluirCursoCommand(aluno.Id, aluno.MatriculasCursos.Last().Id, curso);
 
         var resultado = await _handler.Handle(command, CancellationToken.None);
 
@@ -113,10 +116,10 @@ public class ConcluirCursoCommandHandlerTests
 
     #region Helpers
 
-    private static ConcluirCursoCommand CriarComandoValido()
-    {
-        return new ConcluirCursoCommand(Guid.NewGuid(), Guid.NewGuid());
-    }
+    //private static ConcluirCursoCommand CriarComandoValido()
+    //{
+    //    return new ConcluirCursoCommand(Guid.NewGuid(), Guid.NewGuid());
+    //}
 
     private static Domain.Entities.Aluno CriarAlunoValido()
     {

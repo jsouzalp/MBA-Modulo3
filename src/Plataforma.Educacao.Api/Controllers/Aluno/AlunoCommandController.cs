@@ -11,18 +11,23 @@ using AutoMapper;
 using Plataforma.Educacao.Api.Authentications;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 using Plataforma.Educacao.Aluno.Application.Interfaces;
+using Plataforma.Educacao.Conteudo.Application.Interfaces;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
+using Plataforma.Educacao.Api.ViewModels.Aluno.Queries;
 
 namespace Plataforma.Educacao.Api.Controllers.Aluno;
 
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public partial class AlunoController(IAlunoQueryService alunoQueryService,
+public partial class AlunoController(ICursoAppService cursoAppService,
+    IAlunoQueryService alunoQueryService,
     IMapper mapper,
     IAppIdentityUser appIdentityUser,
     INotificationHandler<DomainNotificacaoRaiz> notifications,
     IMediatorHandler mediatorHandler) : MainController(appIdentityUser, notifications, mediatorHandler)
 {
+    private readonly ICursoAppService _cursoAppService = cursoAppService;
     private readonly IAlunoQueryService _alunoQueryService = alunoQueryService;
     private readonly IMapper _mapper = mapper;
 
@@ -36,7 +41,8 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         {
             if (UserId != matriculaCursoViewModel.AlunoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação"]); }
 
-            var comando = new MatricularAlunoCommand(matriculaCursoViewModel.AlunoId, matriculaCursoViewModel.CursoId);
+            CursoDto cursoDto = await _cursoAppService.ObterPorIdAsync(matriculaCursoViewModel.CursoId);
+            var comando = new MatricularAlunoCommand(matriculaCursoViewModel.AlunoId, matriculaCursoViewModel.CursoId, cursoDto.CursoDisponivel, cursoDto.Nome, cursoDto.Valor);
             var sucesso = await _mediatorHandler.EnviarComando(comando);
             if (sucesso)
             {
@@ -101,10 +107,17 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         {
             if (UserId != viewModel.AlunoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação"]); }
 
+            var matriculaCurso = await _alunoQueryService.ObterInformacaoMatriculaCursoAsync(viewModel.MatriculaCursoId);
+            if (matriculaCurso == null) { return GenerateResponse(null, ResponseTypeEnum.NotFound, HttpStatusCode.NotFound, ["Matrícula não encontrada"]); }
+
+            CursoDto cursoDto = await _cursoAppService.ObterPorIdAsync(matriculaCurso.CursoId);
+            if (cursoDto == null) { return GenerateResponse(null, ResponseTypeEnum.NotFound, HttpStatusCode.NotFound, ["Curso desta matrícula não encontrada"]); }
+
             var comando = new RegistrarHistoricoAprendizadoCommand(
                 viewModel.AlunoId,
                 viewModel.MatriculaCursoId,
                 viewModel.AulaId,
+                cursoDto,
                 viewModel.DataTermino
             );
 
@@ -139,7 +152,13 @@ public partial class AlunoController(IAlunoQueryService alunoQueryService,
         {
             if (UserId != viewModel.AlunoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação"]); }
 
-            var comando = new ConcluirCursoCommand(viewModel.AlunoId, viewModel.MatriculaCursoId);
+            var matriculaCurso = await _alunoQueryService.ObterInformacaoMatriculaCursoAsync(viewModel.MatriculaCursoId);
+            if (matriculaCurso == null) { return GenerateResponse(null, ResponseTypeEnum.NotFound, HttpStatusCode.NotFound, ["Matrícula não encontrada"]); }
+
+            CursoDto cursoDto = await _cursoAppService.ObterPorIdAsync(matriculaCurso.CursoId);
+            if (cursoDto == null) { return GenerateResponse(null, ResponseTypeEnum.NotFound, HttpStatusCode.NotFound, ["Curso desta matrícula não encontrada"]); }
+
+            var comando = new ConcluirCursoCommand(viewModel.AlunoId, viewModel.MatriculaCursoId, cursoDto);
             var sucesso = await _mediatorHandler.EnviarComando(comando);
 
             if (sucesso)

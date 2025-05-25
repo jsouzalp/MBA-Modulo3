@@ -4,14 +4,12 @@ using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Events;
 public class PagamentoConfirmadoEventHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepoMock = new();
-    private readonly Mock<ICursoAppService> _cursoServiceMock = new();
     private readonly Mock<IMediatorHandler> _mediatorMock = new();
     private readonly PagamentoConfirmadoEventHandler _handler;
 
@@ -19,7 +17,6 @@ public class PagamentoConfirmadoEventHandlerTests
     {
         _handler = new PagamentoConfirmadoEventHandler(
             _alunoRepoMock.Object,
-            _cursoServiceMock.Object,
             _mediatorMock.Object
         );
     }
@@ -33,10 +30,9 @@ public class PagamentoConfirmadoEventHandlerTests
         var matricula = aluno.MatriculasCursos.First();
 
         _alunoRepoMock.Setup(r => r.ObterPorIdAsync(aluno.Id)).ReturnsAsync(aluno);
-        _cursoServiceMock.Setup(s => s.ObterPorIdAsync(cursoId)).ReturnsAsync(new CursoDto { Id = cursoId, Nome = "Curso Teste", CursoDisponivel = true });
         _alunoRepoMock.Setup(r => r.UnitOfWork.Commit()).ReturnsAsync(true);
 
-        var evento = new PagamentoConfirmadoEvent(matricula.Id, aluno.Id, cursoId);
+        var evento = new PagamentoConfirmadoEvent(matricula.Id, aluno.Id, cursoId, true);
 
         await _handler.Handle(evento, CancellationToken.None);
 
@@ -47,7 +43,7 @@ public class PagamentoConfirmadoEventHandlerTests
     [Fact]
     public async Task Deve_publicar_notificacao_quando_evento_invalido()
     {
-        var evento = new PagamentoConfirmadoEvent(Guid.Empty, Guid.Empty, Guid.Empty);
+        var evento = new PagamentoConfirmadoEvent(Guid.Empty, Guid.Empty, Guid.Empty, false);
 
         await _handler.Handle(evento, CancellationToken.None);
 
@@ -57,9 +53,8 @@ public class PagamentoConfirmadoEventHandlerTests
     [Fact]
     public async Task Deve_publicar_notificacao_quando_aluno_nao_encontrado()
     {
-        var evento = new PagamentoConfirmadoEvent(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+        var evento = new PagamentoConfirmadoEvent(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), false);
 
-        _cursoServiceMock.Setup(s => s.ObterPorIdAsync(evento.CursoId)).ReturnsAsync(new CursoDto { Id = evento.CursoId, CursoDisponivel = true });
         _alunoRepoMock.Setup(r => r.ObterPorIdAsync(evento.AlunoId)).ReturnsAsync((Domain.Entities.Aluno?)null);
 
         await _handler.Handle(evento, CancellationToken.None);
@@ -70,9 +65,7 @@ public class PagamentoConfirmadoEventHandlerTests
     [Fact]
     public async Task Deve_publicar_notificacao_quando_curso_indisponivel()
     {
-        var evento = new PagamentoConfirmadoEvent(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
-
-        _cursoServiceMock.Setup(s => s.ObterPorIdAsync(evento.CursoId)).ReturnsAsync((CursoDto?)null);
+        var evento = new PagamentoConfirmadoEvent(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), false);
 
         await _handler.Handle(evento, CancellationToken.None);
 

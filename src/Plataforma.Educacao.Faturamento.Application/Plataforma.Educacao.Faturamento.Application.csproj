@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Plataforma.Educacao.Aluno.Application\Plataforma.Educacao.Aluno.Application.csproj" />
     <ProjectReference Include="..\Plataforma.Educacao.Core\Plataforma.Educacao.Core.csproj" />
     <ProjectReference Include="..\Plataforma.Educacao.Faturamento.Data\Plataforma.Educacao.Faturamento.Data.csproj" />
     <ProjectReference Include="..\Plataforma.Educacao.Faturamento.Domain\Plataforma.Educacao.Faturamento.Domain.csproj" />

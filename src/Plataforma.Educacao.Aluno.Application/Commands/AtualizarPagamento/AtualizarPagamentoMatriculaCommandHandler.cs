@@ -4,15 +4,12 @@ using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 using Plataforma.Educacao.Core.SharedDto.Conteudo;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.AtualizarPagamento;
 public class AtualizarPagamentoMatriculaCommandHandler(IAlunoRepository alunoRepository,
-    ICursoAppService cursoService,
     IMediatorHandler mediatorHandler) : IRequestHandler<AtualizarPagamentoMatriculaCommand, bool>
 {
     private readonly IAlunoRepository _alunoRepository = alunoRepository;
-    private readonly ICursoAppService _cursoService = cursoService;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
     private Guid _raizAgregacao;
 
@@ -24,7 +21,6 @@ public class AtualizarPagamentoMatriculaCommandHandler(IAlunoRepository alunoRep
 
         _raizAgregacao = request.RaizAgregacao;
         if (!ValidarRequisicao(request)) { return false; }
-        if (!ObterCurso(request.CursoId, out CursoDto cursoDto)) { return false; }
         if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
 
         var matricula = aluno.ObterMatriculaPorCursoId(request.CursoId);
@@ -45,18 +41,6 @@ public class AtualizarPagamentoMatriculaCommandHandler(IAlunoRepository alunoRep
             {
                 _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), erro)).GetAwaiter().GetResult();
             }
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool ObterCurso(Guid cursoId, out CursoDto cursoDto)
-    {
-        cursoDto = _cursoService.ObterPorIdAsync(cursoId).Result;
-        if (cursoDto == null || !cursoDto.CursoDisponivel)
-        {
-            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Curso indisponível para confirmação de pagamento.")).GetAwaiter().GetResult();
             return false;
         }
 

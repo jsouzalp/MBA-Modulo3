@@ -9,6 +9,7 @@ using Plataforma.Educacao.Core.Exceptions;
 using System.Net;
 using Plataforma.Educacao.Api.ViewModels.Faturamento.Commands;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoCommands;
+using Plataforma.Educacao.Aluno.Application.Interfaces;
 
 namespace Plataforma.Educacao.Api.Controllers.Faturamento;
 
@@ -16,9 +17,12 @@ namespace Plataforma.Educacao.Api.Controllers.Faturamento;
 [ApiController]
 [Route("api/[controller]")]
 public class FaturamentoController(IAppIdentityUser appIdentityUser,
+    IAlunoQueryService alunoQueryService,
     INotificationHandler<DomainNotificacaoRaiz> notifications,
     IMediatorHandler mediatorHandler) : MainController(appIdentityUser, notifications, mediatorHandler)
 {
+    private readonly IAlunoQueryService _alunoQueryService = alunoQueryService;
+
     [HttpPost("{alunoId}/registrar-pagamento")]
     public async Task<IActionResult> RealizarPagamento(Guid alunoId, RealizarPagamentoViewModel pagamentoViewModel)
     {
@@ -27,8 +31,10 @@ public class FaturamentoController(IAppIdentityUser appIdentityUser,
         try
         {
             if (UserId != pagamentoViewModel.AlunoId) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.Forbidden, ["Você não tem permissão para realizar essa operação"]); }
+            var matriculaCursoDto = await _alunoQueryService.ObterInformacaoMatriculaCursoAsync(pagamentoViewModel.MatriculaCursoId);
+            if (matriculaCursoDto == null) { return GenerateResponse(null, ResponseTypeEnum.ValidationError, HttpStatusCode.NotFound, ["Matrícula do curso não encontrada"]); }
 
-            var comando = new RealizarPagamentoCommand(pagamentoViewModel.MatriculaCursoId, pagamentoViewModel.Valor, pagamentoViewModel.NumeroCartao, pagamentoViewModel.NomeTitularCartao, pagamentoViewModel.ValidadeCartao, pagamentoViewModel.CvvCartao);
+            var comando = new RealizarPagamentoCommand(pagamentoViewModel.MatriculaCursoId, matriculaCursoDto, pagamentoViewModel.Valor, pagamentoViewModel.NumeroCartao, pagamentoViewModel.NomeTitularCartao, pagamentoViewModel.ValidadeCartao, pagamentoViewModel.CvvCartao);
             var sucesso = await _mediatorHandler.EnviarComando(comando);
             if (sucesso)
             {
