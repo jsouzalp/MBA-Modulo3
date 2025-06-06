@@ -2,18 +2,15 @@
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
-using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.ConcluirCurso;
 public class ConcluirCursoCommandHandler(IAlunoRepository alunoRepository,
-    ICursoAppService cursoService,
     IMediatorHandler mediatorHandler) : IRequestHandler<ConcluirCursoCommand, bool>
 {
     private readonly IAlunoRepository _alunoRepository = alunoRepository;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
-    private readonly ICursoAppService _cursoService = cursoService;
     private Guid _raizAgregacao;
 
     public async Task<bool> Handle(ConcluirCursoCommand request, CancellationToken cancellationToken)
@@ -23,8 +20,7 @@ public class ConcluirCursoCommandHandler(IAlunoRepository alunoRepository,
         if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
         var matriculaCurso = aluno.ObterMatriculaCursoPeloId(request.MatriculaCursoId);
 
-        if (!ObterCurso(matriculaCurso.CursoId, out CursoDto cursoDto)) { return false; }
-        if (!ValidarSeMatriculaCursoPodeSerConcluido(aluno, cursoDto)) { return false; }
+        if (!ValidarSeMatriculaCursoPodeSerConcluido(aluno, request.CursoDto)) { return false; }
 
         aluno.ConcluirCurso(request.MatriculaCursoId);
 
@@ -53,18 +49,6 @@ public class ConcluirCursoCommandHandler(IAlunoRepository alunoRepository,
         if (aluno == null)
         {
             _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Aluno não encontrado.")).GetAwaiter().GetResult();
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool ObterCurso(Guid cursoId, out CursoDto cursoDto)
-    {
-        cursoDto = _cursoService.ObterPorIdAsync(cursoId).Result;
-        if (cursoDto == null || !cursoDto.CursoDisponivel)
-        {
-            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Curso indisponível para matrícula.")).GetAwaiter().GetResult();
             return false;
         }
 

@@ -2,18 +2,17 @@
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages;
-using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Aluno.Domain.Entities;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Aluno.Domain.ValueObjects;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoEvents;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
-public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoRepository, ICursoAppService cursoService, IMediatorHandler mediatorHandler) : IRequestHandler<RegistrarHistoricoAprendizadoCommand, bool>
+public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoRepository, 
+    IMediatorHandler mediatorHandler) : IRequestHandler<RegistrarHistoricoAprendizadoCommand, bool>
 {
     private readonly IAlunoRepository _alunoRepository = alunoRepository;
-    private readonly ICursoAppService _cursoService = cursoService;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
     private Guid _raizAgregacao;
 
@@ -24,7 +23,7 @@ public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoR
             _raizAgregacao = request.RaizAgregacao;
             if (!ValidarRequisicao(request)) { return false; }
             if (!ObterAluno(request.AlunoId, out Domain.Entities.Aluno aluno)) { return false; }
-            if (!ObterAulaCurso(request.MatriculaCursoId, request.AulaId, aluno, out AulaDto aulaDto)) { return false; }
+            if (!ObterAulaCurso(request.CursoDto, request.AulaId, aluno, out AulaDto aulaDto)) { return false; }
 
             // Capturo o histórico anterior (se existir)
             // Isto é um "bug" do EF que não consegue identificar corretamente o estado de mudança do objeto
@@ -81,31 +80,30 @@ public class RegistrarHistoricoAprendizadoCommandHandler(IAlunoRepository alunoR
         return true;
     }
 
-    private bool ObterAulaCurso(Guid matriculaCursoId, Guid aulaId, Domain.Entities.Aluno aluno, out AulaDto aulaDto)
+    private bool ObterAulaCurso(CursoDto cursoDto, Guid aulaId, Domain.Entities.Aluno aluno, out AulaDto aulaDto)
     {
-        aulaDto = new();
+        //aulaDto = new();
+        //MatriculaCurso matriculaCurso = aluno.ObterMatriculaCursoPeloId(matriculaCursoId);
+        //CursoDto cursoDto = _cursoService.ObterPorIdAsync(matriculaCurso.CursoId).Result;
+        aulaDto = cursoDto?.Aulas?.FirstOrDefault(x => x.Id == aulaId) ?? new();
 
-        MatriculaCurso matriculaCurso = aluno.ObterMatriculaCursoPeloId(matriculaCursoId);
-        CursoDto cursoDto = _cursoService.ObterPorIdAsync(matriculaCurso.CursoId).Result;
-        aulaDto = cursoDto?.Aulas?.FirstOrDefault(x => x.Id == aulaId) ?? aulaDto;
+        //if (cursoDto == null)
+        //{
+        //    _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Matrícula do curso deste aluno não encontrado")).GetAwaiter().GetResult();
+        //    return false;
+        //}
 
-        if (cursoDto == null)
-        {
-            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Matrícula do curso deste aluno não encontrado")).GetAwaiter().GetResult();
-            return false;
-        }
+        //if (cursoDto?.Aulas == null)
+        //{
+        //    _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Curso informado não possui nenhuma aula cadastrada")).GetAwaiter().GetResult();
+        //    return false;
+        //}
 
-        if (cursoDto?.Aulas == null)
-        {
-            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Curso informado não possui nenhuma aula cadastrada")).GetAwaiter().GetResult();
-            return false;
-        }
-
-        if (aulaDto == null) 
-        { 
-            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Aula deste curso não encontrado")).GetAwaiter().GetResult();
-            return false;
-        }
+        //if (aulaDto == null) 
+        //{ 
+        //    _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Domain.Entities.Aluno), "Aula deste curso não encontrado")).GetAwaiter().GetResult();
+        //    return false;
+        //}
 
         if (!aulaDto.Ativo)
         {

@@ -2,27 +2,24 @@
 using Moq;
 using Plataforma.Educacao.Aluno.Application.Commands.RegistrarHistoricoAprendizado;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
-using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Data;
 using Plataforma.Educacao.Core.Exceptions;
 using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Core.Messages.Comunications;
 using Plataforma.Educacao.Core.Messages.Comunications.AlunoCommands;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Commands;
 
 public class RegistrarHistoricoAprendizadoCommandHandlerTests
 {
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
-    private readonly Mock<ICursoAppService> _cursoServiceMock;
     private readonly Mock<IMediatorHandler> _mediatorHandlerMock;
     private readonly RegistrarHistoricoAprendizadoCommandHandler _handler;
 
     public RegistrarHistoricoAprendizadoCommandHandlerTests()
     {
         _alunoRepositoryMock = new Mock<IAlunoRepository>();
-        _cursoServiceMock = new Mock<ICursoAppService>();
         _mediatorHandlerMock = new Mock<IMediatorHandler>();
 
         var unitOfWorkMock = new Mock<IUnitOfWork>();
@@ -31,7 +28,6 @@ public class RegistrarHistoricoAprendizadoCommandHandlerTests
 
         _handler = new RegistrarHistoricoAprendizadoCommandHandler(
             _alunoRepositoryMock.Object,
-            _cursoServiceMock.Object,
             _mediatorHandlerMock.Object
         );
     }
@@ -40,7 +36,7 @@ public class RegistrarHistoricoAprendizadoCommandHandlerTests
     public async Task Deve_retornar_false_quando_requisicao_invalida()
     {
         // Arrange
-        var command = new RegistrarHistoricoAprendizadoCommand(Guid.Empty, Guid.Empty, Guid.Empty, null);
+        var command = new RegistrarHistoricoAprendizadoCommand(Guid.Empty, Guid.Empty, Guid.Empty, null, null);
 
         // Act
         var resultado = await _handler.Handle(command, CancellationToken.None);
@@ -93,14 +89,14 @@ public class RegistrarHistoricoAprendizadoCommandHandlerTests
 
         _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(aluno.Id)).ReturnsAsync(aluno);
 
-        _cursoServiceMock.Setup(s => s.ObterPorIdAsync(matricula.CursoId)).ReturnsAsync(new CursoDto
+        var cursoDto = new CursoDto
         {
-            Id = matricula.CursoId,
+            Id = Guid.NewGuid(),
             CursoDisponivel = true,
             Aulas = new List<AulaDto> { new AulaDto { Id = aulaId, Descricao = "Aula Teste", Ativo = true } }
-        });
+        };
 
-        var command = new RegistrarHistoricoAprendizadoCommand(aluno.Id, matricula.Id, aulaId, null);
+        var command = new RegistrarHistoricoAprendizadoCommand(aluno.Id, matricula.Id, aulaId, cursoDto, null);
 
         // Act
         var resultado = await _handler.Handle(command, CancellationToken.None);
@@ -114,7 +110,17 @@ public class RegistrarHistoricoAprendizadoCommandHandlerTests
 
     private static RegistrarHistoricoAprendizadoCommand CriarComandoValido()
     {
-        return new RegistrarHistoricoAprendizadoCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+        var matriculaId = Guid.NewGuid();
+        var aulaId = Guid.NewGuid();
+
+        var cursoDto = new CursoDto
+        {
+            Id = Guid.NewGuid(),
+            CursoDisponivel = true,
+            Aulas = new List<AulaDto> { new AulaDto { Id = aulaId, Descricao = "Aula Teste", Ativo = true } }
+        };
+
+        return new RegistrarHistoricoAprendizadoCommand(Guid.NewGuid(), matriculaId, aulaId, cursoDto, DateTime.UtcNow);
     }
 
     private static Domain.Entities.Aluno CriarAlunoValido()

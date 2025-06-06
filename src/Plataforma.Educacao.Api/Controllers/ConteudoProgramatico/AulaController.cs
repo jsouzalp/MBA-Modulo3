@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Plataforma.Educacao.Api.Enumerators;
-using Plataforma.Educacao.Conteudo.Application.DTO;
 using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Exceptions;
 using Plataforma.Educacao.Core.Messages.Comunications;
@@ -11,6 +10,7 @@ using System.Net;
 using Plataforma.Educacao.Api.ViewModels.ConteudoProgramatico;
 using AutoMapper;
 using Plataforma.Educacao.Api.Authentications;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Api.Controllers.ConteudoProgramatico;
 

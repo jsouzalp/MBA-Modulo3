@@ -4,18 +4,15 @@ using Plataforma.Educacao.Core.Messages;
 using Plataforma.Educacao.Faturamento.Domain.Entities;
 using Plataforma.Educacao.Faturamento.Domain.Interfaces;
 using Plataforma.Educacao.Faturamento.Domain.ValueObjects;
-using Plataforma.Educacao.Aluno.Application.Interfaces;
-using Plataforma.Educacao.Aluno.Application.DTO;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoEvents;
 using Plataforma.Educacao.Core.Messages.Comunications.FaturamentoCommands;
+using Plataforma.Educacao.Core.SharedDto.Aluno;
 
 namespace Plataforma.Educacao.Faturamento.Application.Commands.RealizarPagamento;
 public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoRepository,
-    IAlunoQueryService alunoQueryService,
     IMediatorHandler mediatorHandler) : IRequestHandler<RealizarPagamentoCommand, bool>
 {
     private readonly IFaturamentoRepository _faturamentoRepository = faturamentoRepository;
-    private readonly IAlunoQueryService _alunoQueryService = alunoQueryService;
     private readonly IMediatorHandler _mediatorHandler = mediatorHandler;
     private Guid _raizAgregacao;
 
@@ -24,10 +21,10 @@ public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoR
         _raizAgregacao = request.RaizAgregacao;
         if (!ValidarRequisicaoAsync(request)) { return false; }
         if (!ObterPagamentoMatriculaCurso(request.MatriculaCursoId, out Pagamento pagamento)) { return false; }
-        if (!ObterMatriculaCurso(request.MatriculaCursoId, out MatriculaCursoDto matriculaCurso)) { return false; }
-        if (!ValidarValorPagamentoMatriculaCurso(request.Valor, pagamento?.Valor ?? matriculaCurso.Valor)) { return false; }
+        //if (!ObterMatriculaCurso(request.MatriculaCursoId, out MatriculaCursoDto matriculaCurso)) { return false; }
+        if (!ValidarValorPagamentoMatriculaCurso(request.Valor, pagamento?.Valor ?? request.MatriculaCursoDto.Valor)) { return false; }
 
-        if (!matriculaCurso.PagamentoPodeSerRealizado)
+        if (!request.MatriculaCursoDto.PagamentoPodeSerRealizado)
         {
             await _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Pagamento), "Matricula não permite pagamento. Entre em contato com nosso SAC"));
             return false;
@@ -36,7 +33,6 @@ public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoR
         bool ehInclusaoPagamento = pagamento == null;
         var dadosCartao = new DadosCartao(request.NumeroCartao, request.NomeTitularCartao, request.ValidadeCartao, request.CvvCartao);
         pagamento ??= new Pagamento(request.MatriculaCursoId, request.Valor, DateTime.Now.Date);
-
 
 
 
@@ -55,13 +51,13 @@ public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoR
 
         if (!confirmado)
         {
-            await _mediatorHandler.PublicarEvento(new PagamentoRecusadoEvent(matriculaCurso.Id, matriculaCurso.AlunoId, matriculaCurso.CursoId, "Pagamento foi recusado pela operadora"));
+            await _mediatorHandler.PublicarEvento(new PagamentoRecusadoEvent(request.MatriculaCursoDto.Id, request.MatriculaCursoDto.AlunoId, request.MatriculaCursoDto.CursoId, "Pagamento foi recusado pela operadora"));
             await _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Pagamento), "Este pagamento não foi confirmado. Tente novamente ou entre em contato com nosso SAC"));
             return false;
         }
 
         pagamento.ConfirmarPagamento(DateTime.Now.Date, comprovante, dadosCartao);
-        await _mediatorHandler.PublicarEvento(new PagamentoConfirmadoEvent(matriculaCurso.Id, matriculaCurso.AlunoId, matriculaCurso.CursoId));
+        await _mediatorHandler.PublicarEvento(new PagamentoConfirmadoEvent(request.MatriculaCursoDto.Id, request.MatriculaCursoDto.AlunoId, request.MatriculaCursoDto.CursoId, true));
 
         if (ehInclusaoPagamento) { await _faturamentoRepository.AdicionarAsync(pagamento); }
         else await _faturamentoRepository.AtualizarAsync(pagamento);
@@ -108,17 +104,17 @@ public class RealizarPagamentoCommandHandler(IFaturamentoRepository faturamentoR
         return true;
     }
 
-    private bool ObterMatriculaCurso(Guid matriculaCursoId, out MatriculaCursoDto matriculaCurso)
-    {
-        matriculaCurso = _alunoQueryService.ObterInformacaoMatriculaCursoParaPagamentoAsync(matriculaCursoId).Result;
-        if (matriculaCurso == null)
-        {
-            _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Pagamento), "Matricula do aluno não encontrada")).GetAwaiter().GetResult();
-            return false;
-        }
+    //private bool ObterMatriculaCurso(Guid matriculaCursoId, out MatriculaCursoDto matriculaCurso)
+    //{
+    //    matriculaCurso = _alunoQueryService.ObterInformacaoMatriculaCursoAsync(matriculaCursoId).Result;
+    //    if (matriculaCurso == null)
+    //    {
+    //        _mediatorHandler.PublicarNotificacaoDominio(new DomainNotificacaoRaiz(_raizAgregacao, nameof(Pagamento), "Matricula do aluno não encontrada")).GetAwaiter().GetResult();
+    //        return false;
+    //    }
 
-        return true;
-    }
+    //    return true;
+    //}
 
     private bool ValidarValorPagamentoMatriculaCurso(decimal valorInformado, decimal valorMatricula)
     {

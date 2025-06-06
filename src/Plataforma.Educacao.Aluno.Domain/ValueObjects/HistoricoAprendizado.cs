@@ -11,9 +11,7 @@ public class HistoricoAprendizado
     public string NomeAula { get; }
     public DateTime DataInicio { get; }
     public DateTime? DataTermino { get; }
-    #endregion
 
-    #region Construtores
     protected HistoricoAprendizado() { }
     public HistoricoAprendizado(Guid matriculaCursoId, Guid cursoId, Guid aulaId, string nomeAula, DateTime? dataTermino = null)
     {
@@ -28,7 +26,7 @@ public class HistoricoAprendizado
     }
     #endregion
 
-    #region Validacoes 
+    #region Métodos 
     private void ValidarIntegridadeHistoricoAprendizado()
     {
         var validacao = new ResultadoValidacao<HistoricoAprendizado>();
@@ -49,9 +47,7 @@ public class HistoricoAprendizado
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides
     public override string ToString()
     {
         string conclusao = DataTermino.HasValue ? $"(Término em {DataTermino:dd/MM/yyyy})" : "(Em andamento)";

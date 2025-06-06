@@ -15,9 +15,7 @@ public class Aluno : Entidade, IRaizAgregacao
 
     private readonly List<MatriculaCurso> _matriculasCursos = [];
     public IReadOnlyCollection<MatriculaCurso> MatriculasCursos  => _matriculasCursos.AsReadOnly(); 
-    #endregion
 
-    #region Construtores
     protected Aluno() { }
 
     public Aluno(string nome, string email, DateTime dataNascimento)
@@ -30,7 +28,7 @@ public class Aluno : Entidade, IRaizAgregacao
     }
     #endregion
 
-    #region Getters
+    #region Metodos
     public MatriculaCurso ObterMatriculaPorCursoId(Guid cursoId)
     {
         var matriculaCurso = _matriculasCursos.FirstOrDefault(m => m.CursoId == cursoId);
@@ -69,9 +67,7 @@ public class Aluno : Entidade, IRaizAgregacao
     {
         return _matriculasCursos.Any(m => m.CursoId == cursoId);
     }
-    #endregion
 
-    #region Metodos do Dominio
     #region Manipuladores do Aluno
     public void IdentificarCodigoUsuarioNoSistema(Guid codigoUsuarioAutenticacao)
     {
@@ -144,9 +140,7 @@ public class Aluno : Entidade, IRaizAgregacao
         matriculaCurso.RegistrarHistoricoAprendizado(aulaId, nomeAula, dataTermino);
     }
     #endregion
-    #endregion
 
-    #region Validações
     private void ValidarIntegridadeAluno(string novoNome = null, string novoEmail = null, DateTime? novaDataNascimento = null)
     {
         var nome = novoNome ?? Nome;
@@ -165,9 +159,7 @@ public class Aluno : Entidade, IRaizAgregacao
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides
     public override string ToString() => $"{Nome} (Email: {Email})";
     #endregion
 }

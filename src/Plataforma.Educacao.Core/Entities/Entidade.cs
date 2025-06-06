@@ -5,27 +5,20 @@ public abstract class Entidade
 {
     #region Atributos
     public Guid Id { get; internal set; }
-    #endregion
 
-    #region Construtores
     protected Entidade()
     {
         Id = Guid.NewGuid();
     }
     #endregion
 
-    #region Metodos do Dominio
+    #region Metodos 
     public void DefinirId(Guid id)
     {
         if (id == Guid.Empty) { throw new DomainException("Id não pode ser vazio"); }
         Id = id;
     }
-    #endregion
 
-    #region Validações  
-    #endregion
-
-    #region Overrides
     public override bool Equals(object obj)
     {
         var objeto = (obj as Entidade);

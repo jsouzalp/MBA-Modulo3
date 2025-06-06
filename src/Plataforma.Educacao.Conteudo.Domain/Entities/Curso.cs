@@ -13,15 +13,11 @@ public class Curso : Entidade, IRaizAgregacao
     public bool Ativo { get; private set; }
     public DateTime? ValidoAte { get; private set; }
 
-    #region Helper only for EF Mapping
     public ConteudoProgramatico ConteudoProgramatico { get; private set; }
 
     private readonly List<Aula> _aulas = [];
     public IReadOnlyCollection<Aula> Aulas => _aulas.AsReadOnly();
-    #endregion
-    #endregion
 
-    #region Construtores
     // EF Constructor
     protected Curso() 
     {
@@ -43,7 +39,7 @@ public class Curso : Entidade, IRaizAgregacao
     }
     #endregion
 
-    #region Getters
+    #region Métodos
     public short CargaHoraria() => (short)_aulas.Sum(a => a.CargaHoraria);
     public int QuantidadeAulas() => _aulas.Count;
     public bool CursoDisponivel() => Ativo && (!ValidoAte.HasValue || ValidoAte.Value >= DateTime.Now.Date);
@@ -54,9 +50,7 @@ public class Curso : Entidade, IRaizAgregacao
         if (aula == null) { throw new DomainException("Aula não encontrada"); }
         return aula;
     }
-    #endregion
 
-    #region Metodos do Dominio
     public void AtivarCurso() => Ativo = true;
     public void DesativarCurso() => Ativo = false;
 
@@ -134,9 +128,7 @@ public class Curso : Entidade, IRaizAgregacao
         var aula = ObterAulaPeloId(aulaId);
         aula.AlterarUrl(url);
     }
-    #endregion
 
-    #region Validações
     private void ValidarIntegridadeCurso(string novoNome = null, decimal? novoValor = null, DateTime? novoValidoAte = null, ConteudoProgramatico novoConteudoProgramatico = null)
     {
         var nome = novoNome ?? Nome;
@@ -169,9 +161,7 @@ public class Curso : Entidade, IRaizAgregacao
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides
     public override string ToString()
     {
         string cursoAtivo = Ativo ? "Sim" : "Não";

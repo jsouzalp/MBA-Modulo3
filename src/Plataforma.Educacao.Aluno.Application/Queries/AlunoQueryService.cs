@@ -2,15 +2,14 @@
 using Plataforma.Educacao.Aluno.Application.Interfaces;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
 using Plataforma.Educacao.Aluno.Domain.ValueObjects;
-using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
 using Plataforma.Educacao.Core.Extensions;
+using Plataforma.Educacao.Core.SharedDto.Aluno;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Aluno.Application.Queries;
-public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppService cursoAppService) : IAlunoQueryService
+public class AlunoQueryService(IAlunoRepository alunoRepository) : IAlunoQueryService
 {
     private readonly IAlunoRepository _alunoRepository = alunoRepository;
-    private readonly ICursoAppService _cursoAppService = cursoAppService;
 
     public async Task<AlunoDto> ObterAlunoPorIdAsync(Guid alunoId)
     {
@@ -47,15 +46,15 @@ public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppServic
         var aluno = await _alunoRepository.ObterPorIdAsync(alunoId);
         if (aluno == null) return null;
 
-        List<CursoDto> cursos = new List<CursoDto>();
-        foreach (var matricula in aluno.MatriculasCursos)
-        {
-            var curso = await _cursoAppService.ObterPorIdAsync(matricula.CursoId);
-            if (curso != null)
-            {
-                cursos.Add(curso);
-            }
-        }
+        //List<CursoDto> cursos = new List<CursoDto>();
+        //foreach (var matricula in aluno.MatriculasCursos)
+        //{
+        //    var curso = await _cursoAppService.ObterPorIdAsync(matricula.CursoId);
+        //    if (curso != null)
+        //    {
+        //        cursos.Add(curso);
+        //    }
+        //}
 
         return new EvolucaoAlunoDto
         {
@@ -72,7 +71,7 @@ public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppServic
                 DataMatricula = m.DataMatricula,
                 DataConclusao = m.DataConclusao,
                 EstadoMatricula = m.EstadoMatricula.GetDescription(),
-                QuantidadeAulasNoCurso = cursos.FirstOrDefault(c => c.Id == m.CursoId)?.QuantidadeAulas ?? -1,
+                //QuantidadeAulasNoCurso = cursos.FirstOrDefault(c => c.Id == m.CursoId)?.QuantidadeAulas ?? -1,
                 QuantidadeAulasRealizadas = m.QuantidadeAulasFinalizadas,
                 QuantidadeAulasEmAndamento = m.QuantidadeAulasEmAndamento,
                 Certificado = m.Certificado != null ? new CertificadoDto
@@ -108,7 +107,7 @@ public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppServic
         });
     }
 
-    public async Task<MatriculaCursoDto> ObterInformacaoMatriculaCursoParaPagamentoAsync(Guid matriculaCursoId)
+    public async Task<MatriculaCursoDto> ObterInformacaoMatriculaCursoAsync(Guid matriculaCursoId)
     {
         var matriculaCurso = await _alunoRepository.ObterMatriculaPorIdAsync(matriculaCursoId);
         if (matriculaCurso == null) return null;
@@ -146,13 +145,13 @@ public class AlunoQueryService(IAlunoRepository alunoRepository, ICursoAppServic
         };
     }
 
-    public async Task<IEnumerable<AulaCursoDto>> ObterAulasPorMatriculaIdAsync(Guid matriculaCursoId)
+    public async Task<IEnumerable<AulaCursoDto>> ObterAulasPorMatriculaIdAsync(Guid matriculaCursoId, CursoDto cursoDto)
     {
         var matricula = await _alunoRepository.ObterMatriculaPorIdAsync(matriculaCursoId);
         if (matricula == null) return null;
 
-        var cursoDto = await _cursoAppService.ObterPorIdAsync(matricula.CursoId);
-        if (cursoDto == null) return null;
+        //var cursoDto = await _cursoAppService.ObterPorIdAsync(matricula.CursoId);
+        //if (cursoDto == null) return null;
 
         // Adiciono as aulas diretamente a partir do cursoDto
         var retorno = new List<AulaCursoDto>();

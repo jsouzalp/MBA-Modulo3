@@ -3,21 +3,18 @@ using Moq;
 using Plataforma.Educacao.Aluno.Application.Queries;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Interfaces;
-using Plataforma.Educacao.Conteudo.Application.DTO;
-using Plataforma.Educacao.Conteudo.Application.Interfaces;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Aluno.Tests.Applications.Queries;
 public class AlunoQueryServiceTests
 {
-    private readonly Mock<ICursoAppService> _cursoServiceMock;
     private readonly Mock<IAlunoRepository> _alunoRepositoryMock;
     private readonly AlunoQueryService _service;
 
     public AlunoQueryServiceTests()
     {
-        _cursoServiceMock = new Mock<ICursoAppService>();
         _alunoRepositoryMock = new Mock<IAlunoRepository>();
-        _service = new AlunoQueryService(_alunoRepositoryMock.Object, _cursoServiceMock.Object);
+        _service = new AlunoQueryService(_alunoRepositoryMock.Object);
     }
 
     [Fact]
@@ -111,10 +108,10 @@ public class AlunoQueryServiceTests
     public async Task Deve_retornar_evolucao_matriculas_quando_existir()
     {
         var aluno = CriarAlunoValido();
-        var cursoMock = new CursoDto { Id = aluno.MatriculasCursos.First().CursoId, QuantidadeAulas = 2 };
+        //var cursoMock = new CursoDto { Id = aluno.MatriculasCursos.First().CursoId, QuantidadeAulas = 2 };
 
         _alunoRepositoryMock.Setup(r => r.ObterPorIdAsync(aluno.Id)).ReturnsAsync(aluno);
-        _cursoServiceMock.Setup(r => r.ObterPorIdAsync(It.IsAny<Guid>())).ReturnsAsync(cursoMock);
+        //_cursoServiceMock.Setup(r => r.ObterPorIdAsync(It.IsAny<Guid>())).ReturnsAsync(cursoMock);
 
         var resultado = await _service.ObterEvolucaoMatriculasCursoDoAlunoPorIdAsync(aluno.Id);
 
@@ -129,21 +126,49 @@ public class AlunoQueryServiceTests
         var matricula = aluno.MatriculasCursos.First();
 
         _alunoRepositoryMock.Setup(r => r.ObterMatriculaPorIdAsync(matricula.Id)).ReturnsAsync(matricula);
-        _cursoServiceMock.Setup(r => r.ObterPorIdAsync(matricula.CursoId)).ReturnsAsync(new CursoDto
+        //_cursoServiceMock.Setup(r => r.ObterPorIdAsync(matricula.CursoId)).ReturnsAsync(new CursoDto
+        //{
+        //    Id = matricula.CursoId,
+        //    Aulas = new List<AulaDto>
+        //{
+        //    new() { Id = matricula.HistoricoAprendizado.First().AulaId, Descricao = "Aula 1", OrdemAula = 1, Ativo = true, Url = "http://aula" }
+        //}
+        //});
+
+        var cursoDto = new CursoDto
         {
             Id = matricula.CursoId,
             Aulas = new List<AulaDto>
-        {
-            new() { Id = matricula.HistoricoAprendizado.First().AulaId, Descricao = "Aula 1", OrdemAula = 1, Ativo = true, Url = "http://aula" }
-        }
-        });
+            {
+                new() { Id = matricula.HistoricoAprendizado.First().AulaId, Descricao = "Aula 1", OrdemAula = 1, Ativo = true, Url = "http://aula" }
+            }
+        };
 
-        var aulas = await _service.ObterAulasPorMatriculaIdAsync(matricula.Id);
+        var aulas = await _service.ObterAulasPorMatriculaIdAsync(matricula.Id, cursoDto);
 
         aulas.Should().NotBeEmpty();
         aulas.First().NomeAula.Should().NotBeNullOrWhiteSpace();
     }
 
+    [Fact]
+    public async Task Deve_retornar_Matricula_Curso_Valido()
+    {
+        var matriculaCurso = CriarAlunoValido().MatriculasCursos.First();
+        _alunoRepositoryMock.Setup(r => r.ObterMatriculaPorIdAsync(matriculaCurso.Id)).ReturnsAsync(matriculaCurso);
+        var matriculaObtida = await _service.ObterInformacaoMatriculaCursoAsync(matriculaCurso.Id);
+
+        matriculaObtida.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task Nao_Deve_retornar_Matricula_Curso_Valido()
+    {
+        var matriculaCurso = CriarAlunoValido().MatriculasCursos.First();
+        _alunoRepositoryMock.Setup(r => r.ObterMatriculaPorIdAsync(matriculaCurso.Id)).ReturnsAsync(matriculaCurso);
+        var matriculaObtida = await _service.ObterInformacaoMatriculaCursoAsync(Guid.NewGuid());
+
+        matriculaObtida.Should().BeNull();
+    }
     #region Helpers
 
     private static Domain.Entities.Aluno CriarAlunoValido()
@@ -177,13 +202,6 @@ public class AlunoQueryServiceTests
 
         return aluno;
     }
-
-    //private static MatriculaCurso CriarMatriculaComCertificado()
-    //{
-    //    var matricula = new MatriculaCurso(Guid.NewGuid(), "Curso Teste", 200.00m);
-    //    matricula.RequisitarCertificadoConclusao("/caminho/certificado.pdf");
-    //    return matricula;
-    //}
 
     #endregion
 }

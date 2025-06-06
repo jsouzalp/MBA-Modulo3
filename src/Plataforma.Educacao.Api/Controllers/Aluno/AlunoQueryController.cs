@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Plataforma.Educacao.Api.Enumerators;
 using Plataforma.Educacao.Api.ViewModels.Aluno.Queries;
+using Plataforma.Educacao.Core.SharedDto.Conteudo;
 using System.Net;
 
 namespace Plataforma.Educacao.Api.Controllers.Aluno;
@@ -52,7 +53,13 @@ public partial class AlunoController
     [HttpGet("aulas/{matriculaId}")]
     public async Task<IActionResult> ObterAulasPorMatriculaId(Guid matriculaId)
     {
-        var aulas = await _alunoQueryService.ObterAulasPorMatriculaIdAsync(matriculaId);
+        var matriculaCurso = await _alunoQueryService.ObterInformacaoMatriculaCursoAsync(matriculaId);
+        if (matriculaCurso == null) { return GenerateResponse(null, ResponseTypeEnum.NotFound, HttpStatusCode.NotFound, ["Matrícula não encontrada"]); }
+
+        CursoDto cursoDto = await _cursoAppService.ObterPorIdAsync(matriculaCurso.CursoId);
+        if (cursoDto == null) { return GenerateResponse(null, ResponseTypeEnum.NotFound, HttpStatusCode.NotFound, ["Curso desta matrícula não encontrada"]); }
+
+        var aulas = await _alunoQueryService.ObterAulasPorMatriculaIdAsync(matriculaId, cursoDto);
         if (aulas == null) { return GenerateResponse(null, ResponseTypeEnum.NotFound, HttpStatusCode.NotFound); }
 
         return GenerateResponse(_mapper.Map<IEnumerable<AulaCursoViewModel>>(aulas));

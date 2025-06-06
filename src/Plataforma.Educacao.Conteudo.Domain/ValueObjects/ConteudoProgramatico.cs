@@ -6,9 +6,7 @@ public class ConteudoProgramatico
     #region Atributos
     public string Finalidade { get; }
     public string Ementa { get; }
-    #endregion
 
-    #region Construtores
     // EF Constructor
     protected ConteudoProgramatico() { }
 
@@ -21,7 +19,7 @@ public class ConteudoProgramatico
     }
     #endregion
 
-    #region Validações
+    #region Métodos
     private void ValidarIntegridadeConteudoProgramatico(string novaFinalidade = null, string novaEmenta = null)
     {
         var finalidade = novaFinalidade ?? Finalidade;
@@ -35,9 +33,7 @@ public class ConteudoProgramatico
 
         validacao.DispararExcecaoDominioSeInvalido();
     }
-    #endregion
 
-    #region Overrides
     public override string ToString() => $"Finalidade: {Finalidade}";
     public override int GetHashCode() => HashCode.Combine(Finalidade, Ementa);
 

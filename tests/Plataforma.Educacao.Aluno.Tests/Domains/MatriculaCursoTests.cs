@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Aluno.Domain.Enumerators;
-using Plataforma.Educacao.Aluno.Domain.ValueObjects;
-using Plataforma.Educacao.Conteudo.Domain.Entities;
 using Plataforma.Educacao.Core.Exceptions;
 
 namespace Plataforma.Educacao.Aluno.Tests.Domains;

@@ -1,4 +1,4 @@
-﻿using Plataforma.Educacao.Conteudo.Application.DTO;
+﻿using Plataforma.Educacao.Core.SharedDto.Conteudo;
 
 namespace Plataforma.Educacao.Conteudo.Application.Interfaces;
 public interface IAulaAppService 

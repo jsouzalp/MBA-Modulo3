@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Data.Contexts;
-using Plataforma.Educacao.Aluno.Domain.Entities;
 using Plataforma.Educacao.Autenticacao.Data.Contexts;
 using Plataforma.Educacao.Conteudo.Data.Contexts;
 using Plataforma.Educacao.Conteudo.Domain.Entities;
