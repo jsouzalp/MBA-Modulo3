@@ -8,6 +8,11 @@ public static class SwaggerConfiguration
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
+            //c.SwaggerDoc("v1", new OpenApiInfo
+            //{
+            //    Title = "Plataforma Educacao Api",
+            //    Version = "v1"
+            //});
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "Insira o token JWT desta maneira: Bearer {seu token}",

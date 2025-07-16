@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Plataforma.Educacao.Aluno.Data.Contexts;
 using Plataforma.Educacao.Autenticacao.Data.Contexts;
@@ -46,6 +47,8 @@ public static class DbMigrationHelper
 
     private static async Task PopularDatabaseAsync()
     {
+        if (_identityContext.Roles.Any()) { return; }
+
         string roleAdminId = await CriarRegraAcessoAsync(_identityContext, "Administrador");
         string roleUsuarioId = await CriarRegraAcessoAsync(_identityContext, "Usuario");
 
